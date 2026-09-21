@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Serviços | Una Instituto de Beleza</title>
+  <link rel="stylesheet" href="/static/css/crud.css">
+</head>
+<body>
+  <div class="crud-wrap">
+    <a class="crud-voltar" href="{% url 'agendamentos:home' %}">&larr; Voltar para a home</a>
+
+    <div class="crud-cabecalho">
+      <h1>Serviços</h1>
+      <a class="crud-btn" href="{% url 'agendamentos:servico_create' %}">+ Novo serviço</a>
+    </div>
+
+    <form method="get" class="crud-filtros">
+      <input type="text" name="q" placeholder="Buscar por nome..." value="{{ q }}">
+      <select name="ordenar" onchange="this.form.submit()">
+        <option value="nome" {% if ordenar == "nome" %}selected{% endif %}>Nome (A-Z)</option>
+        <option value="-nome" {% if ordenar == "-nome" %}selected{% endif %}>Nome (Z-A)</option>
+        <option value="preco" {% if ordenar == "preco" %}selected{% endif %}>Preço (menor primeiro)</option>
+        <option value="-preco" {% if ordenar == "-preco" %}selected{% endif %}>Preço (maior primeiro)</option>
+        <option value="categoria" {% if ordenar == "categoria" %}selected{% endif %}>Categoria</option>
+      </select>
+      <button type="submit" class="crud-btn secundario">Buscar</button>
+    </form>
+
+    {% if servicos %}
+    <table class="crud-tabela">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Categoria</th>
+          <th>Preço</th>
+          <th>Duração</th>
+          <th>Ativo</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for servico in servicos %}
+        <tr>
+          <td>{{ servico.nome }}</td>
+          <td>{{ servico.get_categoria_display }}</td>
+          <td>R$ {{ servico.preco }}</td>
+          <td>{{ servico.duracao_min }} min</td>
+          <td>{% if servico.ativo %}Sim{% else %}Não{% endif %}</td>
+          <td class="crud-acoes">
+            <a href="{% url 'agendamentos:servico_detail' servico.pk %}">Ver</a>
+            <a href="{% url 'agendamentos:servico_update' servico.pk %}">Editar</a>
+            <a class="excluir" href="{% url 'agendamentos:servico_delete' servico.pk %}">Excluir</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {% if is_paginated %}
+    <div class="crud-paginacao">
+      {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}&q={{ q }}&ordenar={{ ordenar }}">&laquo; Anterior</a>
+      {% endif %}
+      <span class="ativo">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}&q={{ q }}&ordenar={{ ordenar }}">Próxima &raquo;</a>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    {% else %}
+    <div class="crud-vazio">
+      {% if q %}
+        Nenhum serviço encontrado para "{{ q }}".
+      {% else %}
+        Nenhum serviço cadastrado ainda. <a href="{% url 'agendamentos:servico_create' %}">Cadastre o primeiro</a>.
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ profissional.nome_completo }} | Una Instituto de Beleza</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <div style="max-width:700px;margin:60px auto;padding:0 20px;font-family:sans-serif;">
+    <p><a href="{% url 'agendamentos:home' %}">&larr; Voltar para a home</a></p>
+
+    <h1>{{ profissional.nome_completo }}</h1>
+
+    <p><strong>Especialidades:</strong>
+      {% for especialidade in profissional.especialidades.all %}
+        {{ especialidade.nome }}{% if not forloop.last %}, {% endif %}
+      {% empty %}
+        Nenhuma especialidade cadastrada.
+      {% endfor %}
+    </p>
+
+    <p><strong>Horário de atendimento:</strong> {{ profissional.horario_atendimento|default:"Não informado" }}</p>
+
+    {% if profissional.apresentacao %}
+      <p><strong>Sobre:</strong> {{ profissional.apresentacao }}</p>
+    {% endif %}
+
+    <p>
+      <a href="{% url 'agendamentos:agendamento' %}" class="btn">Agendar horário com {{ profissional.nome_completo }}</a>
+    </p>
+  </div>
+</body>
+</html>

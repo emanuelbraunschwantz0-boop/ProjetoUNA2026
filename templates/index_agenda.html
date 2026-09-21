@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Una Instituto de Beleza — Entrar</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/login.css">
+
+</head>
+<body>
+
+<div class="login-wrap">
+
+  <!-- LADO ESQUERDO -->
+  <div class="lado-visual">
+    <div class="visual-circulo c1"></div>
+    <div class="visual-circulo c2"></div>
+    <div class="visual-circulo c3"></div>
+    <div class="visual-circulo c4"></div>
+
+    <div class="logo-wrap">
+                <div class="logo">
+                    <img src="/static/img/logo_redonda.png" alt="">
+                </div>
+      <div class="logo-texto">
+        <div class="nome">Una Instituto</div>
+        <div class="sub">de Beleza</div>
+      </div>
+    </div>
+
+    <div class="visual-conteudo">
+      <div class="visual-tag">Sistema de Gestão</div>
+      <h1 class="visual-titulo">Beleza organizada,<br><em>negócio próspero</em></h1>
+      <p class="visual-desc">Gerencie agendamentos, serviços e profissionais em um só lugar. Seu cliente agenda com facilidade. Você controla com elegância.</p>
+    </div>
+
+    <div class="visual-stats">
+      <div class="v-stat"><div class="num">100%</div><div class="desc">Online</div></div>
+      <div class="v-stat"><div class="num">3</div><div class="desc">Profissionais</div></div>
+      <div class="v-stat"><div class="num">8+</div><div class="desc">Serviços</div></div>
+    </div>
+  </div>
+
+  <!-- LADO DIREITO -->
+  <div class="lado-form">
+    <div class="form-wrap">
+      <h1 class="form-titulo">Bem-vinda <em>de volta</em></h1>
+      <p class="form-sub">Acesse sua conta para continuar</p>
+
+      <!-- TABS TIPO -->
+      <div class="tipo-tabs">
+        <button class="tipo-btn ativo" id="tab-cliente" onclick="setTipo('cliente')">
+          <i class="bi bi-person"></i> Sou cliente
+        </button>
+        <button class="tipo-btn" id="tab-profissional" onclick="setTipo('profissional')">
+          <i class="bi bi-scissors"></i> Sou profissional
+        </button>
+      </div>
+
+      <!-- ALERTA ERRO -->
+      <div class="alerta-erro" id="alerta-erro">
+        <i class="bi bi-exclamation-circle"></i>
+        <span id="alerta-msg">E-mail ou senha incorretos.</span>
+      </div>
+
+      <!-- FORM -->
+      <div class="campo">
+        <label>E-mail</label>
+        <div class="campo-inner">
+          <i class="bi bi-envelope campo-ico"></i>
+          <input type="email" id="inp-email" placeholder="seuemail@email.com" autocomplete="email">
+        </div>
+        <span class="campo-erro" id="erro-email">Informe um e-mail válido.</span>
+      </div>
+
+      <div class="campo">
+        <label>Senha</label>
+        <div class="campo-inner">
+          <i class="bi bi-lock campo-ico"></i>
+          <input type="password" id="inp-senha" placeholder="••••••••" autocomplete="current-password">
+          <button class="toggle-senha" type="button" onclick="toggleSenha()" tabindex="-1">
+            <i class="bi bi-eye" id="ico-senha"></i>
+          </button>
+        </div>
+        <span class="campo-erro" id="erro-senha">Informe sua senha.</span>
+      </div>
+
+      <div class="extras">
+        <label class="check-wrap">
+          <input type="checkbox" id="lembrar"> <span>Lembrar de mim</span>
+        </label>
+        <a href="#" class="link-esqueci">Esqueci a senha</a>
+      </div>
+
+      <button class="btn-entrar" id="btn-entrar" onclick="fazerLogin()">
+        <div class="btn-texto">Entrar <i class="bi bi-arrow-right"></i></div>
+        <div class="spinner"></div>
+      </button>
+
+      <div class="divisor"><span>ou</span></div>
+      <p class="link-cadastro">Não tem conta? <a href="#">Cadastre-se</a></p>
+
+      <!-- DEMO -->
+      <div class="demo-hint">
+        <div class="demo-titulo"><i class="bi bi-info-circle"></i> Contas de demonstração</div>
+        <div class="demo-contas">
+          <div class="demo-conta">
+            <span class="tipo">Cliente</span>
+            <span class="creds">cliente@una.com / 123456</span>
+            <button class="btn-preencher" onclick="preencher('cliente@una.com','123456','cliente')">Usar</button>
+          </div>
+          <div class="demo-conta">
+            <span class="tipo">Profissional</span>
+            <span class="creds">prof@una.com / 123456</span>
+            <button class="btn-preencher" onclick="preencher('prof@una.com','123456','profissional')">Usar</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<script src="/static/js/login.js"></script>
+
+
+</body>
+</html>

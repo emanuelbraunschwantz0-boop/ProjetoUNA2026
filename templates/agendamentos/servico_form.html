@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% if servico %}Editar{% else %}Novo{% endif %} serviço | Una Instituto de Beleza</title>
+  <link rel="stylesheet" href="/static/css/crud.css">
+</head>
+<body>
+  <div class="crud-wrap">
+    <a class="crud-voltar" href="{% url 'agendamentos:servico_list' %}">&larr; Voltar para a listagem</a>
+
+    <div class="crud-cabecalho">
+      <h1>{% if servico %}Editar serviço{% else %}Novo serviço{% endif %}</h1>
+    </div>
+
+    <form class="crud-form" method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <div class="crud-form-acoes">
+        <button type="submit" class="crud-btn">Salvar</button>
+        <a class="crud-btn secundario" href="{% url 'agendamentos:servico_list' %}">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

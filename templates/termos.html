@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Una Instituto de Beleza — Termos & Assinatura</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/static/css/termos.css">
+</head>
+<body>
+
+<!-- ======================================================
+     HEADER FIXO
+====================================================== -->
+<header class="termos-header">
+  <div class="header-inner">
+    <a href="{% url 'agendamentos:home' %}" class="header-logo">
+      <div class="header-logo-circulo">U</div>
+      <div>
+        <div class="header-logo-nome">Una Instituto</div>
+        <div class="header-logo-sub">de Beleza</div>
+      </div>
+    </a>
+    <div class="header-nav-btns">
+      <a href="{% url 'agendamentos:cadastro' %}" class="btn-hd-ghost"><i class="bi bi-arrow-left"></i> Voltar ao cadastro</a>
+      <a href="{% url 'agendamentos:home' %}" class="btn-hd-ghost"><i class="bi bi-house"></i> Home</a>
+    </div>
+  </div>
+</header>
+
+<!-- ======================================================
+     HERO DO DOCUMENTO
+====================================================== -->
+<div class="doc-hero">
+  <div class="doc-hero-linha"></div>
+  <div class="doc-hero-tag" id="doc-hero-tag">Documento legal</div>
+  <h1 class="doc-hero-titulo" id="doc-hero-titulo">Termos de <em>Uso e Privacidade</em></h1>
+  <div class="doc-hero-meta">
+    <span><i class="bi bi-calendar3"></i> Vigência: Janeiro de 2026</span>
+    <span><i class="bi bi-building"></i> Una Instituto de Beleza</span>
+    <span><i class="bi bi-geo-alt"></i> Cacoal — RO, Brasil</span>
+    <span><i class="bi bi-shield-check"></i> Conforme LGPD — Lei 13.709/2018</span>
+  </div>
+</div>
+
+<!-- ======================================================
+     TABS DE NAVEGAÇÃO
+====================================================== -->
+<div class="doc-tabs-wrap">
+  <div class="doc-tabs">
+    <button class="doc-tab ativo" id="tab-uso" onclick="mudarDoc('uso')">
+      <i class="bi bi-file-text"></i> Termos de Uso
+    </button>
+    <button class="doc-tab" id="tab-privacidade" onclick="mudarDoc('privacidade')">
+      <i class="bi bi-shield-lock"></i> Privacidade & LGPD
+    </button>
+    <button class="doc-tab" id="tab-compromisso" onclick="mudarDoc('compromisso')">
+      <i class="bi bi-pen"></i> Termo de Compromisso
+    </button>
+    <button class="doc-tab" id="tab-responsabilidade" onclick="mudarDoc('responsabilidade')">
+      <i class="bi bi-exclamation-circle"></i> Responsabilidade
+    </button>
+  </div>
+</div>
+
+<!-- ======================================================
+     LAYOUT PRINCIPAL: SUMÁRIO | CONTEÚDO | PAINEL ASSINATURA
+====================================================== -->
+<div class="doc-layout">
+
+  <!-- SUMÁRIO LATERAL -->
+  <aside class="doc-sumario">
+    <p class="sumario-titulo">Sumário</p>
+    <ul class="sumario-list" id="sumario-list">
+      <!-- gerado por JS -->
+    </ul>
+  </aside>
+
+  <!-- CONTEÚDO -->
+  <main class="doc-conteudo">
+
+    <!-- ---- TERMOS DE USO ---- -->
+    <div class="doc-section ativa" id="sec-uso">
+
+      <div class="doc-artigo" id="art-1">
+        <div class="doc-artigo-header">
+          <span class="artigo-num">01</span>
+          <div class="artigo-titulo-wrap">
+            <span class="artigo-label">Aceitação</span>
+            <h2>Aceitação dos <em>Termos</em></h2>
+          </div>
+        </div>
+        <p>Ao acessar, navegar ou utilizar qualquer funcionalidade do sistema de agendamento da <strong>Una Instituto de Beleza</strong> ("Una", "nós", "nosso"), você ("Usuário") concorda integralmente com os presentes Termos de Uso.</p>
+        <p>Caso não concorde com qualquer disposição deste documento, solicitamos que não utilize nossos serviços digitais.</p>
+        <div class="doc-box destaque">
+          <i class="bi bi-info-circle-fill"></i>
+          <span>O uso continuado do sistema após eventuais alterações dos Termos implica na aceitação automática das modificações publicadas.</span>
+        </div>
+      </div>
+
+      <div class="doc-artigo" id="art-2">
+        <div class="doc-artigo-header">
+          <span class="artigo-num">02</span>
+          <div class="artigo-titulo-wrap">
+            <span class="artigo-label">Definições</span>
+            <h2>Definições e <em>Partes</em></h2>
+          </div>
+        </div>
+        <p>Para fins deste instrumento, ficam estabelecidas as seguintes definições:</p>
+        <ul>
+          <li><strong>Sistema:</strong> Plataforma digital de agendamento de serviços da Una, incluindo aplicações web e mobile.</li>
+          <li><strong>Cliente:</strong> Pessoa física que utiliza o sistema para agendar serviços de beleza.</li>
+          <li><strong>Profissional:</strong> Colaborador ou prestador de serviço cadastrado e aprovado pela Una.</li>
+          <li><strong>Serviço:</strong> Atendimento de beleza disponibilizado pela Una (corte, coloração, manicure, etc.).</li>
+          <li><strong>Agendamento:</strong> Reserva confirmada de horário para prestação de serviço.</li>
+        </ul>
+      </div>
+
+      <div class="doc-artigo" id="art-3">
+        <div class="doc-artigo-header">
+          <span class="artigo-num">03</span>
+          <div class="artigo-titulo-wrap">
+            <span class="artigo-label">Cadastro</span>
+            <h2>Cadastro e <em>Conta de Usuário</em></h2>
+          </div>
+        </div>
+        <p>Para utilizar os recursos de agendamento, é necessário criar uma conta. O Usuário é responsável por:</p>
+        <ol>
+          <li>Fornecer informações verdadeiras, precisas e atualizadas durante o cadastro;</li>
+          <li>Manter a confidencialidade de sua senha e dos dados de acesso;</li>
+          <li>Notificar imediatamente a Una em caso de uso não autorizado da conta;</li>
+          <li>Ser a única pessoa autorizada a utilizar sua conta.</li>
+        </ol>
+        <div class="doc-box aviso">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+          <span>Contas profissionais estão sujeitas à aprovação prévia da gestão da Una. O cadastro não garante automaticamente o acesso ao painel profissional.</span>
+        </div>
+      </div>
+
+      <div class="doc-artigo" id="art-4">
+        <div class="doc-artigo-header">
+          <span class="artigo-num">04</span>
+          <div class="artigo-titulo-wrap">
+            <span class="artigo-label">Agendamentos</span>
+            <h2>Regras de <em>Agendamento</em></h2>
+          </div>
+        </div>
+        <p>O sistema de agendamento opera conforme as seguintes regras:</p>
+        <table class="doc-tabela">
+          <thead><tr><th>Regra</th><th>Prazo / Condição</th></tr></thead>
+          <tbody>
+            <tr><td>Cancelamento gratuito</td><td>Até 24 horas antes do horário</td></tr>
+            <tr><td>Cancelamento com taxa</td><td>Menos de 24 horas antes</td></tr>
+            <tr><td>Reagendamento</td><td>Até 12 horas antes, sujeito à disponibilidade</td></tr>
+            <tr><td>Ausência sem aviso</td><td>Pode resultar em suspensão temporária</td></tr>
+            <tr><td>Atraso tolerado</td><td>Até 10 minutos; após isso, o horário pode ser remanejado</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="doc-artigo" id="art-5">
+        <div class="doc-artigo-header">
+          <span class="artigo-num">05</span>
+          <div class="artigo-titulo-wrap">
+            <span class="artigo-label">Pagamentos</span>
+            <h2>Política de <em>Pagamentos</em></h2>
+          </div>
+        </div>
+        <p>Os pagamentos pelos serviços podem ser realizados pelos meios disponibilizados na plataforma: PIX, cartão de crédito, cartão de débito ou pagamento no local.</p>
+        <p>A Una não armazena dados de cartão de crédito em seus servidores. As transações são processadas por gateways de pagamento certificados e seguros.</p>
+        <div class="doc-box verde">
+          <i class="bi bi-shield-fill-check"></i>
+          <span>Todos os pagamentos online são protegidos por criptografia SSL/TLS e processados em conformidade com o PCI-DSS.</span>
+        </div>
+      </div>
+
+      <div class="doc-artigo" id="art-6">
+        <div class="doc-artigo-header">
+          <span class="artigo-num">06</span>
+          <div class="artigo-titulo-wrap">
+            <span class="artigo-label">Proibições</span>
+            <h2>Condutas <em>Vedadas</em></h2>
+          </div>
+        </div>
+        <p>É estritamente proibido ao Usuário:</p>
+        <ul>
+          <li>Utilizar informações falsas ou de terceiros para criação de conta;</li>
+          <li>Realizar agendamentos fraudulentos ou de má-fé;</li>
+          <li>Tentar acessar áreas restritas do sistema sem autorização;</li>
+          <li>Compartilhar credenciais de acesso com terceiros;</li>
+          <li>Utilizar scripts, bots ou mecanismos automatizados no sistema;</li>
+          <li>Publicar conteúdo ofensivo, discriminatório ou ilegal.</li>
+        </ul>
+        <p>O descumprimento poderá acarretar suspensão ou exclusão imediata da conta, sem prejuízo das medidas legais cabíveis.</p>
+      </div>
+
+    </div><!-- /sec-uso -->
+
+    <!-- ---- PRIVACIDADE & LGPD ---- -->
+    <div class="doc-section" id="sec-privacidade">
+
+      <div class="doc-artigo" id="priv-1">
+        <div class="doc-artigo-header">
+          <span class="artigo-num">01</span>
+          <div class="artigo-titulo-wrap">
+            <span class="artigo-label">Controlador</span>
+            <h2>Quem é o <em>Controlador dos Dados</em></h2>
+          </div>
+        </div>
+        <p>A <strong>Una Instituto de Beleza</strong>, com sede em Cacoal — RO, atua como Controladora dos dados pessoais coletados em sua plataforma, conforme definição da Lei Geral de Proteção de Dados (LGPD — Lei Federal nº 13.709/2018).</p>
+        <div class="doc-box info">
+          <i class="bi bi-person-badge"></i>
+          <span>Encarregado (DPO): contato disponível via e-mail <strong>privacidade@una.com.br</strong> para exercício de direitos e esclarecimentos.</span>
+        </div>
+      </div>
+
+      <div class="doc-artigo" id="priv-2">
+        <div class="doc-artigo-header">
+          <span class="artigo-num">02</span>
+          <div class="artigo-titulo-wrap">
+            <span class="artigo-label">Dados coletados</span>
+            <h2>Quais <em>Dados Coletamos</em></h2>
+          </div>
+        </div>
+        <p>Coletamos os seguintes dados pessoais para viabilizar a prestação dos serviços:</p>
+        <table class="doc-tabela">
+          <thead><tr><th>Dado</th><th>Finalidade</th><th>Base Legal</th></tr></thead>
+          <tbody>
+            <tr><td>Nome completo</td><td>Identificação, emissão de recibo</td><td>Contrato (art. 7º, V)</td></tr>
+            <tr><td>E-mail</td><td>Comunicação, confirmações</td><td>Contrato (art. 7º, V)</td></tr>
+            <tr><td>CPF</td><td>Identificação legal, NF</td><td>Obrigação legal (art. 7º, II)</td></tr>
+            <tr><td>Telefone / WhatsApp</td><td>Lembretes, suporte</td><td>Consentimento (art. 7º, I)</td></tr>
+            <tr><td>Data de nascimento</td><td>Verificação de maioridade</td><td>Legítimo interesse (art. 7º, IX)</td></tr>
+            <tr><td>Histórico de agendamentos</td><td>Personalização, melhoria do serviço</td><td>Legítimo interesse (art. 7º, IX)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="doc-artigo" id="priv-3">
+        <div class="doc-artigo-header">
+          <span class="artigo-num">03</span>
+          <div class="artigo-titulo-wrap">
+            <span class="artigo-label">Seus direitos</span>
+            <h2>Direitos do <em>Titular</em></h2>
+          </div>
+        </div>
+        <p>Nos termos da LGPD, você tem os seguintes direitos sobre seus dados pessoais:</p>
+        <ul>
+          <li><strong>Acesso:</strong> saber quais dados seus estão armazenados;</li>
+          <li><strong>Correção:</strong> solicitar atualização de dados incompletos ou incorretos;</li>
+          <li><strong>Eliminação:</strong> pedir exclusão dos dados tratados com base em consentimento;</li>
+          <li><strong>Portabilidade:</strong> receber seus dados em formato estruturado;</li>
+          <li><strong>Revogação:</strong> retirar consentimento a qualquer momento;</li>
+          <li><strong>Oposição:</strong> opor-se a tratamentos em desacordo com a LGPD.</li>
+        </ul>
+        <p>Para exercer qualquer desses direitos, entre em contato com nosso DPO pelo e-mail indicado acima.</p>
+      </div>
+
+      <div class="doc-artigo" id="priv-4">
+        <div class="doc-artigo-header">
+          <span class="artigo-num">04</span>
+          <div class="artigo-titulo-wrap">
+            <span class="artigo-label">Retenção</span>
+            <h2>Retenção e <em>Exclusão</em></h2>
+          </div>
+        </div>
+        <p>Os dados pessoais são retidos enquanto necessários para as finalidades descritas ou enquanto a conta permanecer ativa. Após o encerramento, os dados serão eliminados em até <strong>90 dias</strong>, salvo obrigações legais que exijam retenção por prazo maior.</p>
+      </div>
+
+    </div><!-- /sec-privacidade -->
+
+    <!-- ---- TERMO DE COMPROMISSO ---- -->
+    <div class="doc-section" id="sec-compromisso">
+
+      <div class="doc-box destaque" style="margin-bottom:28px">
+        <i class="bi bi-pen-fill"></i>
+        <span>Este documento requer <strong>assinatura eletrônica</strong>. Utilize o painel à direita para assinar após a leitura completa.</span>
+      </div>
+
+      <div class="doc-artigo" id="comp-1">
+        <div class="doc-artigo-header">
+          <span class="artigo-num">01</span>
+          <div class="artigo-titulo-wrap">
+            <span class="artigo-label">Objeto</span>
+            <h2>Objeto do <em>Compromisso</em></h2>
+          </div>
+        </div>
+        <p>O presente Termo de Compromisso tem por objeto estabelecer as obrigações assumidas pelo Usuário ao se cadastrar e utilizar os serviços digitais da <strong>Una Instituto de Beleza</strong>, garantindo a lisura e a boa-fé nas relações estabelecidas pela plataforma.</p>
+      </div>
+
+      <div class="doc-artigo" id="comp-2">
+        <div class="doc-artigo-header">
+          <span class="artigo-num">02</span>
+          <div class="artigo-titulo-wrap">
+            <span class="artigo-label">Obrigações do cliente</span>
+            <h2>Compromissos do <em>Cliente</em></h2>
+          </div>
+        </div>
+        <p>O Cliente, ao aceitar este termo, compromete-se a:</p>
+        <ol>
+          <li>Comparecer ao agendamento no horário marcado ou cancelar com antecedência mínima de 24 horas;</li>
+          <li>Informar previamente condições de saúde, alergias ou sensibilidades relevantes aos serviços;</li>
+          <li>Tratar com respeito e cordialidade todos os profissionais e colaboradores da Una;</li>
+          <li>Realizar o pagamento pelos serviços prestados na forma e prazo acordados;</li>
+          <li>Não utilizar o sistema para fins fraudulentos ou em desacordo com estes termos;</li>
+          <li>Manter seus dados de contato atualizados para comunicações referentes aos agendamentos.</li>
+        </ol>
+      </div>
+
+      <div class="doc-artigo" id="comp-3">
+        <div class="doc-artigo-header">
+          <span class="artigo-num">03</span>
+          <div class="artigo-titulo-wrap">
+            <span class="artigo-label">Obrigações do profissional</span>
+            <h2>Compromissos do <em>Profissional</em></h2>
+          </div>
+        </div>
+        <p>O Profissional cadastrado compromete-se a:</p>
+        <ol>
+          <li>Prestar os serviços com excelência técnica, ética e pontualidade;</li>
+          <li>Manter sigilo sobre informações pessoais dos clientes atendidos;</li>
+          <li>Zelar pelo uso correto das ferramentas e equipamentos disponibilizados;</li>
+          <li>Atualizar sua disponibilidade de agenda com regularidade no sistema;</li>
+          <li>Comunicar à gestão com antecedência qualquer impossibilidade de atendimento;</li>
+          <li>Seguir todas as normas de higiene, segurança e biossegurança estabelecidas.</li>
+        </ol>
+      </div>
+
+      <div class="doc-artigo" id="comp-4">
+        <div class="doc-artigo-header">
+          <span class="artigo-num">04</span>
+          <div class="artigo-titulo-wrap">
+            <span class="artigo-label">Validade</span>
+            <h2>Validade e <em>Vigência</em></h2>
+          </div>
+        </div>
+        <p>Este Termo de Compromisso entra em vigor na data de sua assinatura eletrônica, com validade por prazo indeterminado, podendo ser rescindido por qualquer das partes mediante notificação prévia com antecedência de 15 dias.</p>
+        <div class="doc-box verde">
+          <i class="bi bi-award-fill"></i>
+          <span>A assinatura eletrônica possui validade jurídica conforme a Medida Provisória nº 2.200-2/2001 e a Lei nº 14.063/2020.</span>
+        </div>
+      </div>
+
+    </div><!-- /sec-compromisso -->
+
+    <!-- ---- TERMO DE RESPONSABILIDADE ---- -->
+    <div class="doc-section" id="sec-responsabilidade">
+
+      <div class="doc-box aviso" style="margin-bottom:28px">
+        <i class="bi bi-shield-exclamation"></i>
+        <span>Leia com atenção. Este documento delimita as responsabilidades de cada parte na relação de prestação de serviços.</span>
+      </div>
+
+      <div class="doc-artigo" id="resp-1">
+        <div class="doc-artigo-header">
+          <span class="artigo-num">01</span>
+          <div class="artigo-titulo-wrap">
+            <span class="artigo-label">Responsabilidade da Una</span>
+            <h2>O que a <em>Una garante</em></h2>
+          </div>
+        </div>
+        <p>A Una Instituto de Beleza é responsável por:</p>
+        <ul>
+          <li>Garantir a disponibilidade do sistema de agendamento com esforços razoáveis de continuidade;</li>
+          <li>Proteger os dados pessoais dos Usuários conforme a LGPD e esta Política de Privacidade;</li>
+          <li>Disponibilizar profissionais qualificados e certificados para a prestação dos serviços;</li>
+          <li>Manter as instalações físicas em condições adequadas de higiene e segurança;</li>
+          <li>Responder por danos causados diretamente por negligência comprovada da equipe Una.</li>
+        </ul>
+      </div>
+
+      <div class="doc-artigo" id="resp-2">
+        <div class="doc-artigo-header">
+          <span class="artigo-num">02</span>
+          <div class="artigo-titulo-wrap">
+            <span class="artigo-label">Limitações</span>
+            <h2>Limitações de <em>Responsabilidade</em></h2>
+          </div>
+        </div>
+        <p>A Una <strong>não se responsabiliza</strong> por:</p>
+        <ul>
+          <li>Reações alérgicas a produtos quando o Cliente não informou previamente as alergias conhecidas;</li>
+          <li>Resultados estéticos que dependam de características individuais do Cliente (tipo de cabelo, pele, etc.);</li>
+          <li>Objetos pessoais deixados nas dependências do salão;</li>
+          <li>Indisponibilidade temporária do sistema por manutenção programada ou falhas de terceiros;</li>
+          <li>Danos causados por informações incorretas fornecidas pelo Usuário no cadastro.</li>
+        </ul>
+        <div class="doc-box aviso">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+          <span>É de inteira responsabilidade do Cliente informar alergias, sensibilidades e condições dermatológicas ANTES do início de qualquer procedimento.</span>
+        </div>
+      </div>
+
+      <div class="doc-artigo" id="resp-3">
+        <div class="doc-artigo-header">
+          <span class="artigo-num">03</span>
+          <div class="artigo-titulo-wrap">
+            <span class="artigo-label">Resolução de conflitos</span>
+            <h2>Resolução de <em>Disputas</em></h2>
+          </div>
+        </div>
+        <p>As partes comprometem-se a resolver eventuais conflitos primeiramente de forma amigável. Caso não seja possível acordo, fica eleito o foro da Comarca de Cacoal — RO para dirimir quaisquer litígios decorrentes deste instrumento, com renúncia expressa a qualquer outro foro.</p>
+      </div>
+
+      <div class="doc-artigo" id="resp-4">
+        <div class="doc-artigo-header">
+          <span class="artigo-num">04</span>
+          <div class="artigo-titulo-wrap">
+            <span class="artigo-label">Lei aplicável</span>
+            <h2>Legislação <em>Aplicável</em></h2>
+          </div>
+        </div>
+        <p>O presente instrumento é regido pelas leis brasileiras, especialmente:</p>
+        <ul>
+          <li>Código de Defesa do Consumidor — Lei nº 8.078/1990;</li>
+          <li>Marco Civil da Internet — Lei nº 12.965/2014;</li>
+          <li>Lei Geral de Proteção de Dados — Lei nº 13.709/2018;</li>
+          <li>Código Civil Brasileiro — Lei nº 10.406/2002.</li>
+        </ul>
+      </div>
+
+    </div><!-- /sec-responsabilidade -->
+
+    <!-- TELA DE ASSINATURA CONCLUÍDA (conteúdo) -->
+    <div class="assin-concluida" id="assin-concluida">
+      <div class="assin-concluida-ico"><i class="bi bi-patch-check-fill"></i></div>
+      <h2>Termo <em>assinado!</em></h2>
+      <p>Sua assinatura eletrônica foi registrada com sucesso. Uma cópia foi enviada para o seu e-mail.</p>
+      <div class="assin-hash">
+        <span class="hash-label">Hash de verificação (SHA-256)</span>
+        <span id="hash-valor">—</span>
+      </div>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <button class="btn-extra" style="width:auto;padding:12px 24px;" onclick="baixarPDF()">
+          <i class="bi bi-download"></i> Baixar PDF
+        </button>
+        <a href="{% url 'agendamentos:cadastro' %}" class="btn-extra" style="width:auto;padding:12px 24px;text-decoration:none">
+          <i class="bi bi-arrow-left"></i> Voltar ao cadastro
+        </a>
+      </div>
+    </div>
+
+  </main><!-- /doc-conteudo -->
+
+  <!-- PAINEL DE ASSINATURA (direita) -->
+  <aside class="doc-assinatura-panel">
+    <div class="assin-card" id="assin-card">
+      <div class="assin-card-header">
+        <span class="assin-tag">Assinatura eletrônica</span>
+        <h3>Assinar <em>documento</em></h3>
+      </div>
+      <div class="assin-card-body">
+
+        <!-- Progresso de leitura -->
+        <div class="leitura-progresso-wrap">
+          <div class="leitura-progresso-txt">
+            <span>Progresso de leitura</span>
+            <span id="leitura-pct">0%</span>
+          </div>
+          <div class="leitura-barra-bg">
+            <div class="leitura-barra" id="leitura-barra"></div>
+          </div>
+        </div>
+
+        <!-- Signatário -->
+        <div class="assin-info">
+          <label>Signatário</label>
+          <p id="assin-nome">—</p>
+          <p class="assin-info-meta" id="assin-email-txt">—</p>
+        </div>
+
+        <!-- IP e data/hora -->
+        <div class="assin-info">
+          <label>Dados do registro</label>
+          <p class="assin-info-meta" id="assin-datetime">—</p>
+          <p class="assin-info-meta" id="assin-ip">IP: carregando...</p>
+        </div>
+
+        <!-- Canvas de assinatura -->
+        <div class="assin-info">
+          <label>Sua assinatura</label>
+          <div class="assin-canvas-wrap">
+            <canvas id="assin-canvas" width="200" height="100"></canvas>
+            <span class="assin-canvas-label" id="canvas-placeholder">Assine aqui</span>
+          </div>
+          <div class="assin-canvas-acoes">
+            <button class="btn-limpar-assin" onclick="limparCanvas()">
+              <i class="bi bi-eraser"></i> Limpar
+            </button>
+          </div>
+        </div>
+
+        <!-- Checkboxes -->
+        <div class="assin-checks">
+          <label class="assin-check">
+            <input type="checkbox" id="chk-li"> 
+            <span>Li e compreendi o conteúdo integral deste documento.</span>
+          </label>
+          <label class="assin-check">
+            <input type="checkbox" id="chk-aceito">
+            <span>Aceito os termos e assino eletronicamente de forma voluntária.</span>
+          </label>
+        </div>
+
+        <!-- Status -->
+        <div class="assin-status pendente vis" id="assin-status-pendente">
+          <i class="bi bi-clock"></i> Aguardando assinatura
+        </div>
+        <div class="assin-status assinado" id="assin-status-assinado">
+          <i class="bi bi-check-circle-fill"></i> Documento assinado
+        </div>
+
+        <!-- Botão principal -->
+        <button class="btn-assinar" id="btn-assinar" onclick="abrirModalAssinatura()" disabled>
+          <span class="btn-assin-txt"><i class="bi bi-pen"></i> Assinar documento</span>
+          <div class="spinner-assin"></div>
+        </button>
+
+        <!-- Ações pós-assinatura -->
+        <div class="assin-acoes-extra" id="assin-acoes-extra">
+          <button class="btn-extra" onclick="baixarPDF()">
+            <i class="bi bi-file-pdf"></i> Baixar PDF
+          </button>
+          <button class="btn-extra" onclick="compartilharWpp()">
+            <i class="bi bi-whatsapp"></i> Enviar via WhatsApp
+          </button>
+        </div>
+
+      </div><!-- /assin-card-body -->
+    </div><!-- /assin-card -->
+  </aside>
+
+</div><!-- /doc-layout -->
+
+<!-- FOOTER -->
+<footer class="doc-footer">
+  <p class="footer-logo">Una<span>Instituto</span></p>
+  <p class="footer-txt">&copy; 2026 Una Instituto de Beleza &bull; Todos os direitos reservados &bull; Cacoal — RO</p>
+</footer>
+
+<!-- ======================================================
+     MODAL DE CONFIRMAÇÃO DE ASSINATURA
+====================================================== -->
+<div class="overlay-assin" id="overlay-assin" onclick="fecharModalAssinOutside(event)">
+  <div class="modal-assin">
+    <button class="modal-assin-close" onclick="fecharModalAssin()"><i class="bi bi-x"></i></button>
+    <div class="modal-assin-ico"><i class="bi bi-pen-fill"></i></div>
+    <h3>Confirmar <em>assinatura</em></h3>
+    <p>Você está prestes a assinar eletronicamente o documento abaixo. Esta ação tem validade jurídica.</p>
+    <div class="modal-assin-resumo" id="modal-resumo">
+      <!-- preenchido por JS -->
+    </div>
+    <div class="modal-assin-btns">
+      <button class="btn-confirmar-assin" onclick="executarAssinatura()">
+        <i class="bi bi-check2-circle"></i> Confirmar e assinar
+      </button>
+      <button class="btn-cancelar-assin" onclick="fecharModalAssin()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- NOTIFICAÇÃO -->
+<div class="notif" id="notif">
+  <i class="bi bi-check-circle"></i>
+  <span id="notif-txt"></span>
+</div>
+
+  <script src="/static/js/termos.js"></script>
+  
+</body>
+</html>

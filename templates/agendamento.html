@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Una Instituto de Beleza — Agendamento</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/agenda.css">
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <div class="logo-wrap">
+      <div class="logo">
+        <img src="/static/img/logo_redonda.png" alt="">
+      </div>
+      <div class="user-badge">
+        <div class="avatar" id="av-inicial">M</div>
+        <div class="info">
+          <div class="nome-user" id="user-nome-sidebar">Maria Silva</div>
+          <div class="tipo-user" id="user-tipo-sidebar">Cliente</div>
+        </div>
+      </div>
+      <nav>
+        <ul id="nav-menu">
+          <!-- gerado por JS -->
+        </ul>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="btn-sair" onclick="sair()"><i class="bi bi-box-arrow-left"></i> Sair</button>
+        <p class="rodape-texto">Una<br>Instituto de Beleza</p>
+      </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- PAGE HEADER -->
+    <div class="page-header" id="page-header">
+      <div class="ph-deco"></div>
+      <div class="ph-deco2"></div>
+      <div class="ph-linha"></div>
+      <div class="ph-tag" id="ph-tag">Agendamento</div>
+      <h1 class="ph-titulo" id="ph-titulo">Carregando...</h1>
+      <p class="ph-sub" id="ph-sub"></p>
+    </div>
+
+    <div class="conteudo">
+
+      <!-- ========================================
+         SEÇÃO: CLIENTE — AGENDAR
+    ======================================== -->
+      <div class="secao" id="sec-agendar">
+        <!-- STEPS -->
+        <div class="steps-bar">
+          <div class="step ativo" id="st1">
+            <div class="step-num">1</div><span>Serviço</span>
+          </div>
+          <div class="step-linha"></div>
+          <div class="step" id="st2">
+            <div class="step-num">2</div><span>Profissional</span>
+          </div>
+          <div class="step-linha"></div>
+          <div class="step" id="st3">
+            <div class="step-num">3</div><span>Horário</span>
+          </div>
+          <div class="step-linha"></div>
+          <div class="step" id="st4">
+            <div class="step-num">4</div><span>Confirmar</span>
+          </div>
+        </div>
+
+        <!-- ETAPA 1: SERVIÇO -->
+        <div id="et1">
+          <span class="label-sec">Escolha o serviço</span>
+          <div class="grade-servicos" id="grade-servs"></div>
+          <div style="display:flex;gap:12px;">
+            <button class="btn-pri" id="btn-n1" onclick="goEt(2)" disabled>Próximo <i
+                class="bi bi-arrow-right"></i></button>
+          </div>
+        </div>
+
+        <!-- ETAPA 2: PROFISSIONAL -->
+        <div id="et2" style="display:none">
+          <span class="label-sec">Escolha a profissional</span>
+          <div class="grade-prof" id="grade-profs-ag"></div>
+          <div style="display:flex;gap:12px;">
+            <button class="btn-sec" onclick="goEt(1)"><i class="bi bi-arrow-left"></i> Voltar</button>
+            <button class="btn-pri" id="btn-n2" onclick="goEt(3)" disabled>Próximo <i
+                class="bi bi-arrow-right"></i></button>
+          </div>
+        </div>
+
+        <!-- ETAPA 3: DATA/HORÁRIO -->
+        <div id="et3" style="display:none">
+          <span class="label-sec">Data e horário</span>
+          <div class="data-grid">
+            <div class="cal" id="cal-box"></div>
+            <div class="horarios-box">
+              <h4>Horários disponíveis</h4>
+              <span class="data-txt" id="data-txt-sel">Selecione uma data</span>
+              <div class="turnos" id="turnos-box">
+                <p style="font-size:13px;color:rgba(61,43,26,0.3);">← Selecione uma data</p>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px;">
+            <button class="btn-sec" onclick="goEt(2)"><i class="bi bi-arrow-left"></i> Voltar</button>
+            <button class="btn-pri" id="btn-n3" onclick="goEt(4)" disabled>Próximo <i
+                class="bi bi-arrow-right"></i></button>
+          </div>
+        </div>
+
+        <!-- ETAPA 4: CONFIRMAR + PAGAMENTO -->
+        <div id="et4" style="display:none">
+          <span class="label-sec">Confirmar agendamento</span>
+          <div class="resumo-pag-grid">
+            <!-- RESUMO -->
+            <div>
+              <div class="resumo-card" style="margin-bottom:20px;">
+                <p class="resumo-titulo">Resumo do <em>agendamento</em></p>
+                <div class="rl">
+                  <div class="rl-ico"><i class="bi bi-scissors"></i></div>
+                  <div class="rl-info"><label>Serviço</label>
+                    <p id="r-serv">—</p>
+                  </div>
+                </div>
+                <div class="rl">
+                  <div class="rl-ico"><i class="bi bi-person"></i></div>
+                  <div class="rl-info"><label>Profissional</label>
+                    <p id="r-prof">—</p>
+                  </div>
+                </div>
+                <div class="rl">
+                  <div class="rl-ico"><i class="bi bi-calendar3"></i></div>
+                  <div class="rl-info"><label>Data</label>
+                    <p id="r-data">—</p>
+                  </div>
+                </div>
+                <div class="rl">
+                  <div class="rl-ico"><i class="bi bi-clock"></i></div>
+                  <div class="rl-info"><label>Horário</label>
+                    <p id="r-hora">—</p>
+                  </div>
+                </div>
+                <div class="rl">
+                  <div class="rl-ico"><i class="bi bi-hourglass"></i></div>
+                  <div class="rl-info"><label>Duração</label>
+                    <p id="r-dur">—</p>
+                  </div>
+                </div>
+                <div class="total-linha">
+                  <span class="tl">Total</span>
+                  <span class="tv"><span>R$</span> <span id="r-preco">—</span></span>
+                </div>
+              </div>
+              <div class="resumo-card">
+                <p class="resumo-titulo">Seus <em>dados</em></p>
+                <div class="campo-f"><label class="inp-label">Nome completo</label><input class="inp" id="c-nome"
+                    placeholder="Maria Silva"></div>
+                <div class="grid2">
+                  <div class="campo-f"><label class="inp-label">WhatsApp</label><input class="inp" id="c-tel"
+                      placeholder="(69) 9 9999-9999"></div>
+                  <div class="campo-f"><label class="inp-label">E-mail</label><input class="inp" id="c-email"
+                      placeholder="maria@email.com"></div>
+                </div>
+                <div class="campo-f"><label class="inp-label">Observações</label><textarea class="inp" rows="2"
+                    placeholder="Preferências, alergias, etc..."></textarea></div>
+              </div>
+            </div>
+            <!-- PAGAMENTO -->
+            <div>
+              <div class="resumo-card">
+                <p class="resumo-titulo">Forma de <em>pagamento</em></p>
+                <div class="metodos-pag" id="metodos-pag">
+                  <div class="metodo" onclick="selPag('pix',this)">
+                    <div class="metodo-ico" style="background:rgba(76,175,125,0.1);color:#4CAF7D;"><i
+                        class="bi bi-qr-code"></i></div>
+                    <div class="metodo-info">
+                      <h5>PIX</h5>
+                      <p>Confirmação instantânea</p>
+                    </div>
+                    <div class="metodo-radio"></div>
+                  </div>
+                  <div class="metodo" onclick="selPag('credito',this)">
+                    <div class="metodo-ico"><i class="bi bi-credit-card"></i></div>
+                    <div class="metodo-info">
+                      <h5>Cartão de Crédito</h5>
+                      <p>Parcele em até 3x</p>
+                    </div>
+                    <div class="metodo-radio"></div>
+                  </div>
+                  <div class="metodo" onclick="selPag('debito',this)">
+                    <div class="metodo-ico"><i class="bi bi-credit-card-2-front"></i></div>
+                    <div class="metodo-info">
+                      <h5>Cartão de Débito</h5>
+                      <p>Débito na hora</p>
+                    </div>
+                    <div class="metodo-radio"></div>
+                  </div>
+                  <div class="metodo" onclick="selPag('local',this)">
+                    <div class="metodo-ico"><i class="bi bi-cash-coin"></i></div>
+                    <div class="metodo-info">
+                      <h5>Pagar no local</h5>
+                      <p>Dinheiro ou maquininha</p>
+                    </div>
+                    <div class="metodo-radio"></div>
+                  </div>
+                </div>
+                <!-- PIX -->
+                <div class="pix-box" id="pix-box">
+                  <i class="bi bi-qr-code" style="font-size:36px;color:#4CAF7D;display:block;margin-bottom:10px;"></i>
+                  <p style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(61,43,26,0.4);">Chave
+                    PIX</p>
+                  <p class="pix-key"><span>📱</span> (69) 9 8469-6874</p>
+                  <p style="font-size:12px;color:rgba(61,43,26,0.4);">Envie o comprovante via WhatsApp após o pagamento
+                  </p>
+                </div>
+                <!-- CARTÃO -->
+                <div class="cartao-box" id="cartao-box">
+                  <div class="campo-f"><label class="inp-label">Número do cartão</label><input class="inp"
+                      placeholder="0000 0000 0000 0000" maxlength="19" oninput="maskCard(this)"></div>
+                  <div class="grid2">
+                    <div class="campo-f"><label class="inp-label">Validade</label><input class="inp" placeholder="MM/AA"
+                        maxlength="5"></div>
+                    <div class="campo-f"><label class="inp-label">CVV</label><input class="inp" placeholder="123"
+                        maxlength="3"></div>
+                  </div>
+                  <div class="campo-f"><label class="inp-label">Nome no cartão</label><input class="inp"
+                      placeholder="MARIA SILVA"></div>
+                  <div id="parcelas-wrap" style="display:none">
+                    <div class="campo-f"><label class="inp-label">Parcelas</label>
+                      <select class="sel-inp" id="parcelas-sel"></select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="display:flex;gap:12px;margin-top:20px;">
+                <button class="btn-sec" onclick="goEt(3)"><i class="bi bi-arrow-left"></i> Voltar</button>
+                <button class="btn-pri" onclick="confirmar()"><i class="bi bi-check2-circle"></i> Confirmar
+                  agendamento</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUCESSO -->
+        <div id="et-suc" style="display:none">
+          <div class="sucesso-wrap">
+            <div class="suc-ico"><i class="bi bi-check-lg"></i></div>
+            <h2 class="suc-titulo">Agendamento <em>confirmado!</em></h2>
+            <p class="suc-desc">Seu horário foi reservado com sucesso. Você receberá uma confirmação em breve.</p>
+            <div class="suc-card" id="suc-info">—</div>
+            <br><br>
+            <button class="suc-wpp" onclick="window.open('https://wa.me/556984696874','_blank')">
+              <i class="bi bi-whatsapp"></i> Falar no WhatsApp
+            </button>
+            <button class="btn-sec" onclick="novoAg()">Novo agendamento</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================
+         SEÇÃO: CLIENTE — MEUS AGENDAMENTOS
+    ======================================== -->
+      <div class="secao" id="sec-meus">
+        <p class="label-sec">Meu histórico</p>
+        <h2 class="titulo-sec">Meus <em>agendamentos</em></h2>
+        <p class="sub-sec">Consulte e gerencie seus agendamentos passados e futuros</p>
+        <div class="hist-lista" id="hist-lista"></div>
+      </div>
+
+      <!-- ========================================
+         SEÇÃO: PROF — AGENDA
+    ======================================== -->
+      <div class="secao" id="sec-agenda">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;">
+          <div>
+            <p class="label-sec">Agenda da semana</p>
+            <h2 class="titulo-sec">Olá, <em id="prof-saudacao">Carla</em></h2>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;">
+            <label
+              style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(61,43,26,0.4);">Profissional</label>
+            <select class="sel-inp" style="width:auto;" id="sel-prof-agenda" onchange="renderAgenda()">
+              <option>Carla Mendes</option>
+              <option>Juliana Ramos</option>
+              <option>Beatriz Costa</option>
+            </select>
+          </div>
+        </div>
+        <div class="stats-bar" id="stats-agenda"></div>
+        <div class="semana-nav">
+          <h3 id="semana-titulo">—</h3>
+          <div class="snav-btns">
+            <div class="snav-ico" onclick="movSemana(-1)"><i class="bi bi-chevron-left"></i></div>
+            <button class="snav-btn" onclick="movSemana(0)"><i class="bi bi-calendar-check"></i> Hoje</button>
+            <div class="snav-ico" onclick="movSemana(1)"><i class="bi bi-chevron-right"></i></div>
+          </div>
+        </div>
+        <div class="agenda-wrap">
+          <div class="ag-header" id="ag-header"></div>
+          <div class="ag-corpo" id="ag-corpo"></div>
+        </div>
+        <div class="legenda">
+          <div class="leg">
+            <div class="leg-c" style="background:#C9A96E"></div> Corte
+          </div>
+          <div class="leg">
+            <div class="leg-c" style="background:#C0392B"></div> Manicure/Pedicure
+          </div>
+          <div class="leg">
+            <div class="leg-c" style="background:#4CAF7D"></div> Tratamento Capilar
+          </div>
+          <div class="leg">
+            <div class="leg-c" style="background:#8E44AD"></div> Coloração
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================
+         SEÇÃO: PROF — GESTÃO DE SERVIÇOS
+    ======================================== -->
+      <div class="secao" id="sec-servicos-gestao">
+        <p class="label-sec">Painel administrativo</p>
+        <h2 class="titulo-sec">Gestão de <em>serviços</em></h2>
+        <p class="sub-sec">Adicione, edite e remova serviços disponíveis no sistema de agendamento</p>
+        <div class="servicos-gestao-grid">
+          <div class="servicos-lista" id="servicos-lista-gestao"></div>
+          <div class="form-servico">
+            <h3 id="form-serv-titulo">Novo <em>serviço</em></h3>
+            <div class="campo-f"><label class="inp-label">Nome do serviço</label><input class="inp" id="fs-nome"
+                placeholder="Ex: Corte + Escova"></div>
+            <div class="grid2">
+              <div class="campo-f"><label class="inp-label">Preço (R$)</label><input class="inp" id="fs-preco"
+                  type="number" placeholder="0,00"></div>
+              <div class="campo-f"><label class="inp-label">Duração (min)</label><input class="inp" id="fs-dur"
+                  type="number" placeholder="60"></div>
+            </div>
+            <div class="campo-f">
+              <label class="inp-label">Categoria</label>
+              <select class="sel-inp" id="fs-cat">
+                <option value="corte">Corte / Cabelo</option>
+                <option value="manicure">Manicure / Pedicure</option>
+                <option value="tratamento">Tratamento Capilar</option>
+                <option value="coloracao">Coloração</option>
+              </select>
+            </div>
+            <div class="campo-f">
+              <label class="inp-label">Ícone</label>
+              <div class="ico-sel" id="ico-sel">
+                <div class="ico-opt sel" data-ico="bi-scissors" onclick="selIco(this)"><i class="bi bi-scissors"></i>
+                </div>
+                <div class="ico-opt" data-ico="bi-hand-index" onclick="selIco(this)"><i class="bi bi-hand-index"></i>
+                </div>
+                <div class="ico-opt" data-ico="bi-droplet" onclick="selIco(this)"><i class="bi bi-droplet"></i></div>
+                <div class="ico-opt" data-ico="bi-palette" onclick="selIco(this)"><i class="bi bi-palette"></i></div>
+                <div class="ico-opt" data-ico="bi-wind" onclick="selIco(this)"><i class="bi bi-wind"></i></div>
+                <div class="ico-opt" data-ico="bi-eye" onclick="selIco(this)"><i class="bi bi-eye"></i></div>
+                <div class="ico-opt" data-ico="bi-stars" onclick="selIco(this)"><i class="bi bi-stars"></i></div>
+                <div class="ico-opt" data-ico="bi-flower1" onclick="selIco(this)"><i class="bi bi-flower1"></i></div>
+              </div>
+            </div>
+            <div class="campo-f"><label class="inp-label">Descrição (opcional)</label><textarea class="inp" rows="2"
+                id="fs-desc" placeholder="Descrição breve do serviço..."></textarea></div>
+            <div style="display:flex;gap:10px;margin-top:4px;">
+              <button class="btn-pri" onclick="salvarServico()" style="flex:1;justify-content:center;"
+                id="fs-btn-salvar">
+                <i class="bi bi-plus-circle"></i> Adicionar serviço
+              </button>
+              <button class="btn-ghost" onclick="cancelarEdicaoServ()" id="fs-btn-cancelar"
+                style="display:none">Cancelar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================
+         SEÇÃO: PROF — RELATÓRIOS
+    ======================================== -->
+      <div class="secao" id="sec-relatorios">
+        <p class="label-sec">Financeiro</p>
+        <h2 class="titulo-sec">Relatórios e <em>métricas</em></h2>
+        <p class="sub-sec">Visão geral do faturamento e desempenho do salão</p>
+        <div id="relatorios-conteudo"></div>
+      </div>
+
+      <!-- ========================================
+         SEÇÃO: PROF — CLIENTES
+    ======================================== -->
+      <div class="secao" id="sec-clientes-gestao">
+        <p class="label-sec">Base de clientes</p>
+        <h2 class="titulo-sec">Gestão de <em>clientes</em></h2>
+        <p class="sub-sec">Histórico e informações dos clientes do salão</p>
+        <div id="clientes-lista-gestao"></div>
+      </div>
+
+    </div><!-- /conteudo -->
+  </main>
+
+  <!-- MODAL EVENTO -->
+  <div class="overlay" id="modal-overlay" onclick="fecharOverlay(event)">
+    <div class="modal">
+      <button class="modal-close" onclick="fecharModal()"><i class="bi bi-x"></i></button>
+      <div id="modal-tipo-badge" style="margin-bottom:12px;"></div>
+      <h3 id="modal-titulo">—</h3>
+      <div id="modal-body" style="font-size:13px;line-height:2;color:var(--marrom-medio);"></div>
+      <div style="display:flex;gap:10px;margin-top:20px;" id="modal-acoes"></div>
+    </div>
+  </div>
+
+  <!-- MODAL EDITAR SERVIÇO -->
+  <div class="overlay" id="del-overlay" onclick="fecharOverlay2(event)">
+    <div class="modal" style="max-width:380px;">
+      <button class="modal-close" onclick="document.getElementById('del-overlay').classList.remove('open')"><i
+          class="bi bi-x"></i></button>
+      <h3>Remover <em>serviço</em></h3>
+      <p style="font-size:14px;color:rgba(61,43,26,0.55);line-height:1.7;margin-bottom:20px;">Tem certeza que deseja
+        remover o serviço <strong id="del-nome"></strong>? Esta ação não pode ser desfeita.</p>
+      <div style="display:flex;gap:10px;">
+        <button class="btn-danger" onclick="confirmarDel()">Sim, remover</button>
+        <button class="btn-sec"
+          onclick="document.getElementById('del-overlay').classList.remove('open')">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTIF -->
+  <div class="notif" id="notif"><i class="bi bi-check-circle"></i> <span id="notif-txt"></span></div>
+  <script src="/static/js/agendamento.js"></script>
+</body>
+
+</html>

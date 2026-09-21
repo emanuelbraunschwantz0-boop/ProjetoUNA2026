@@ -1,0 +1,802 @@
+/* =====================================================
+   UNA INSTITUTO DE BELEZA — CADASTRO.CSS
+   ===================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap');
+
+/* ---- RESET & VARIÁVEIS ---- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --marrom:        #3D2B1A;
+  --marrom-medio:  #6B4226;
+  --dourado:       #C9A96E;
+  --dourado-claro: #E8D5B0;
+  --creme:         #FAF5EE;
+  --creme-escuro:  #F0E6D3;
+  --texto:         #2A1A0E;
+  --verde:         #4CAF7D;
+  --vermelho:      #C0392B;
+  --sombra:        rgba(61, 43, 26, 0.08);
+}
+
+html, body {
+  min-height: 100%;
+  font-family: 'Jost', sans-serif;
+  background: var(--creme);
+  color: var(--texto);
+  overflow-x: hidden;
+}
+
+/* =====================================================
+   LAYOUT GERAL
+   ===================================================== */
+.cad-wrap {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  min-height: 100vh;
+}
+
+/* =====================================================
+   PAINEL ESQUERDO — VISUAL FIXO
+   ===================================================== */
+.cad-visual {
+  background: linear-gradient(160deg, #2A1A0E 0%, #3D2B1A 35%, #5C3D22 70%, #7A5230 100%);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 52px 48px;
+  overflow: hidden;
+}
+
+/* Círculos decorativos */
+.cv-circulo {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.cv-circulo.c1 { width: 600px; height: 600px; border: 1px solid rgba(201,169,110,0.07); top: -180px; right: -220px; }
+.cv-circulo.c2 { width: 420px; height: 420px; border: 1px solid rgba(201,169,110,0.06); top: -80px;  right: -120px; }
+.cv-circulo.c3 { width: 260px; height: 260px; border: 1px solid rgba(201,169,110,0.1);  top:  10px;  right: -40px; }
+.cv-circulo.c4 { width: 360px; height: 360px; border: 1px solid rgba(201,169,110,0.05); bottom: -120px; left: -80px; }
+
+/* Logo */
+.cv-logo {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  animation: fadeUp 0.5s 0.1s ease both;
+}
+.cv-logo-circulo {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: var(--dourado);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px; font-weight: 300;
+  color: var(--marrom);
+  box-shadow: 0 0 0 7px rgba(201,169,110,0.13);
+  flex-shrink: 0;
+}
+.cv-logo-texto .cv-nome {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px; font-weight: 300;
+  color: #fff; letter-spacing: 2px;
+}
+.cv-logo-texto .cv-sub {
+  font-size: 10px; letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(201,169,110,0.55);
+}
+
+/* Conteúdo central */
+.cv-corpo {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 48px 0 32px;
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+.cv-tag {
+  display: inline-block;
+  font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--dourado);
+  border: 1px solid rgba(201,169,110,0.32);
+  padding: 5px 14px; border-radius: 20px;
+  margin-bottom: 22px; width: fit-content;
+}
+.cv-titulo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(30px, 2.8vw, 46px);
+  font-weight: 300; color: #fff; line-height: 1.22;
+  margin-bottom: 16px;
+}
+.cv-titulo em { font-style: italic; color: var(--dourado); }
+.cv-desc {
+  font-size: 13px; line-height: 1.9; letter-spacing: 0.3px;
+  color: rgba(232,213,176,0.5);
+  max-width: 300px;
+}
+
+/* Checklist de benefícios */
+.cv-checks {
+  margin-top: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.cv-check-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: rgba(232,213,176,0.6);
+  letter-spacing: 0.2px;
+}
+.cv-check-item .cv-check-ico {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: rgba(201,169,110,0.12);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: var(--dourado);
+  flex-shrink: 0;
+}
+
+/* Steps lateral */
+.cv-steps {
+  position: relative;
+  z-index: 2;
+  border-top: 1px solid rgba(201,169,110,0.14);
+  padding-top: 26px;
+  animation: fadeUp 0.6s 0.35s ease both;
+}
+.cv-steps-titulo {
+  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  color: rgba(201,169,110,0.35);
+  margin-bottom: 14px;
+}
+.cv-step-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cv-step-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: rgba(201,169,110,0.3);
+  letter-spacing: 0.5px;
+  transition: all 0.3s;
+}
+.cv-step-item.ativo { color: var(--dourado-claro); }
+.cv-step-item.concluido { color: rgba(201,169,110,0.5); }
+.cv-step-num {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 500;
+  flex-shrink: 0;
+  transition: all 0.3s;
+}
+.cv-step-item.ativo .cv-step-num {
+  background: var(--dourado);
+  border-color: var(--dourado);
+  color: var(--marrom);
+}
+.cv-step-item.concluido .cv-step-num {
+  background: rgba(201,169,110,0.2);
+  border-color: rgba(201,169,110,0.4);
+}
+
+/* =====================================================
+   PAINEL DIREITO — FORMULÁRIO
+   ===================================================== */
+.cad-form-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 72px;
+  background: var(--creme);
+  position: relative;
+}
+.cad-form-area::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(201,169,110,0.2), transparent);
+}
+
+/* Header do form */
+.cad-form-header {
+  width: 100%;
+  max-width: 580px;
+  margin-bottom: 36px;
+  animation: fadeUp 0.5s 0.15s ease both;
+}
+.cad-form-header .cad-titulo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 38px; font-weight: 300;
+  color: var(--marrom); line-height: 1.15;
+  margin-bottom: 6px;
+}
+.cad-form-header .cad-titulo em { font-style: italic; color: var(--marrom-medio); }
+.cad-form-header .cad-sub {
+  font-size: 13px; letter-spacing: 0.4px;
+  color: rgba(61,43,26,0.4); line-height: 1.7;
+}
+
+/* Wrapper de etapas */
+.cad-etapa-wrap {
+  width: 100%;
+  max-width: 580px;
+}
+
+/* ---- ETAPA (bloco genérico) ---- */
+.cad-etapa {
+  display: none;
+  animation: fadeUp 0.35s ease both;
+}
+.cad-etapa.ativa { display: block; }
+
+/* Título de etapa */
+.etapa-secao-label {
+  font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--dourado); display: block; margin-bottom: 6px;
+}
+.etapa-secao-titulo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px; font-weight: 300;
+  color: var(--marrom); margin-bottom: 24px;
+}
+.etapa-secao-titulo em { font-style: italic; color: var(--marrom-medio); }
+
+/* =====================================================
+   TIPO DE CONTA
+   ===================================================== */
+.tipo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+.tipo-card {
+  border: 2px solid var(--creme-escuro);
+  border-radius: 12px;
+  padding: 24px 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+  background: #fff;
+  position: relative;
+  text-align: center;
+}
+.tipo-card:hover {
+  border-color: rgba(201,169,110,0.45);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--sombra);
+}
+.tipo-card.sel {
+  border-color: var(--dourado);
+  background: rgba(201,169,110,0.06);
+  box-shadow: 0 0 0 3px rgba(201,169,110,0.12);
+}
+.tipo-card::after {
+  content: '✓';
+  position: absolute;
+  top: 12px; right: 14px;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: var(--dourado);
+  display: grid; place-items: center;
+  font-size: 10px; color: var(--marrom); font-weight: 700;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.tipo-card.sel::after { opacity: 1; }
+.tipo-card-ico {
+  width: 52px; height: 52px;
+  border-radius: 12px;
+  background: var(--creme-escuro);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; color: var(--dourado);
+  margin: 0 auto 14px;
+  transition: background 0.3s;
+}
+.tipo-card.sel .tipo-card-ico {
+  background: rgba(201,169,110,0.15);
+}
+.tipo-card h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px; font-weight: 400;
+  color: var(--marrom); margin-bottom: 5px;
+}
+.tipo-card p {
+  font-size: 12px; color: rgba(61,43,26,0.4);
+  line-height: 1.6; letter-spacing: 0.2px;
+}
+
+/* =====================================================
+   CAMPOS
+   ===================================================== */
+.campo-row {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.campo-row.col2 { grid-template-columns: 1fr 1fr; }
+.campo-row.col3 { grid-template-columns: 1fr 1fr 1fr; }
+.campo-row.col1 { grid-template-columns: 1fr; }
+
+.campo-g { display: flex; flex-direction: column; }
+.campo-g label {
+  font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase;
+  color: rgba(61,43,26,0.38);
+  margin-bottom: 7px; display: block;
+}
+.campo-g .campo-inner { position: relative; }
+.campo-g .campo-inner .campo-ico {
+  position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+  font-size: 15px; color: rgba(61,43,26,0.22); pointer-events: none;
+}
+.campo-g input,
+.campo-g select,
+.campo-g textarea {
+  width: 100%;
+  padding: 12px 14px 12px 40px;
+  border: 1.5px solid var(--creme-escuro);
+  border-radius: 8px;
+  font-family: 'Jost', sans-serif;
+  font-size: 13px; color: var(--texto);
+  background: #fff; outline: none;
+  transition: all 0.22s;
+  appearance: none;
+}
+.campo-g input:focus,
+.campo-g select:focus,
+.campo-g textarea:focus {
+  border-color: var(--dourado);
+  box-shadow: 0 0 0 3px rgba(201,169,110,0.1);
+}
+.campo-g input::placeholder,
+.campo-g textarea::placeholder { color: rgba(61,43,26,0.18); }
+.campo-g input.erro,
+.campo-g select.erro { border-color: var(--vermelho) !important; }
+.campo-g .campo-erro-txt {
+  font-size: 11px; color: var(--vermelho);
+  margin-top: 5px; display: none; letter-spacing: 0.2px;
+}
+.campo-g .campo-erro-txt.vis { display: block; }
+
+/* Campo sem ícone */
+.campo-g.sem-ico input,
+.campo-g.sem-ico select,
+.campo-g.sem-ico textarea {
+  padding-left: 14px;
+}
+
+/* Toggle senha */
+.toggle-senha {
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: pointer;
+  font-size: 14px; color: rgba(61,43,26,0.25);
+  transition: color 0.2s;
+}
+.toggle-senha:hover { color: var(--dourado); }
+
+/* Força senha */
+.senha-forca-wrap { margin-top: 8px; }
+.senha-barra { display: flex; gap: 4px; }
+.senha-seg {
+  flex: 1; height: 3px; border-radius: 2px;
+  background: var(--creme-escuro);
+  transition: background 0.3s;
+}
+.senha-seg.fraca  { background: var(--vermelho); }
+.senha-seg.media  { background: #E67E22; }
+.senha-seg.forte  { background: var(--verde); }
+.senha-forca-txt {
+  font-size: 11px; color: rgba(61,43,26,0.4);
+  margin-top: 5px; letter-spacing: 0.3px;
+}
+
+/* Senhas coincidem */
+.match-ico {
+  position: absolute; right: 38px; top: 50%; transform: translateY(-50%);
+  font-size: 14px; display: none;
+}
+.match-ico.ok  { color: var(--verde); display: block; }
+.match-ico.nok { color: var(--vermelho); display: block; }
+
+/* =====================================================
+   DATA DE NASCIMENTO — SELEÇÃO EM 3 SELECTS
+   ===================================================== */
+.nascimento-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 1fr;
+  gap: 10px;
+}
+
+/* =====================================================
+   FOTO DE PERFIL
+   ===================================================== */
+.foto-upload-wrap {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 24px;
+  padding: 18px 20px;
+  background: #fff;
+  border: 1.5px dashed var(--creme-escuro);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.foto-upload-wrap:hover { border-color: rgba(201,169,110,0.45); }
+.foto-preview {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: var(--creme-escuro);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; color: rgba(61,43,26,0.25);
+  overflow: hidden; flex-shrink: 0;
+  border: 2px solid var(--creme-escuro);
+  transition: border-color 0.2s;
+}
+.foto-preview img { width: 100%; height: 100%; object-fit: cover; }
+.foto-upload-info h4 {
+  font-size: 13px; font-weight: 500; color: var(--marrom);
+  margin-bottom: 3px;
+}
+.foto-upload-info p {
+  font-size: 11px; color: rgba(61,43,26,0.35);
+  letter-spacing: 0.2px;
+}
+#inp-foto { display: none; }
+
+/* =====================================================
+   ESPECIALIDADES (PROF)
+   ===================================================== */
+.especialidades-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.esp-chip {
+  padding: 8px 16px;
+  border: 1.5px solid var(--creme-escuro);
+  border-radius: 20px;
+  background: #fff;
+  font-size: 12px; letter-spacing: 0.5px;
+  color: rgba(61,43,26,0.5);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex; align-items: center; gap: 7px;
+}
+.esp-chip i { font-size: 14px; }
+.esp-chip:hover { border-color: rgba(201,169,110,0.4); color: var(--marrom); }
+.esp-chip.sel {
+  border-color: var(--dourado);
+  background: rgba(201,169,110,0.08);
+  color: var(--marrom);
+}
+
+/* =====================================================
+   HORÁRIOS DE ATENDIMENTO (PROF)
+   ===================================================== */
+.horarios-semana {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.dia-row {
+  display: grid;
+  grid-template-columns: 100px 1fr 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 14px;
+  background: #fff;
+  border: 1px solid var(--creme-escuro);
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+.dia-row.desativado { opacity: 0.45; }
+.dia-row .dia-nome {
+  font-size: 12px; font-weight: 500; color: var(--marrom);
+  letter-spacing: 0.5px;
+}
+.dia-row input[type="time"] {
+  padding: 7px 10px;
+  border: 1.5px solid var(--creme-escuro);
+  border-radius: 6px;
+  font-family: 'Jost', sans-serif;
+  font-size: 12px; color: var(--texto);
+  background: #fff; outline: none;
+  transition: border 0.2s;
+}
+.dia-row input[type="time"]:focus { border-color: var(--dourado); }
+.dia-row .dia-toggle {
+  width: 36px; height: 20px;
+  border-radius: 10px;
+  background: var(--creme-escuro);
+  position: relative; cursor: pointer;
+  transition: background 0.3s;
+  flex-shrink: 0;
+  border: none;
+}
+.dia-row .dia-toggle::after {
+  content: '';
+  position: absolute;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  top: 3px; left: 3px;
+  transition: transform 0.3s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+.dia-row .dia-toggle.on {
+  background: var(--dourado);
+}
+.dia-row .dia-toggle.on::after { transform: translateX(16px); }
+
+/* =====================================================
+   CHECKBOXES & RADIO
+   ===================================================== */
+.check-linha {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+.check-linha input[type="checkbox"],
+.check-linha input[type="radio"] {
+  width: 16px; height: 16px;
+  accent-color: var(--dourado);
+  cursor: pointer;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+.check-linha span {
+  font-size: 13px; color: rgba(61,43,26,0.55);
+  line-height: 1.6; letter-spacing: 0.2px;
+}
+.check-linha span a {
+  color: var(--dourado); text-decoration: none; font-weight: 500;
+}
+.check-linha span a:hover { color: var(--marrom); }
+
+/* =====================================================
+   ALERTA / INFO BOXES
+   ===================================================== */
+.alerta {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  letter-spacing: 0.2px;
+  margin-bottom: 18px;
+}
+.alerta.vis { display: flex; }
+.alerta.erro {
+  background: rgba(192,57,43,0.07);
+  border: 1px solid rgba(192,57,43,0.18);
+  color: #8B1A10;
+}
+.alerta.sucesso {
+  background: rgba(76,175,125,0.08);
+  border: 1px solid rgba(76,175,125,0.2);
+  color: #1A5E35;
+}
+.alerta.info {
+  background: rgba(201,169,110,0.08);
+  border: 1px solid rgba(201,169,110,0.2);
+  color: var(--marrom-medio);
+}
+
+/* =====================================================
+   BOTÕES DE NAVEGAÇÃO
+   ===================================================== */
+.nav-btns {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 28px;
+}
+.btn-pri {
+  padding: 13px 30px;
+  background: var(--marrom);
+  color: var(--dourado-claro);
+  border: none; border-radius: 8px;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px; letter-spacing: 3px; text-transform: uppercase; font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: inline-flex; align-items: center; gap: 9px;
+  position: relative; overflow: hidden;
+}
+.btn-pri::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(201,169,110,0.08) 100%);
+}
+.btn-pri:hover {
+  background: #2A1A0E;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(61,43,26,0.2);
+}
+.btn-pri:active { transform: translateY(0); }
+.btn-pri:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+.btn-pri.carregando { pointer-events: none; opacity: 0.7; }
+
+.btn-sec {
+  padding: 13px 26px;
+  border: 1.5px solid rgba(201,169,110,0.32);
+  color: var(--marrom-medio);
+  background: transparent;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase;
+  border-radius: 8px; cursor: pointer;
+  transition: all 0.3s;
+  display: inline-flex; align-items: center; gap: 9px;
+}
+.btn-sec:hover { border-color: var(--dourado); color: var(--marrom); }
+
+/* Spinner */
+.spinner {
+  width: 15px; height: 15px;
+  border-radius: 50%;
+  border: 2px solid rgba(232,213,176,0.25);
+  border-top-color: var(--dourado-claro);
+  animation: spin 0.7s linear infinite;
+  display: none;
+}
+.btn-pri.carregando .spinner { display: block; }
+.btn-pri.carregando .btn-txt { display: none; }
+
+/* =====================================================
+   PROGRESSO LINEAR (topo do form)
+   ===================================================== */
+.progresso-wrap {
+  width: 100%;
+  max-width: 580px;
+  margin-bottom: 28px;
+  animation: fadeUp 0.4s 0.1s ease both;
+}
+.progresso-barra-bg {
+  height: 3px;
+  background: var(--creme-escuro);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.progresso-barra {
+  height: 100%;
+  background: linear-gradient(90deg, var(--dourado), var(--dourado-claro));
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+.progresso-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.progresso-info .etapa-atual {
+  font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--dourado);
+}
+.progresso-info .etapa-total {
+  font-size: 11px; color: rgba(61,43,26,0.35); letter-spacing: 0.5px;
+}
+
+/* =====================================================
+   DIVIDER
+   ===================================================== */
+.divider {
+  display: flex; align-items: center; gap: 12px;
+  margin: 20px 0;
+}
+.divider::before, .divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--creme-escuro);
+}
+.divider span {
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(61,43,26,0.22);
+}
+
+/* =====================================================
+   LINK VOLTAR AO LOGIN
+   ===================================================== */
+.link-login {
+  text-align: center;
+  font-size: 13px;
+  color: rgba(61,43,26,0.4);
+  letter-spacing: 0.2px;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 580px;
+}
+.link-login a {
+  color: var(--dourado); text-decoration: none; font-weight: 500;
+}
+.link-login a:hover { color: var(--marrom); }
+
+/* =====================================================
+   TELA DE SUCESSO DO CADASTRO
+   ===================================================== */
+.cad-sucesso {
+  display: none;
+  text-align: center;
+  padding: 40px 20px;
+  animation: fadeUp 0.5s ease both;
+}
+.cad-sucesso.vis { display: block; }
+.suc-ico-wrap {
+  width: 88px; height: 88px;
+  border-radius: 50%;
+  background: rgba(76,175,125,0.1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 38px; color: var(--verde);
+  margin: 0 auto 24px;
+  box-shadow: 0 0 0 12px rgba(76,175,125,0.06);
+}
+.suc-titulo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 40px; font-weight: 300;
+  color: var(--marrom); margin-bottom: 10px; line-height: 1.2;
+}
+.suc-titulo em { font-style: italic; color: var(--dourado); }
+.suc-desc {
+  font-size: 14px; color: rgba(61,43,26,0.45);
+  line-height: 1.8; max-width: 380px;
+  margin: 0 auto 28px;
+}
+.suc-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--creme-escuro);
+  border-radius: 10px;
+  padding: 14px 22px;
+  font-size: 13px; color: var(--marrom);
+  letter-spacing: 0.3px;
+  margin-bottom: 28px;
+}
+
+/* =====================================================
+   ANIMAÇÕES
+   ===================================================== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* =====================================================
+   RESPONSIVO
+   ===================================================== */
+@media (max-width: 1000px) {
+  .cad-wrap { grid-template-columns: 1fr; }
+  .cad-visual { display: none; }
+  .cad-form-area { padding: 40px 28px; }
+}
+@media (max-width: 560px) {
+  .tipo-grid { grid-template-columns: 1fr; }
+  .campo-row.col2,
+  .campo-row.col3 { grid-template-columns: 1fr; }
+  .nascimento-grid { grid-template-columns: 1fr 1fr; }
+  .dia-row { grid-template-columns: 80px 1fr 1fr auto; }
+}

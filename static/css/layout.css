@@ -1,0 +1,219 @@
+@font-face {
+    font-family: 'AdamBold';
+    src: url('Adam-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+.pagina-container{
+    display: flex;
+}
+
+
+/* MENU */
+.logo img{
+    width: 120px;
+}
+.logo{
+    display: flex;
+    justify-content: center;
+}
+.menu{
+    width: 210px;
+    min-height: 100vh;
+    background-color: #4A341A;
+    color: #CEB483;
+    padding: 20px;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.menu ul {
+    list-style: none;
+    margin-top: 40px;
+}
+.menu ul li{
+    margin-bottom: 20px;
+}
+.menu ul li a {
+    text-decoration: none;
+    color: #CEB483;
+    font-size: 32px;
+    transition: 0.3s;
+    font-family: 'AdamBold';
+}
+
+.menu ul li a i {
+    font-size: 25px; 
+}
+
+
+.menu ul li a:hover {
+    color: #E4D0C7;
+    padding-left: 8px;
+    
+}
+
+.conteudo {
+    margin-left: 240px; 
+    padding:  0 0 0 40px;
+    width: calc(100% - 200px); 
+}
+
+
+
+/* CONTEUDO */
+.sessao{
+    margin-bottom: 50px;
+    margin-right: 40px;
+}
+
+
+
+.sessao h2{
+    font-size: 26px;
+    margin-bottom: 15px;
+    position: relative;
+    font-family: 'AdamBold';
+    color: #2E1F0F;
+
+}
+
+.sessao h3{
+    font-size: 25px;
+    margin-bottom: 15px;
+    position: relative;
+    font-family: 'AdamBold';
+    color: #4A341A;
+}
+
+.sessao p {
+    font-size: 20px;
+    line-height: 24px;
+    font-family: 'AdamBold';
+
+}
+
+#sobre {
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px; 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    margin: 0 auto;
+    width: 1120px;
+}
+.page-title{
+    height: 100vh;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    padding: 0;
+    align-items: center;
+
+    background: linear-gradient(135deg, #E4D0C7, #CEB483);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.page-title p {
+    font-size: 25px;
+    opacity: 0.8;
+    font-family: 'AdamBold';
+}
+
+.page-title h1{
+    font-size: 40px;
+    opacity: 0.8;
+    font-family: 'AdamBold';
+}
+
+body{
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(135deg, #E4D0C7, #CEB483);
+}
+
+.cartoes{
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.cartao{
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    flex: 1;
+    min-width: 250px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    transition: 0.3s;
+}
+
+.cartao:hover{
+    transform: translateY(-5px);
+}
+
+#contato {
+    background: #fff;
+    padding: 40px 30px;
+    padding-top: 25px;
+    border-radius: 12px; 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    margin: 0;
+    width: 510px;
+}
+
+#contato h2{
+    margin-bottom: 35px;
+}
+#contato .redes {
+    display: flex;                
+    gap: 20px; 
+}
+
+#contato .redes .rede {
+    display: flex;                  
+    align-items: center;            
+    font-family: 'AdamBold';        
+    font-size: 20px;                
+    text-decoration: none;          
+    padding: 12px 20px;             
+    border-radius: 8px;             
+    transition: 0.3s;
+    color: #fff;               
+}
+
+#contato .redes .rede i {
+    margin-right: 10px;             
+    font-size: 24px;                
+}
+
+#contato .redes .whatsapp {
+    background: #25D366;            
+}
+#contato .redes .facebook {
+    background: #1877F2;            
+}
+#contato .redes .instagram {
+    background: linear-gradient(135deg, #7201a2, #e1306e, #e8be06);
+}
+
+#contato .redes .instagram:hover {
+    background: linear-gradient(135deg, #490068, #881b41, #705c03);
+}
+
+#contato .redes .rede:hover {
+    opacity: 0.9;                  
+    transform: translateX(5px);     
+}
+
+.footer{
+    margin-left: 340px;
+    display: flex;
+}

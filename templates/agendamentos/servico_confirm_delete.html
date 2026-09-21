@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Excluir {{ servico.nome }} | Una Instituto de Beleza</title>
+  <link rel="stylesheet" href="/static/css/crud.css">
+</head>
+<body>
+  <div class="crud-wrap">
+    <a class="crud-voltar" href="{% url 'agendamentos:servico_list' %}">&larr; Voltar para a listagem</a>
+
+    <div class="crud-cabecalho">
+      <h1>Excluir serviço</h1>
+    </div>
+
+    <div class="crud-card">
+      <p class="crud-confirma-texto">
+        Tem certeza que deseja excluir <strong>"{{ servico.nome }}"</strong>?
+        Essa ação não pode ser desfeita.
+      </p>
+
+      <form method="post">
+        {% csrf_token %}
+        <div class="crud-form-acoes">
+          <button type="submit" class="crud-btn perigo">Sim, excluir</button>
+          <a class="crud-btn secundario" href="{% url 'agendamentos:servico_list' %}">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

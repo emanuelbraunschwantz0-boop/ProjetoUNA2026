@@ -1,0 +1,172 @@
+/* Estilo do CRUD de Serviços — reaproveita a paleta do site (style.css) */
+
+.crud-wrap {
+  max-width: 960px;
+  margin: 48px auto;
+  padding: 0 24px;
+  font-family: 'Jost', sans-serif;
+  color: var(--texto);
+}
+
+.crud-voltar {
+  display: inline-block;
+  margin-bottom: 18px;
+  color: var(--marrom-medio);
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+.crud-voltar:hover { text-decoration: underline; }
+
+.crud-cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.crud-cabecalho h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.2rem;
+  color: var(--marrom);
+}
+
+.crud-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 6px;
+  background: var(--marrom);
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+}
+.crud-btn:hover { background: var(--marrom-medio); }
+
+.crud-btn.secundario {
+  background: transparent;
+  color: var(--marrom);
+  border: 1px solid var(--marrom);
+}
+.crud-btn.secundario:hover { background: var(--creme-escuro); }
+
+.crud-btn.perigo {
+  background: #8B2E2E;
+}
+.crud-btn.perigo:hover { background: #6e2323; }
+
+/* barra de busca + ordenação */
+.crud-filtros {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.crud-filtros input[type="text"],
+.crud-filtros select {
+  padding: 10px 12px;
+  border: 1px solid var(--dourado-claro);
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  background: #fff;
+}
+.crud-filtros input[type="text"] { flex: 1; min-width: 200px; }
+
+/* tabela de listagem */
+.crud-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(61, 43, 26, 0.08);
+}
+.crud-tabela th {
+  background: var(--marrom);
+  color: #fff;
+  text-align: left;
+  padding: 12px 14px;
+  font-weight: 500;
+}
+.crud-tabela td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--creme-escuro);
+}
+.crud-tabela tr:last-child td { border-bottom: none; }
+.crud-tabela tr:hover { background: var(--creme); }
+
+.crud-acoes { display: flex; gap: 8px; flex-wrap: wrap; }
+.crud-acoes a, .crud-acoes button {
+  font-size: 0.85rem;
+  padding: 6px 12px;
+  border-radius: 5px;
+  text-decoration: none;
+  border: 1px solid var(--dourado-claro);
+  color: var(--marrom);
+  background: #fff;
+  cursor: pointer;
+}
+.crud-acoes a:hover, .crud-acoes button:hover { background: var(--creme-escuro); }
+.crud-acoes .excluir { border-color: #8B2E2E; color: #8B2E2E; }
+
+.crud-vazio {
+  padding: 40px;
+  text-align: center;
+  color: var(--marrom-medio);
+  background: #fff;
+  border-radius: 8px;
+}
+
+/* paginação */
+.crud-paginacao {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 22px;
+  flex-wrap: wrap;
+}
+.crud-paginacao a, .crud-paginacao span {
+  padding: 8px 14px;
+  border-radius: 5px;
+  text-decoration: none;
+  border: 1px solid var(--dourado-claro);
+  color: var(--marrom);
+  font-size: 0.9rem;
+}
+.crud-paginacao .ativo { background: var(--marrom); color: #fff; border-color: var(--marrom); }
+
+/* formulário */
+.crud-form {
+  background: #fff;
+  padding: 28px;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(61, 43, 26, 0.08);
+}
+.crud-form p { margin-bottom: 16px; }
+.crud-form label { display: block; margin-bottom: 6px; font-weight: 500; color: var(--marrom); }
+.crud-form input, .crud-form select, .crud-form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--dourado-claro);
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+.crud-form .helptext { display: block; font-size: 0.8rem; color: #888; margin-top: 4px; }
+.crud-form ul.errorlist { color: #8B2E2E; font-size: 0.85rem; margin-top: 4px; list-style: none; }
+.crud-form-acoes { margin-top: 20px; display: flex; gap: 10px; }
+
+/* detalhe e confirmação */
+.crud-card {
+  background: #fff;
+  padding: 28px;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(61, 43, 26, 0.08);
+}
+.crud-card dl { display: grid; grid-template-columns: 180px 1fr; row-gap: 12px; }
+.crud-card dt { font-weight: 500; color: var(--marrom-medio); }
+.crud-card dd { color: var(--texto); }
+.crud-confirma-texto { margin: 16px 0; font-size: 1.05rem; }

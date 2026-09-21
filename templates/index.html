@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Una | Instituto de Beleza</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/layout_ts.css">
+</head>
+
+<body>
+
+    <main class="pagina-container">
+
+        <!-- ======================== MENU LATERAL ======================== -->
+        <nav class="menu">
+            <div class="logo-wrap">
+                <div class="logo">
+                    <img src="/static/img/logo_redonda.png" alt="">
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li class="ativo"><a href="#home"><i class="bi bi-house"></i> Home</a></li>
+                    <li><a href="{% url 'agendamentos:sobre' %}"><i class="bi bi-info-circle"></i> Sobre</a></li>
+                    <li><a href="#servicos"><i class="bi bi-scissors"></i> Serviços</a></li>
+                    <li>
+                        <a href="#" onclick="irAgendamento(event)">
+                            <i class="bi bi-calendar-check"></i> Agendar
+                        </a>
+                    </li>
+                    <li><a href="#contato"><i class="bi bi-envelope"></i> Contato</a></li>
+                    <li><a href="{% url 'agendamentos:servico_list' %}"><i class="bi bi-gear"></i> Gerenciar serviços</a></li>
+                </ul>
+            </nav>
+            <div class="menu-rodape">
+                Una<br>Instituto de Beleza
+            </div>
+        </nav>
+
+        <!-- ======================== CONTEÚDO ======================== -->
+        <div class="conteudo">
+            <main class="body" style="flex:1;overflow:hidden;">
+
+                <!-- HERO -->
+                <section id="home" class="hero">
+                    <div class="hero-fundo"></div>
+                    <div class="hero-detalhe"></div>
+                    <div class="hero-linha"></div>
+                    <div class="hero-corpo">
+                        <div class="hero-tag">Instituto de Beleza</div>
+                        <h1 class="hero-titulo">O padrão aqui é<br><em>se sentir bem</em></h1>
+                        <p class="hero-subtitulo">Experiências de beleza únicas, pensadas para revelar o melhor de você
+                            — com profissionais dedicados e um ambiente que acolhe.</p>
+                        <div class="hero-btns">
+                            <a href="{% url 'agendamentos:login' %}">
+                                <button class="btn-primario">Entrar na minha conta</button>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SOBRE -->
+                <section id="sobre" class="sobre">
+                    <div>
+                        <p class="sobre-label">Quem somos</p>
+                        <h2>Beleza com <em>propósito</em> e cuidado</h2>
+                        <p>A Una Instituto de Beleza nasceu em 2023, fruto de muita dedicação e renúncia, com o
+                            propósito de elevar a
+                            autoestima e proporcionar experiências únicas. Destaca-se na cidade pelo seu conceito
+                            organizado, charme e
+                            uma equipe de profissionais de excelência, sempre focados em valorizar a beleza de cada
+                            cliente.</p>
+                    </div>
+                    <div class="sobre-deco">
+                        <div class="sobre-stat">
+                            <div class="num">8+</div>
+                            <div class="desc">Anos de experiência</div>
+                        </div>
+                        <div class="sobre-stat">
+                            <div class="num">∞</div>
+                            <div class="desc">Clientes satisfeitas</div>
+                        </div>
+                        <div class="sobre-stat">
+                            <div class="num">10+</div>
+                            <div class="desc">Serviços disponíveis</div>
+                        </div>
+                        <div class="sobre-stat">
+                            <div class="num">100%</div>
+                            <div class="desc">Dedicação e cuidado</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SERVIÇOS -->
+                <section id="servicos" class="servicos">
+                    <div class="servicos-header">
+                        <span class="label">O que fazemos</span>
+                        <h2>Nossos <em>serviços</em></h2>
+                    </div>
+
+                    <div class="grade-servicos">
+                        {% for servico in servicos %}
+                        <div class="cartao">
+                            <div class="cartao-icone"><i class="bi {{ servico.icone|default:'bi-stars' }}"></i></div>
+                            <h3>{{ servico.nome }}</h3>
+                            <p>{{ servico.descricao|default:"Fale com a gente para saber mais sobre esse serviço." }}</p>
+                        </div>
+                        {% empty %}
+                        <p>Nenhum serviço cadastrado no momento.</p>
+                        {% endfor %}
+                    </div>
+                </section>
+
+                <!-- CONTATO -->
+                <section id="contato" class="contato">
+                    <div class="contato-texto">
+                        <span class="label">Fale conosco</span>
+                        <h2>Estamos<br><em>aqui para você</em></h2>
+                    </div>
+                    <div class="contato-redes">
+                        <a href="https://www.instagram.com/institutodebelezauna" class="rede instagram" target="_blank">
+                            <i class="bi bi-instagram"></i> Instagram
+                        </a>
+                        <a href="https://wa.me/556984696874" class="rede whatsapp" target="_blank">
+                            <i class="bi bi-whatsapp"></i> WhatsApp
+                        </a>
+
+                        <a href="https://maps.app.goo.gl/JstgWfeySg9LZ7k48" target="_blank" class="rede localizacao">
+                            <i class="bi bi-geo-alt">Localização</i>
+                        </a>
+                    </div>
+                </section>
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p class="footer-logo">Una<span>Live</span></p>
+        <p class="footer-texto">&copy; 2026 UnaLive • Todos os direitos reservados</p>
+    </footer>
+<script src="/static/js/inicial.js"></script>
+</body>
+
+</html>

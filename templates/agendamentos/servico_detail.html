@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ servico.nome }} | Una Instituto de Beleza</title>
+  <link rel="stylesheet" href="/static/css/crud.css">
+</head>
+<body>
+  <div class="crud-wrap">
+    <a class="crud-voltar" href="{% url 'agendamentos:servico_list' %}">&larr; Voltar para a listagem</a>
+
+    <div class="crud-cabecalho">
+      <h1>{{ servico.nome }}</h1>
+    </div>
+
+    <div class="crud-card">
+      <dl>
+        <dt>Categoria</dt>
+        <dd>{{ servico.get_categoria_display }}</dd>
+
+        <dt>Preço</dt>
+        <dd>R$ {{ servico.preco }}</dd>
+
+        <dt>Duração</dt>
+        <dd>{{ servico.duracao_min }} minutos</dd>
+
+        <dt>Ícone</dt>
+        <dd>{{ servico.icone|default:"—" }}</dd>
+
+        <dt>Ativo</dt>
+        <dd>{% if servico.ativo %}Sim{% else %}Não{% endif %}</dd>
+
+        <dt>Descrição</dt>
+        <dd>{{ servico.descricao|default:"Sem descrição." }}</dd>
+      </dl>
+
+      <div class="crud-form-acoes">
+        <a class="crud-btn" href="{% url 'agendamentos:servico_update' servico.pk %}">Editar</a>
+        <a class="crud-btn perigo" href="{% url 'agendamentos:servico_delete' servico.pk %}">Excluir</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

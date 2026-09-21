@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Una Instituto de Beleza — Criar Conta</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/static/css/cadastro.css">
+</head>
+<body>
+
+<div class="cad-wrap">
+
+  <!-- ======================================================
+       PAINEL ESQUERDO — VISUAL
+  ====================================================== -->
+  <div class="cad-visual">
+    <div class="cv-circulo c1"></div>
+    <div class="cv-circulo c2"></div>
+    <div class="cv-circulo c3"></div>
+    <div class="cv-circulo c4"></div>
+
+    <!-- Logo -->
+    <div class="cv-logo">
+      <div class="cv-logo-circulo">U</div>
+      <div class="cv-logo-texto">
+        <div class="cv-nome">Una Instituto</div>
+        <div class="cv-sub">de Beleza</div>
+      </div>
+    </div>
+
+    <!-- Corpo central -->
+    <div class="cv-corpo">
+      <div class="cv-tag">Novo cadastro</div>
+      <h2 class="cv-titulo">Faça parte da nossa<br><em>comunidade de beleza</em></h2>
+      <p class="cv-desc">Crie sua conta em poucos passos e comece a aproveitar uma experiência de beleza única e personalizada.</p>
+      <div class="cv-checks">
+        <div class="cv-check-item">
+          <div class="cv-check-ico"><i class="bi bi-check-lg"></i></div>
+          Agendamento online 24h
+        </div>
+        <div class="cv-check-item">
+          <div class="cv-check-ico"><i class="bi bi-check-lg"></i></div>
+          Histórico de atendimentos
+        </div>
+        <div class="cv-check-item">
+          <div class="cv-check-ico"><i class="bi bi-check-lg"></i></div>
+          Notificações por WhatsApp
+        </div>
+        <div class="cv-check-item">
+          <div class="cv-check-ico"><i class="bi bi-check-lg"></i></div>
+          Pagamento seguro e online
+        </div>
+      </div>
+    </div>
+
+    <!-- Steps lateral -->
+    <div class="cv-steps">
+      <p class="cv-steps-titulo">Etapas do cadastro</p>
+      <div class="cv-step-list" id="cv-step-list">
+        <div class="cv-step-item ativo" data-s="1">
+          <div class="cv-step-num">1</div> Tipo de conta
+        </div>
+        <div class="cv-step-item" data-s="2">
+          <div class="cv-step-num">2</div> Dados pessoais
+        </div>
+        <div class="cv-step-item" data-s="3">
+          <div class="cv-step-num">3</div> <span id="cv-label-etapa3">Segurança</span>
+        </div>
+        <div class="cv-step-item" data-s="4">
+          <div class="cv-step-num">4</div> <span id="cv-label-etapa4">Confirmação</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================
+       PAINEL DIREITO — FORMULÁRIO
+  ====================================================== -->
+  <div class="cad-form-area">
+
+    <!-- Header -->
+    <div class="cad-form-header">
+      <h1 class="cad-titulo">Criar <em>conta</em></h1>
+      <p class="cad-sub">Preencha as informações abaixo para se cadastrar no sistema Una</p>
+    </div>
+
+    <!-- Barra de progresso -->
+    <div class="progresso-wrap">
+      <div class="progresso-barra-bg">
+        <div class="progresso-barra" id="prog-barra" style="width:25%"></div>
+      </div>
+      <div class="progresso-info">
+        <span class="etapa-atual" id="prog-label">Etapa 1 — Tipo de conta</span>
+        <span class="etapa-total" id="prog-total">1 de 4</span>
+      </div>
+    </div>
+
+    <!-- Alerta global -->
+    <div class="alerta erro" id="alerta-global" style="width:100%;max-width:580px;">
+      <i class="bi bi-exclamation-circle"></i>
+      <span id="alerta-msg">Erro.</span>
+    </div>
+
+    <!-- ====================================================
+         ETAPAS
+    ==================================================== -->
+    <div class="cad-etapa-wrap">
+
+      <!-- ---- ETAPA 1: TIPO DE CONTA ---- -->
+      <div class="cad-etapa ativa" id="etapa1">
+        <span class="etapa-secao-label">Passo 1</span>
+        <p class="etapa-secao-titulo">Qual é o seu <em>perfil?</em></p>
+
+        <div class="tipo-grid">
+          <div class="tipo-card" id="tc-cliente" onclick="selecionarTipo('cliente')">
+            <div class="tipo-card-ico"><i class="bi bi-person-heart"></i></div>
+            <h3>Sou cliente</h3>
+            <p>Quero agendar serviços e acompanhar meu histórico de atendimentos.</p>
+          </div>
+          <div class="tipo-card" id="tc-profissional" onclick="selecionarTipo('profissional')">
+            <div class="tipo-card-ico"><i class="bi bi-scissors"></i></div>
+            <h3>Sou profissional</h3>
+            <p>Trabalho no salão e quero gerenciar minha agenda e atendimentos.</p>
+          </div>
+        </div>
+
+        <div class="alerta info vis" id="info-tipo" style="display:flex!important">
+          <i class="bi bi-info-circle"></i>
+          <span>Contas profissionais passam por aprovação da administração do salão.</span>
+        </div>
+
+        <div class="nav-btns">
+          <button class="btn-pri" id="btn-proximo1" onclick="avancar(1)" disabled>
+            <span class="btn-txt">Próximo <i class="bi bi-arrow-right"></i></span>
+            <div class="spinner"></div>
+          </button>
+        </div>
+      </div>
+
+      <!-- ---- ETAPA 2: DADOS PESSOAIS ---- -->
+      <div class="cad-etapa" id="etapa2">
+        <span class="etapa-secao-label">Passo 2</span>
+        <p class="etapa-secao-titulo">Seus <em>dados pessoais</em></p>
+
+        <!-- Foto de perfil -->
+        <div class="foto-upload-wrap" onclick="document.getElementById('inp-foto').click()">
+          <div class="foto-preview" id="foto-preview">
+            <i class="bi bi-person-fill"></i>
+          </div>
+          <div class="foto-upload-info">
+            <h4>Foto de perfil <span style="font-weight:300;color:rgba(61,43,26,0.4)">(opcional)</span></h4>
+            <p>Clique para enviar · JPG, PNG · Máx. 2MB</p>
+          </div>
+        </div>
+        <input type="file" id="inp-foto" accept="image/*" onchange="previewFoto(this)">
+
+        <!-- Nome completo -->
+        <div class="campo-row col1">
+          <div class="campo-g">
+            <label>Nome completo *</label>
+            <div class="campo-inner">
+              <i class="bi bi-person campo-ico"></i>
+              <input type="text" id="inp-nome" placeholder="Maria Silva" autocomplete="name">
+            </div>
+            <span class="campo-erro-txt" id="err-nome">Informe seu nome completo.</span>
+          </div>
+        </div>
+
+        <!-- Email + Telefone -->
+        <div class="campo-row col2">
+          <div class="campo-g">
+            <label>E-mail *</label>
+            <div class="campo-inner">
+              <i class="bi bi-envelope campo-ico"></i>
+              <input type="email" id="inp-email" placeholder="maria@email.com" autocomplete="email">
+            </div>
+            <span class="campo-erro-txt" id="err-email">Informe um e-mail válido.</span>
+          </div>
+          <div class="campo-g">
+            <label>WhatsApp / Telefone *</label>
+            <div class="campo-inner">
+              <i class="bi bi-telephone campo-ico"></i>
+              <input type="tel" id="inp-tel" placeholder="(69) 9 9999-9999" oninput="maskTel(this)" maxlength="16">
+            </div>
+            <span class="campo-erro-txt" id="err-tel">Informe um telefone válido.</span>
+          </div>
+        </div>
+
+        <!-- CPF + Data de nascimento -->
+        <div class="campo-row col2">
+          <div class="campo-g">
+            <label>CPF *</label>
+            <div class="campo-inner">
+              <i class="bi bi-card-text campo-ico"></i>
+              <input type="text" id="inp-cpf" placeholder="000.000.000-00" oninput="maskCPF(this)" maxlength="14">
+            </div>
+            <span class="campo-erro-txt" id="err-cpf">CPF inválido.</span>
+          </div>
+          <div class="campo-g">
+            <label>Data de nascimento *</label>
+            <div class="campo-inner">
+              <i class="bi bi-calendar3 campo-ico"></i>
+              <input type="date" id="inp-nasc" style="padding-left:40px">
+            </div>
+            <span class="campo-erro-txt" id="err-nasc">Informe sua data de nascimento.</span>
+          </div>
+        </div>
+
+        <!-- Gênero + CEP -->
+        <div class="campo-row col2">
+          <div class="campo-g">
+            <label>Gênero</label>
+            <div class="campo-inner">
+              <i class="bi bi-gender-ambiguous campo-ico"></i>
+              <select id="inp-genero">
+                <option value="">Prefiro não informar</option>
+                <option>Feminino</option>
+                <option>Masculino</option>
+                <option>Não-binário</option>
+                <option>Outro</option>
+              </select>
+            </div>
+          </div>
+          <div class="campo-g">
+            <label>CEP</label>
+            <div class="campo-inner">
+              <i class="bi bi-geo-alt campo-ico"></i>
+              <input type="text" id="inp-cep" placeholder="00000-000" oninput="maskCEP(this)" maxlength="9">
+            </div>
+          </div>
+        </div>
+
+        <!-- Bloco extra PROFISSIONAL -->
+        <div id="bloco-prof" style="display:none">
+          <div class="divider"><span>Informações profissionais</span></div>
+
+          <!-- Especialidades -->
+          <div class="campo-g sem-ico" style="margin-bottom:18px">
+            <label>Especialidades *</label>
+            <div class="especialidades-grid">
+              <div class="esp-chip" onclick="toggleEsp(this)" data-esp="Corte de Cabelo">
+                <i class="bi bi-scissors"></i> Corte de Cabelo
+              </div>
+              <div class="esp-chip" onclick="toggleEsp(this)" data-esp="Coloração">
+                <i class="bi bi-palette"></i> Coloração
+              </div>
+              <div class="esp-chip" onclick="toggleEsp(this)" data-esp="Manicure">
+                <i class="bi bi-hand-index"></i> Manicure
+              </div>
+              <div class="esp-chip" onclick="toggleEsp(this)" data-esp="Pedicure">
+                <i class="bi bi-hand-index-thumb"></i> Pedicure
+              </div>
+              <div class="esp-chip" onclick="toggleEsp(this)" data-esp="Tratamento Capilar">
+                <i class="bi bi-droplet"></i> Tratamento Capilar
+              </div>
+              <div class="esp-chip" onclick="toggleEsp(this)" data-esp="Escova Progressiva">
+                <i class="bi bi-wind"></i> Escova Progressiva
+              </div>
+              <div class="esp-chip" onclick="toggleEsp(this)" data-esp="Design de Sobrancelha">
+                <i class="bi bi-eye"></i> Design de Sobrancelha
+              </div>
+              <div class="esp-chip" onclick="toggleEsp(this)" data-esp="Maquiagem">
+                <i class="bi bi-stars"></i> Maquiagem
+              </div>
+            </div>
+            <span class="campo-erro-txt" id="err-esp">Selecione ao menos uma especialidade.</span>
+          </div>
+
+          <!-- Horários de atendimento -->
+          <div class="campo-g sem-ico" style="margin-bottom:18px">
+            <label>Horários de atendimento</label>
+            <div class="horarios-semana" id="horarios-semana">
+              <!-- gerado por JS -->
+            </div>
+          </div>
+
+          <!-- Bio / Apresentação -->
+          <div class="campo-row col1">
+            <div class="campo-g">
+              <label>Breve apresentação</label>
+              <div class="campo-inner">
+                <i class="bi bi-chat-quote campo-ico" style="top:16px;transform:none"></i>
+                <textarea id="inp-bio" rows="3" placeholder="Conte um pouco sobre você, experiência, diferenciais..."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-btns">
+          <button class="btn-sec" onclick="voltar(2)"><i class="bi bi-arrow-left"></i> Voltar</button>
+          <button class="btn-pri" onclick="avancar(2)">
+            <span class="btn-txt">Próximo <i class="bi bi-arrow-right"></i></span>
+            <div class="spinner"></div>
+          </button>
+        </div>
+      </div>
+
+      <!-- ---- ETAPA 3: SEGURANÇA ---- -->
+      <div class="cad-etapa" id="etapa3">
+        <span class="etapa-secao-label">Passo 3</span>
+        <p class="etapa-secao-titulo" id="titulo-etapa3">Crie sua <em>senha</em></p>
+
+        <!-- Senha -->
+        <div class="campo-row col1">
+          <div class="campo-g">
+            <label>Senha *</label>
+            <div class="campo-inner">
+              <i class="bi bi-lock campo-ico"></i>
+              <input type="password" id="inp-senha" placeholder="Mín. 8 caracteres" oninput="avaliarSenha(this)">
+              <button class="toggle-senha" type="button" onclick="toggleSenha('inp-senha','ico-s1')" tabindex="-1">
+                <i class="bi bi-eye" id="ico-s1"></i>
+              </button>
+            </div>
+            <div class="senha-forca-wrap">
+              <div class="senha-barra">
+                <div class="senha-seg" id="ss1"></div>
+                <div class="senha-seg" id="ss2"></div>
+                <div class="senha-seg" id="ss3"></div>
+                <div class="senha-seg" id="ss4"></div>
+              </div>
+              <p class="senha-forca-txt" id="senha-forca-txt">Mínimo 8 caracteres, 1 número e 1 letra maiúscula</p>
+            </div>
+            <span class="campo-erro-txt" id="err-senha">A senha não atende aos requisitos.</span>
+          </div>
+        </div>
+
+        <!-- Confirmar senha -->
+        <div class="campo-row col1">
+          <div class="campo-g">
+            <label>Confirmar senha *</label>
+            <div class="campo-inner">
+              <i class="bi bi-lock-fill campo-ico"></i>
+              <input type="password" id="inp-senha2" placeholder="Repita a senha" oninput="verificarSenhas()">
+              <span class="match-ico" id="match-ico"></span>
+              <button class="toggle-senha" type="button" onclick="toggleSenha('inp-senha2','ico-s2')" tabindex="-1" style="right:14px">
+                <i class="bi bi-eye" id="ico-s2"></i>
+              </button>
+            </div>
+            <span class="campo-erro-txt" id="err-senha2">As senhas não coincidem.</span>
+          </div>
+        </div>
+
+        <!-- Dicas de segurança -->
+        <div class="alerta info vis" style="margin-top:4px">
+          <i class="bi bi-shield-check"></i>
+          <span>Use letras maiúsculas, números e símbolos para uma senha mais forte.</span>
+        </div>
+
+        <!-- Código de convite (PROFISSIONAL) -->
+        <div id="bloco-codigo" style="display:none">
+          <div class="divider"><span>Acesso profissional</span></div>
+          <div class="campo-row col1">
+            <div class="campo-g">
+              <label>Código de convite <span style="color:rgba(61,43,26,0.35);text-transform:none;font-size:11px">(fornecido pela gestão)</span></label>
+              <div class="campo-inner">
+                <i class="bi bi-key campo-ico"></i>
+                <input type="text" id="inp-codigo" placeholder="Ex: UNA-2026" style="text-transform:uppercase;letter-spacing:2px">
+              </div>
+              <span class="campo-erro-txt" id="err-codigo">Código inválido.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-btns">
+          <button class="btn-sec" onclick="voltar(3)"><i class="bi bi-arrow-left"></i> Voltar</button>
+          <button class="btn-pri" onclick="avancar(3)">
+            <span class="btn-txt">Próximo <i class="bi bi-arrow-right"></i></span>
+            <div class="spinner"></div>
+          </button>
+        </div>
+      </div>
+
+      <!-- ---- ETAPA 4: CONFIRMAÇÃO / REVISÃO ---- -->
+      <div class="cad-etapa" id="etapa4">
+        <span class="etapa-secao-label">Passo 4</span>
+        <p class="etapa-secao-titulo">Revise e <em>confirme</em></p>
+
+        <!-- Card de revisão -->
+        <div style="background:#fff;border:1px solid var(--creme-escuro);border-radius:12px;padding:24px;margin-bottom:20px;" id="card-revisao">
+          <!-- preenchido por JS -->
+        </div>
+
+        <!-- Checkboxes obrigatórios -->
+        <label class="check-linha">
+          <input type="checkbox" id="chk-termos">
+          <span>Li e aceito os
+            <a href="{% url 'agendamentos:termos' %}" target="_blank">Termos de Uso e Política de Privacidade</a>
+            da Una Instituto de Beleza. *
+          </span>
+        </label>
+        <label class="check-linha">
+          <input type="checkbox" id="chk-termo-compromisso">
+          <span>Concordo com o
+            <a href="{% url 'agendamentos:termos' %}?tipo=compromisso" target="_blank">Termo de Compromisso e Responsabilidade</a>
+            e autorizo a coleta de dados conforme a LGPD. *
+          </span>
+        </label>
+        <label class="check-linha">
+          <input type="checkbox" id="chk-marketing">
+          <span>Desejo receber novidades, promoções e lembretes por WhatsApp e e-mail. (opcional)</span>
+        </label>
+
+        <span class="campo-erro-txt" id="err-termos" style="display:none;margin-bottom:12px">
+          Você deve aceitar os termos obrigatórios para continuar.
+        </span>
+
+        <div class="nav-btns">
+          <button class="btn-sec" onclick="voltar(4)"><i class="bi bi-arrow-left"></i> Voltar</button>
+          <button class="btn-pri" id="btn-finalizar" onclick="finalizar()">
+            <span class="btn-txt"><i class="bi bi-check2-circle"></i> Criar conta</span>
+            <div class="spinner"></div>
+          </button>
+        </div>
+      </div>
+
+      <!-- ---- TELA DE SUCESSO ---- -->
+      <div class="cad-sucesso" id="cad-sucesso">
+        <div class="suc-ico-wrap"><i class="bi bi-check-lg"></i></div>
+        <h2 class="suc-titulo">Conta <em>criada!</em></h2>
+        <p class="suc-desc" id="suc-desc">Seu cadastro foi realizado com sucesso. Você já pode acessar sua conta e aproveitar todos os serviços da Una.</p>
+        <div class="suc-card" id="suc-card">
+          <i class="bi bi-person-check" style="color:var(--dourado)"></i>
+          <span id="suc-nome-email">—</span>
+        </div>
+        <div id="suc-aviso-prof" style="display:none">
+          <div class="alerta info vis" style="margin-bottom:20px;max-width:400px;margin-left:auto;margin-right:auto">
+            <i class="bi bi-clock-history"></i>
+            <span>Sua conta profissional está em análise. A gestão do salão irá aprová-la em breve.</span>
+          </div>
+        </div>
+        <a href="{% url 'agendamentos:home' %}" class="btn-pri" style="text-decoration:none;display:inline-flex">
+          <i class="bi bi-box-arrow-in-right"></i> Fazer login
+        </a>
+      </div>
+
+    </div><!-- /cad-etapa-wrap -->
+
+    <!-- Link voltar login -->
+    <p class="link-login">Já tem uma conta? <a href="{% url 'agendamentos:home' %}">Entrar</a></p>
+
+  </div><!-- /cad-form-area -->
+</div><!-- /cad-wrap -->
+
+  <script src="/static/js/cadastro.js"></script>
+
+</body>
+</html>
