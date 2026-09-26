@@ -1,4 +1,4 @@
-# Una — Instituto de Beleza
+ Una — Instituto de Beleza
 
 Sistema de agendamento para salão de beleza (cliente, profissional, serviços,
 agendamento e pagamento), desenvolvido em **Django** como Projeto Integrador
