@@ -764,3 +764,195 @@ html, body {
   .doc-tabs-wrap { padding: 0 16px; }
   .doc-footer { padding: 24px 20px; flex-direction: column; gap: 12px; text-align: center; }
 }
+/* =========================================================
+   RESPONSIVIDADE — termos.css
+   Substitui os @media existentes
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+    .doc-layout {
+        grid-template-columns: 220px 1fr;
+    }
+
+    .doc-assinatura-panel {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+
+    html,
+    body {
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    /* Header */
+    .termos-header {
+        padding: 0 16px;
+    }
+
+    .header-inner {
+        min-height: 64px;
+        gap: 10px;
+        flex-wrap: wrap;
+        padding: 10px 0;
+    }
+
+    .header-nav-btns {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .btn-hd-ghost {
+        flex: 1;
+        min-width: 120px;
+        text-align: center;
+    }
+
+    /* Hero */
+    .doc-hero {
+        padding: 36px 18px 32px;
+    }
+
+    .doc-hero-titulo {
+        font-size: clamp(2rem, 9vw, 3.5rem);
+        line-height: 1.05;
+    }
+
+    .doc-hero-meta {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    /* Abas */
+    .doc-tabs-wrap {
+        padding: 0 10px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .doc-tabs {
+        min-width: max-content;
+    }
+
+    .doc-tab {
+        white-space: nowrap;
+    }
+
+    /* Conteúdo */
+    .doc-layout {
+        width: 100%;
+        grid-template-columns: 1fr;
+        padding: 0 12px;
+    }
+
+    .doc-sumario {
+        display: none;
+    }
+
+    .doc-conteudo {
+        width: 100%;
+        min-width: 0;
+        padding: 24px 18px;
+        border: none;
+    }
+
+    .doc-section {
+        width: 100%;
+    }
+
+    .doc-artigo {
+        width: 100%;
+    }
+
+    .doc-artigo-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .artigo-titulo-wrap {
+        width: 100%;
+    }
+
+    .artigo-titulo {
+        font-size: 1.5rem;
+    }
+
+    .doc-artigo p,
+    .doc-artigo li {
+        font-size: 14px;
+        line-height: 1.75;
+        overflow-wrap: anywhere;
+    }
+
+    .doc-box {
+        width: 100%;
+        overflow-wrap: anywhere;
+    }
+
+    /* Rodapé */
+    .doc-footer {
+        padding: 24px 16px;
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+
+    /* Modal */
+    .modal {
+        width: calc(100% - 24px);
+        max-width: 480px;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .termos-header {
+        padding: 0 10px;
+    }
+
+    .header-inner {
+        justify-content: center;
+    }
+
+    .header-nav-btns {
+        gap: 6px;
+    }
+
+    .btn-hd-ghost {
+        min-width: 0;
+        font-size: 12px;
+        padding: 8px 10px;
+    }
+
+    .doc-hero {
+        padding: 30px 14px 26px;
+    }
+
+    .doc-hero-titulo {
+        font-size: 2rem;
+    }
+
+    .doc-layout {
+        padding: 0 8px;
+    }
+
+    .doc-conteudo {
+        padding: 20px 14px;
+    }
+
+    .doc-artigo p,
+    .doc-artigo li {
+        font-size: 13px;
+    }
+
+    .doc-footer {
+        padding: 20px 12px;
+    }
+}

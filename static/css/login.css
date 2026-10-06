@@ -264,3 +264,108 @@ html,body{height:100%;font-family:'Jost',sans-serif;background:var(--creme);colo
   .lado-visual{display:none;}
   .lado-form{padding:40px 32px;}
 }
+/* =========================================================
+   RESPONSIVIDADE — login.css
+   Substitui o @media(max-width:900px) existente
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    html,
+    body {
+        width: 100%;
+        min-height: 100%;
+        overflow-x: hidden;
+    }
+
+    .login-wrap {
+        width: 100%;
+        min-height: 100vh;
+        grid-template-columns: 1fr;
+    }
+
+    .lado-visual {
+        display: none;
+    }
+
+    .lado-form {
+        width: 100%;
+        min-height: 100vh;
+        padding: 40px 24px;
+    }
+
+    .form-wrap {
+        width: 100%;
+        max-width: 420px;
+        margin: 0 auto;
+    }
+
+    .form-titulo {
+        font-size: clamp(2rem, 8vw, 3rem);
+    }
+
+    .form-sub {
+        font-size: 14px;
+    }
+
+    .tipo-tabs {
+        width: 100%;
+    }
+
+    .tipo-btn {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .campo {
+        width: 100%;
+    }
+
+    .campo-inner {
+        width: 100%;
+    }
+
+    .campo input,
+    .campo select,
+    .campo textarea {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .extras {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .btn-entrar {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .lado-form {
+        padding: 28px 16px;
+    }
+
+    .form-wrap {
+        max-width: 100%;
+    }
+
+    .form-titulo {
+        font-size: 2rem;
+    }
+
+    .tipo-tabs {
+        flex-direction: column;
+    }
+
+    .tipo-btn {
+        width: 100%;
+    }
+
+    .extras {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}

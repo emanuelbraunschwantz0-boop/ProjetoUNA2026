@@ -170,3 +170,130 @@
 .crud-card dt { font-weight: 500; color: var(--marrom-medio); }
 .crud-card dd { color: var(--texto); }
 .crud-confirma-texto { margin: 16px 0; font-size: 1.05rem; }
+/* =========================================================
+   RESPONSIVIDADE — crud.css
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .crud-wrap {
+        width: 100%;
+        max-width: 100%;
+        padding: 0 16px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .crud-cabecalho {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+    }
+
+    .crud-cabecalho h1 {
+        font-size: 1.8rem;
+    }
+
+    .crud-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Filtros */
+    .crud-filtros {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .crud-filtros input[type="text"] {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .crud-filtros select,
+    .crud-filtros input {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    /* Tabela com rolagem horizontal */
+    .crud-tabela {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .crud-tabela table {
+        min-width: 650px;
+    }
+
+    /* Ações */
+    .crud-acoes {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    /* Formulário */
+    .crud-form {
+        width: 100%;
+        padding: 24px;
+    }
+
+    .crud-form input,
+    .crud-form select,
+    .crud-form textarea {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .crud-form-acoes {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .crud-form-acoes button,
+    .crud-form-acoes a {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Card */
+    .crud-card {
+        width: 100%;
+        padding: 22px;
+    }
+
+    .crud-card dl {
+        grid-template-columns: 1fr;
+        gap: 4px;
+    }
+
+    .crud-card dt {
+        margin-top: 10px;
+    }
+
+    .crud-paginacao {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .crud-wrap {
+        padding: 0 10px;
+    }
+
+    .crud-form,
+    .crud-card {
+        padding: 18px;
+    }
+
+    .crud-cabecalho h1 {
+        font-size: 1.5rem;
+    }
+
+    .crud-tabela table {
+        min-width: 600px;
+    }
+}

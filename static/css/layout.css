@@ -217,3 +217,141 @@ body{
     margin-left: 340px;
     display: flex;
 }
+/* =========================================================
+   RESPONSIVIDADE — layout.css
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    html,
+    body {
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    .pagina-container {
+        width: 100%;
+    }
+
+    /* Menu lateral vira menu horizontal */
+    .menu {
+        position: relative;
+        top: 0;
+        left: 0;
+
+        width: 100%;
+        min-height: auto;
+        height: auto;
+
+        padding: 14px 16px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        box-shadow: none;
+    }
+
+    .menu .logo {
+        margin-bottom: 10px;
+    }
+
+    .menu nav {
+        width: 100%;
+    }
+
+    .menu nav ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px;
+    }
+
+    .menu nav li {
+        margin: 0;
+    }
+
+    .menu nav a {
+        display: block;
+        padding: 8px 10px;
+        font-size: 13px;
+    }
+
+    /* Remove espaço reservado ao menu lateral */
+    .conteudo {
+        width: 100%;
+        margin-left: 0;
+        padding: 0 16px;
+    }
+
+    .sessao {
+        width: 100%;
+        padding: 28px 0;
+    }
+
+    .page-title {
+        font-size: clamp(2rem, 9vw, 3rem);
+        text-align: center;
+    }
+
+    /* Cards */
+    .cartoes {
+        grid-template-columns: 1fr !important;
+        width: 100%;
+        gap: 16px;
+    }
+
+    .cartao {
+        width: 100%;
+    }
+
+    /* Contato */
+    #contato {
+        width: 100%;
+    }
+
+    #contato .redes {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    #contato .rede {
+        max-width: 100%;
+    }
+
+    /* Elementos com largura fixa */
+    img,
+    iframe,
+    video {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .menu {
+        padding: 10px;
+    }
+
+    .menu nav a {
+        font-size: 12px;
+        padding: 7px 8px;
+    }
+
+    .conteudo {
+        padding: 0 12px;
+    }
+
+    .sessao {
+        padding: 24px 0;
+    }
+
+    .page-title {
+        font-size: 2rem;
+    }
+
+    .cartao {
+        padding: 20px;
+    }
+}
