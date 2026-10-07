@@ -1,4 +1,17 @@
 /* Estilo do CRUD de Serviços — reaproveita a paleta do site (style.css) */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap');
+
+/* As páginas do CRUD não carregam o style.css, então a paleta é declarada aqui.
+   Antes, var(--marrom) etc. ficavam indefinidas: o cabeçalho da tabela ficava
+   branco sobre branco e o fundo/botões perdiam a cor. */
+:root {
+  --marrom: #3D2B1A; --marrom-medio: #6B4226;
+  --dourado: #C9A96E; --dourado-claro: #E8D5B0;
+  --creme: #FAF5EE; --creme-escuro: #F0E6D3;
+  --texto: #2A1A0E;
+}
+body.pg-crud { background: var(--creme); font-family: 'Jost', sans-serif; color: var(--texto); }
+
 
 .crud-wrap {
   max-width: 960px;

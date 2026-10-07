@@ -11,9 +11,10 @@
         href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="/static/css/layout_ts.css">
+<link rel="stylesheet" href="/static/css/responsivo.css">
 </head>
 
-<body>
+<body class="pg-home">
 
     <main class="pagina-container">
 
@@ -45,7 +46,7 @@
 
         <!-- ======================== CONTEÚDO ======================== -->
         <div class="conteudo">
-            <main class="body" style="flex:1;overflow:hidden;">
+            <div class="body" style="flex:1;overflow:hidden;">
 
                 <!-- HERO -->
                 <section id="home" class="hero">
@@ -132,12 +133,13 @@
                         </a>
 
                         <a href="https://maps.app.goo.gl/JstgWfeySg9LZ7k48" target="_blank" class="rede localizacao">
-                            <i class="bi bi-geo-alt">Localização</i>
+                            <i class="bi bi-geo-alt"></i> Localização
                         </a>
                     </div>
                 </section>
 
-        </div>
+            </div><!-- /body -->
+        </div><!-- /conteudo -->
     </main>
 
     <footer class="footer">
@@ -145,6 +147,7 @@
         <p class="footer-texto">&copy; 2026 UnaLive • Todos os direitos reservados</p>
     </footer>
 <script src="/static/js/inicial.js"></script>
+<script src="/static/js/menu-mobile.js"></script>
 </body>
 
 </html>
