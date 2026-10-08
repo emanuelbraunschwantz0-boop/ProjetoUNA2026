@@ -30,3 +30,14 @@ Página nova? Coloque `<link rel="stylesheet" href="/static/css/responsivo.css">
 
 ## Não mexido de propósito
 - `index_inical.html` / `layout.css`: página antiga duplicada, sem nenhum link apontando para ela. Sugestão: apagar na fase de integração.
+
+## Correção do menu/layout em telas pequenas (out/2026)
+**Causa:** `layout_ts.css`, `style.css` e `agenda.css` tinham, cada um, um `@media (max-width: 900px)` próprio que deixava o menu `position: relative`. Isso brigava com a gaveta do `responsivo.css`: o menu ficava invisível (translateX) mas ainda ocupava ~280px no container flex, espremendo o conteúdo para um lado, e a gaveta aberta saía estreita.
+
+**O que mudou**
+- Removidos os blocos `@media` antigos dos 3 CSS. Agora `responsivo.css` é a única fonte de regras responsivas.
+- Gaveta com `position: fixed` + `flex: none` (não ocupa espaço), `visibility: hidden` quando fechada, foco devolvido ao botão ao fechar, `Esc`/toque no fundo fecham.
+- Barra superior fina com a marca "Una" (criada em `menu-mobile.js`) para o botão não ficar solto sobre o conteúdo; âncoras (#servicos, #contato) respeitam a barra.
+- Home: cards de serviço compactos no celular (ícone ao lado do texto).
+- Agenda: a página inteira rola (antes `html/body { height:100% }` prendia a rolagem no body); itens da gaveta alinhados.
+- Testado em 360, 390, 600, 768, 900, 1024 e 1280px: sem rolagem lateral, menu abre/fecha em home, sobre e agendamento.

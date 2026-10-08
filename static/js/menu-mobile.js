@@ -22,13 +22,27 @@
   var fundo = document.createElement('div');
   fundo.className = 'menu-backdrop';
 
+  // barra superior fina (só aparece em telas <= 900px, via CSS) com a marca
+  var barra = document.createElement('div');
+  barra.className = 'menu-topbar';
+  barra.setAttribute('aria-hidden', 'true');
+  barra.innerHTML = 'Una <small>Instituto de Beleza</small>';
+
+  document.body.appendChild(barra);
   document.body.appendChild(btn);
   document.body.appendChild(fundo);
 
   function definir(aberto) {
+    var estava = document.body.classList.contains('menu-aberto');
     document.body.classList.toggle('menu-aberto', aberto);
     btn.setAttribute('aria-expanded', String(aberto));
     btn.setAttribute('aria-label', aberto ? 'Fechar menu' : 'Abrir menu');
+    if (aberto && !estava) {
+      var primeiro = menu.querySelector('a, button');
+      if (primeiro) setTimeout(function () { primeiro.focus({ preventScroll: true }); }, 320);
+    } else if (!aberto && estava && window.matchMedia('(max-width: 900px)').matches) {
+      btn.focus({ preventScroll: true });
+    }
   }
 
   btn.addEventListener('click', function () {

@@ -19,7 +19,8 @@ img, video { max-width: 100%; }
 
 /* Botão hambúrguer e fundo escuro: só aparecem em telas <= 900px */
 .menu-toggle,
-.menu-backdrop { display: none; }
+.menu-backdrop,
+.menu-topbar { display: none; }
 
 /* Footer da home ficava escondido atrás do menu fixo no desktop */
 body.pg-home .footer { margin-left: 220px; }
@@ -69,32 +70,95 @@ body.pg-home .footer { margin-left: 220px; }
    ============================================================ */
 @media (max-width: 900px) {
 
-  /* --- gaveta --- */
+  /* --- gaveta ---
+     position:fixed + flex:none garantem que o menu NÃO ocupa espaço no layout
+     (antes ele ficava "relative" e empurrava o conteúdo para o lado). */
   .menu,
   .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    flex: none;
     transform: translateX(-100%);
-    transition: transform 0.3s ease;
+    visibility: hidden;                       /* fechado: some também para o teclado/leitor de tela */
+    transition: transform 0.3s ease, visibility 0s linear 0.3s;
     width: min(280px, 84vw);
     height: 100vh;
     height: 100dvh;
     min-height: 0;
+    padding: 28px 22px 24px;
     overflow-y: auto;
+    overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
     z-index: 110;
   }
   body.menu-aberto .menu,
   body.menu-aberto .sidebar {
     transform: translateX(0);
+    visibility: visible;
+    transition: transform 0.3s ease, visibility 0s;
     box-shadow: 0 0 48px rgba(0, 0, 0, 0.4);
   }
   body.menu-aberto { overflow: hidden; }
+  .menu .logo-wrap img,
+  .sidebar .logo-wrap img { width: 112px; height: 112px; margin-bottom: 20px; padding-left: 0; }
+
+  /* sem o "pulo" lateral do hover/ativo do desktop: itens alinhados na gaveta */
+  .menu nav ul li a,
+  .sidebar nav ul li a { padding: 12px 14px; }
+  .menu nav ul li a:hover,
+  .menu nav ul li.ativo a,
+  .sidebar nav ul li a:hover,
+  .sidebar nav ul li.ativo a { padding-left: 14px; }
+
+  /* na agenda tudo da barra lateral está dentro de .logo-wrap: ele precisa ocupar a largura da gaveta */
+  .sidebar .logo-wrap { width: 100%; display: flex; flex-direction: column; align-items: center; }
+  .sidebar nav, .sidebar .user-badge { width: 100%; }
+  .sidebar .sidebar-footer { width: 100%; margin-top: 12px; }
+  .sidebar .btn-sair { width: 100%; justify-content: flex-start; padding: 12px 14px; }
+
+  /* o container flex da home não pode mais reservar lugar para o menu */
+  .pagina-container { display: block; }
+
+  /* âncoras (#servicos, #contato...) não ficam escondidas atrás da barra superior */
+  html { scroll-padding-top: 68px; }
+
+  /* --- barra superior fina: botão + marca --- */
+  .menu-topbar {
+    display: flex;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 85;
+    height: calc(60px + env(safe-area-inset-top, 0px));
+    padding: env(safe-area-inset-top, 0px) 16px 0 68px;
+    background: rgba(61, 43, 26, 0.96);
+    border-bottom: 1px solid rgba(201, 169, 110, 0.18);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--dourado-claro, #E8D5B0);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-size: 18px;
+    pointer-events: none;                     /* só o botão recebe toque */
+  }
+  .menu-topbar small {
+    margin-left: 10px;
+    font-family: 'Jost', sans-serif;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: rgba(201, 169, 110, 0.6);
+  }
 
   .menu-toggle {
     display: flex;
     position: fixed;
-    top: calc(12px + env(safe-area-inset-top, 0px));
+    top: calc(8px + env(safe-area-inset-top, 0px));
     left: 12px;
-    z-index: 90;
+    z-index: 120;                             /* acima da gaveta: vira o "X" de fechar */
     width: 44px;
     height: 44px;
     align-items: center;
@@ -105,7 +169,7 @@ body.pg-home .footer { margin-left: 220px; }
     color: var(--dourado-claro, #E8D5B0);
     font-size: 22px;
     cursor: pointer;
-    box-shadow: 0 4px 14px rgba(42, 26, 14, 0.25);
+    -webkit-tap-highlight-color: transparent;
   }
   /* ícone desenhado em CSS (não depende de fonte de ícones): vira "X" quando aberto */
   .menu-toggle-barras,
@@ -157,7 +221,7 @@ body.pg-home .footer { margin-left: 220px; }
     height: auto !important;
     min-height: 100vh;
     min-height: 100svh;
-    padding: 96px 0 72px;
+    padding: 92px 0 64px;
   }
   body.pg-sobre .hero { min-height: 56vh; }
   body.pg-home .hero-corpo,
@@ -217,6 +281,10 @@ body.pg-home .footer { margin-left: 220px; }
   }
 
   /* --- AGENDAMENTO / PAINEL --- */
+  /* agenda.css fixa html/body em height:100%: a rolagem ficava no body. Aqui rola a página inteira. */
+  html:has(body.pg-agenda),
+  body.pg-agenda { height: auto; min-height: 100%; }
+  body.pg-agenda .main { min-height: 100vh; }
   body.pg-agenda .page-header { padding: 76px 20px 28px; }
   body.pg-agenda .conteudo { padding: 24px 16px 48px; }
   body.pg-agenda .data-grid { grid-template-columns: 1fr; }
@@ -256,7 +324,17 @@ body.pg-home .footer { margin-left: 220px; }
 
   /* HOME */
   body.pg-home .grade-servicos { grid-template-columns: 1fr; gap: 16px; }
-  body.pg-home .cartao { padding: 28px 22px; }
+  body.pg-home .cartao {
+    padding: 22px 20px;
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    column-gap: 16px;
+    align-items: start;
+  }
+  body.pg-home .cartao:hover { transform: none; }
+  body.pg-home .cartao-icone { grid-row: 1 / span 2; margin-bottom: 0; }
+  body.pg-home .cartao h3 { margin-bottom: 6px; align-self: center; }
+  body.pg-home .cartao p { grid-column: 2; font-size: 13.5px; line-height: 1.7; }
   body.pg-home .sobre h2,
   body.pg-home .servicos-header h2,
   body.pg-home .contato-texto h2 { font-size: 32px; }
