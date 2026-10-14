@@ -10,9 +10,10 @@
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="/static/css/agenda.css">
+<link rel="stylesheet" href="/static/css/responsivo.css">
 </head>
 
-<body>
+<body class="pg-agenda">
 
   <!-- SIDEBAR -->
   <nav class="sidebar" id="sidebar">
@@ -36,6 +37,7 @@
         <button class="btn-sair" onclick="sair()"><i class="bi bi-box-arrow-left"></i> Sair</button>
         <p class="rodape-texto">Una<br>Instituto de Beleza</p>
       </div>
+    </div><!-- /logo-wrap -->
   </nav>
 
   <!-- MAIN -->
@@ -433,6 +435,7 @@
 
   <!-- NOTIF -->
   <div class="notif" id="notif"><i class="bi bi-check-circle"></i> <span id="notif-txt"></span></div>
+  <script src="/static/js/menu-mobile.js"></script>
   <script src="/static/js/agendamento.js"></script>
 </body>
 

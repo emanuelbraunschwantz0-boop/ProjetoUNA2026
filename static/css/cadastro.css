@@ -800,3 +800,128 @@ html, body {
   .nascimento-grid { grid-template-columns: 1fr 1fr; }
   .dia-row { grid-template-columns: 80px 1fr 1fr auto; }
 }
+/* =========================================================
+   RESPONSIVIDADE — cadastro.css
+   Substitui os @media existentes
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+    html,
+    body {
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    .cad-wrap {
+        width: 100%;
+        min-height: 100vh;
+        grid-template-columns: 1fr;
+    }
+
+    .cad-visual {
+        display: none;
+    }
+
+    .cad-form-area {
+        width: 100%;
+        padding: 40px 28px;
+    }
+
+    .cad-form-header,
+    .cad-etapa-wrap {
+        width: 100%;
+        max-width: 580px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .cad-form-header .cad-titulo {
+        font-size: clamp(2rem, 8vw, 3rem);
+    }
+
+    .tipo-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .campo-row.col2 {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .campo-row.col3 {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .campo-g,
+    .campo-inner,
+    .campo-g input,
+    .campo-g select,
+    .campo-g textarea {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .dia-row {
+        overflow-x: auto;
+    }
+}
+
+@media (max-width: 560px) {
+
+    .cad-form-area {
+        padding: 28px 16px;
+    }
+
+    .cad-form-header,
+    .cad-etapa-wrap {
+        max-width: 100%;
+    }
+
+    .cad-form-header .cad-titulo {
+        font-size: 2rem;
+    }
+
+    .tipo-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .campo-row.col2,
+    .campo-row.col3 {
+        grid-template-columns: 1fr;
+    }
+
+    .nascimento-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    /*
+       Mantém os campos do dia utilizáveis sem
+       esmagar os inputs.
+    */
+    .dia-row {
+        grid-template-columns: 70px minmax(120px, 1fr) minmax(120px, 1fr) auto;
+        min-width: 420px;
+    }
+
+    .cad-form-acoes {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cad-form-acoes button,
+    .cad-form-acoes a {
+        width: 100%;
+    }
+}
+
+@media (max-width: 380px) {
+
+    .cad-form-area {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .nascimento-grid {
+        grid-template-columns: 1fr;
+    }
+}
