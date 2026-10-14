@@ -175,72 +175,17 @@
               </div>
             </div>
             <!-- PAGAMENTO -->
-            <div>
+
               <div class="resumo-card">
                 <p class="resumo-titulo">Forma de <em>pagamento</em></p>
-                <div class="metodos-pag" id="metodos-pag">
-                  <div class="metodo" onclick="selPag('pix',this)">
-                    <div class="metodo-ico" style="background:rgba(76,175,125,0.1);color:#4CAF7D;"><i
-                        class="bi bi-qr-code"></i></div>
-                    <div class="metodo-info">
-                      <h5>PIX</h5>
-                      <p>Confirmação instantânea</p>
-                    </div>
-                    <div class="metodo-radio"></div>
-                  </div>
-                  <div class="metodo" onclick="selPag('credito',this)">
-                    <div class="metodo-ico"><i class="bi bi-credit-card"></i></div>
-                    <div class="metodo-info">
-                      <h5>Cartão de Crédito</h5>
-                      <p>Parcele em até 3x</p>
-                    </div>
-                    <div class="metodo-radio"></div>
-                  </div>
-                  <div class="metodo" onclick="selPag('debito',this)">
-                    <div class="metodo-ico"><i class="bi bi-credit-card-2-front"></i></div>
-                    <div class="metodo-info">
-                      <h5>Cartão de Débito</h5>
-                      <p>Débito na hora</p>
-                    </div>
-                    <div class="metodo-radio"></div>
-                  </div>
-                  <div class="metodo" onclick="selPag('local',this)">
-                    <div class="metodo-ico"><i class="bi bi-cash-coin"></i></div>
-                    <div class="metodo-info">
-                      <h5>Pagar no local</h5>
-                      <p>Dinheiro ou maquininha</p>
-                    </div>
-                    <div class="metodo-radio"></div>
-                  </div>
-                </div>
-                <!-- PIX -->
-                <div class="pix-box" id="pix-box">
-                  <i class="bi bi-qr-code" style="font-size:36px;color:#4CAF7D;display:block;margin-bottom:10px;"></i>
-                  <p style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(61,43,26,0.4);">Chave
-                    PIX</p>
-                  <p class="pix-key"><span>📱</span> (69) 9 8469-6874</p>
-                  <p style="font-size:12px;color:rgba(61,43,26,0.4);">Envie o comprovante via WhatsApp após o pagamento
-                  </p>
-                </div>
-                <!-- CARTÃO -->
-                <div class="cartao-box" id="cartao-box">
-                  <div class="campo-f"><label class="inp-label">Número do cartão</label><input class="inp"
-                      placeholder="0000 0000 0000 0000" maxlength="19" oninput="maskCard(this)"></div>
-                  <div class="grid2">
-                    <div class="campo-f"><label class="inp-label">Validade</label><input class="inp" placeholder="MM/AA"
-                        maxlength="5"></div>
-                    <div class="campo-f"><label class="inp-label">CVV</label><input class="inp" placeholder="123"
-                        maxlength="3"></div>
-                  </div>
-                  <div class="campo-f"><label class="inp-label">Nome no cartão</label><input class="inp"
-                      placeholder="MARIA SILVA"></div>
-                  <div id="parcelas-wrap" style="display:none">
-                    <div class="campo-f"><label class="inp-label">Parcelas</label>
-                      <select class="sel-inp" id="parcelas-sel"></select>
-                    </div>
+                <div class="rl">
+                <div class="rl-ico"><i class="bi bi-cash-coin"></i></div>
+                <div class="rl-info"><label>Pagamento no local</label>
+                  <p>Dinheiro,maquininha ou pix, após o atendimento</p>
                   </div>
                 </div>
               </div>
+
               <div style="display:flex;gap:12px;margin-top:20px;">
                 <button class="btn-sec" onclick="goEt(3)"><i class="bi bi-arrow-left"></i> Voltar</button>
                 <button class="btn-pri" onclick="confirmar()"><i class="bi bi-check2-circle"></i> Confirmar
@@ -380,27 +325,6 @@
           </div>
         </div>
       </div>
-
-      <!-- ========================================
-         SEÇÃO: PROF — RELATÓRIOS
-    ======================================== -->
-      <div class="secao" id="sec-relatorios">
-        <p class="label-sec">Financeiro</p>
-        <h2 class="titulo-sec">Relatórios e <em>métricas</em></h2>
-        <p class="sub-sec">Visão geral do faturamento e desempenho do salão</p>
-        <div id="relatorios-conteudo"></div>
-      </div>
-
-      <!-- ========================================
-         SEÇÃO: PROF — CLIENTES
-    ======================================== -->
-      <div class="secao" id="sec-clientes-gestao">
-        <p class="label-sec">Base de clientes</p>
-        <h2 class="titulo-sec">Gestão de <em>clientes</em></h2>
-        <p class="sub-sec">Histórico e informações dos clientes do salão</p>
-        <div id="clientes-lista-gestao"></div>
-      </div>
-
     </div><!-- /conteudo -->
   </main>
 

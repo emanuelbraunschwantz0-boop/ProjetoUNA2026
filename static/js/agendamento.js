@@ -72,7 +72,6 @@ let user = null;
 let sel = {servico:null, prof:null, data:null, hora:null};
 let calM = new Date().getMonth(), calA = new Date().getFullYear();
 let semOff = 0;
-let pagSel = null;
 let editServId = null;
 let delServId = null;
 let icoSel = 'bi-scissors';
@@ -114,8 +113,6 @@ function montarLayout() {
     nav.innerHTML = `
       <li class="ativo" data-sec="sec-agenda"><a onclick="irSec('sec-agenda',this)"><i class="bi bi-calendar3"></i> Minha agenda</a></li>
       <li data-sec="sec-servicos-gestao"><a onclick="irSec('sec-servicos-gestao',this)"><i class="bi bi-scissors"></i> Serviços</a></li>
-      <li data-sec="sec-relatorios"><a onclick="irSec('sec-relatorios',this)"><i class="bi bi-bar-chart"></i> Relatórios</a></li>
-      <li data-sec="sec-clientes-gestao"><a onclick="irSec('sec-clientes-gestao',this)"><i class="bi bi-people"></i> Clientes</a></li>
       <li class="separador"></li>
       <li><a href="index.html"><i class="bi bi-house"></i> Home</a></li>
     `;
@@ -131,8 +128,6 @@ function montarLayout() {
     irSec('sec-agenda');
     renderAgenda();
     renderServicosGestao();
-    renderRelatorios();
-    renderClientesGestao();
   }
 }
 
@@ -279,29 +274,8 @@ function preencherResumo(){
   document.getElementById('r-hora').textContent=sel.hora||'—';
   document.getElementById('r-dur').textContent=s?.dur+'min'||'—';
   document.getElementById('r-preco').textContent=s?.preco||'—';
-  // Parcelas cartão
-  const parc=document.getElementById('parcelas-sel');
-  parc.innerHTML='';
-  for(let i=1;i<=3;i++){
-    const v=(s?.preco/i).toFixed(2).replace('.',',');
-    parc.innerHTML+=`<option value="${i}">${i}x de R$ ${v}${i===1?' (sem juros)':''}</option>`;
-  }
 }
 
-function selPag(tipo,el){
-  pagSel=tipo;
-  document.querySelectorAll('.metodo').forEach(m=>m.classList.remove('sel'));
-  el.classList.add('sel');
-  document.getElementById('pix-box').classList.toggle('visivel',tipo==='pix');
-  const cartaoBox=document.getElementById('cartao-box');
-  cartaoBox.classList.toggle('visivel',tipo==='credito'||tipo==='debito');
-  document.getElementById('parcelas-wrap').style.display=tipo==='credito'?'block':'none';
-}
-
-function maskCard(inp){
-  let v=inp.value.replace(/\D/g,'').substring(0,16);
-  inp.value=v.replace(/(.{4})/g,'$1 ').trim();
-}
 
 function confirmar(){
   const nome=document.getElementById('c-nome').value.trim();
@@ -315,7 +289,6 @@ function confirmar(){
 
 function novoAg(){
   sel={servico:null,prof:null,data:null,hora:null};
-  pagSel=null;
   document.getElementById('et-suc').style.display='none';
   document.getElementById('et1').style.display='block';
   for(let i=1;i<=4;i++) document.getElementById('st'+i).className='step'+(i===1?' ativo':'');
@@ -524,89 +497,6 @@ function confirmarDel(){
   renderServicosGestao();
   renderServicosAg();
 }
-
-// ============================================================
-// RELATÓRIOS
-// ============================================================
-function renderRelatorios(){
-  const total=Object.values(AGENDA_PROF).flat().length;
-  const fat=Object.values(AGENDA_PROF).flat().reduce((a,e)=>{
-    const p={corte:60,manicure:50,tratamento:80,coloracao:150};return a+(p[e.tipo]||60);},0);
-  const porProf=Object.entries(AGENDA_PROF).map(([n,evs])=>{
-    const f=evs.reduce((a,e)=>{const p={corte:60,manicure:50,tratamento:80,coloracao:150};return a+(p[e.tipo]||60);},0);
-    return {nome:n,qtd:evs.length,fat:f};
-  });
-  document.getElementById('relatorios-conteudo').innerHTML=`
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px;">
-      <div class="stat-box"><div class="sn">${total}</div><div class="sd">Atendimentos totais</div><div class="sd2">Semana atual</div></div>
-      <div class="stat-box"><div class="sn">R$ ${fat}</div><div class="sd">Faturamento bruto</div><div class="sd2">Estimativa da semana</div></div>
-      <div class="stat-box"><div class="sn">${SERVICOS.length}</div><div class="sd">Serviços ativos</div><div class="sd2">Disponíveis no sistema</div></div>
-    </div>
-    <div class="card" style="margin-bottom:20px;">
-      <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--marrom);margin-bottom:20px;">Desempenho por <em style="font-style:italic;color:var(--marrom-medio)">profissional</em></h3>
-      ${porProf.map(p=>`
-        <div style="display:flex;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid var(--creme-escuro);">
-          <div style="width:40px;height:40px;border-radius:50%;background:var(--marrom);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--dourado-claro);flex-shrink:0;">${p.nome.split(' ').map(x=>x[0]).join('').substring(0,2)}</div>
-          <div style="flex:1;"><div style="font-size:14px;font-weight:500;color:var(--marrom);">${p.nome}</div><div style="font-size:12px;color:rgba(61,43,26,0.4);margin-top:2px;">${p.qtd} atendimentos</div></div>
-          <div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--dourado);">R$ ${p.fat}</div>
-          <div style="width:80px;">
-            <div style="height:4px;background:var(--creme-escuro);border-radius:2px;">
-              <div style="height:4px;background:var(--dourado);border-radius:2px;width:${Math.round(p.qtd/total*100)}%"></div>
-            </div>
-            <div style="font-size:10px;color:rgba(61,43,26,0.35);margin-top:3px;text-align:right;">${Math.round(p.qtd/total*100)}%</div>
-          </div>
-        </div>`).join('')}
-    </div>
-    <div class="card">
-      <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--marrom);margin-bottom:20px;">Serviços mais <em style="font-style:italic;color:var(--marrom-medio)">solicitados</em></h3>
-      ${(() => {
-        const tc={};
-        Object.values(AGENDA_PROF).flat().forEach(e=>tc[e.tipo]=(tc[e.tipo]||0)+1);
-        const tn={corte:'Corte de Cabelo',manicure:'Manicure/Pedicure',tratamento:'Tratamento Capilar',coloracao:'Coloração'};
-        const tc2={corte:'#C9A96E',manicure:'#C0392B',tratamento:'#4CAF7D',coloracao:'#8E44AD'};
-        return Object.entries(tc).sort((a,b)=>b[1]-a[1]).map(([t,n])=>`
-          <div style="display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--creme-escuro);">
-            <div style="width:10px;height:10px;border-radius:2px;background:${tc2[t]};flex-shrink:0;"></div>
-            <div style="flex:1;font-size:14px;color:var(--marrom);">${tn[t]}</div>
-            <div style="font-size:13px;color:rgba(61,43,26,0.4);">${n} atendimentos</div>
-            <div style="width:100px;"><div style="height:4px;background:var(--creme-escuro);border-radius:2px;"><div style="height:4px;background:${tc2[t]};border-radius:2px;width:${Math.round(n/total*100)}%"></div></div></div>
-          </div>`).join('');
-      })()}
-    </div>`;
-}
-
-// ============================================================
-// CLIENTES GESTÃO
-// ============================================================
-function renderClientesGestao(){
-  const clientes=[
-    {nome:'Ana Paula Ferreira',tel:'(69) 9 8401-2345',ultimo:'08/04/2026',serv:'Coloração',total:'R$ 450'},
-    {nome:'Fernanda Lima',tel:'(69) 9 8523-4567',ultimo:'07/04/2026',serv:'Corte de Cabelo',total:'R$ 240'},
-    {nome:'Roberta Silva',tel:'(69) 9 9112-3456',ultimo:'08/04/2026',serv:'Corte de Cabelo',total:'R$ 180'},
-    {nome:'Letícia Matos',tel:'(69) 9 9234-5678',ultimo:'08/04/2026',serv:'Escova Progressiva',total:'R$ 200'},
-    {nome:'Marcia Freitas',tel:'(69) 9 9345-6789',ultimo:'07/04/2026',serv:'Manicure + Pedicure',total:'R$ 195'},
-    {nome:'Eliane Gomes',tel:'(69) 9 9456-7890',ultimo:'07/04/2026',serv:'Tratamento Capilar',total:'R$ 320'},
-  ];
-  document.getElementById('clientes-lista-gestao').innerHTML=`
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
-      <span style="font-size:13px;color:rgba(61,43,26,0.4);">${clientes.length} clientes cadastrados</span>
-      <button class="btn-ghost"><i class="bi bi-search"></i> Buscar cliente</button>
-    </div>
-    ${clientes.map(c=>`
-    <div class="serv-row" style="margin-bottom:10px;">
-      <div style="width:40px;height:40px;border-radius:50%;background:var(--marrom);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--dourado-claro);flex-shrink:0;">${c.nome.split(' ').map(x=>x[0]).join('').substring(0,2)}</div>
-      <div class="serv-row-info">
-        <h4>${c.nome}</h4>
-        <div class="meta"><i class="bi bi-telephone" style="font-size:10px"></i> ${c.tel} &bull; Último: ${c.ultimo} &bull; ${c.serv}</div>
-      </div>
-      <div class="serv-row-preco">${c.total}</div>
-      <div class="serv-row-acoes">
-        <button class="btn-ghost" onclick="notif('Em breve: histórico completo do cliente')"><i class="bi bi-eye"></i></button>
-        <button class="btn-ghost" onclick="window.open('https://wa.me/5569','_blank')"><i class="bi bi-whatsapp"></i></button>
-      </div>
-    </div>`).join('')}`;
-}
-
 // ============================================================
 // MODAL / OVERLAY
 // ============================================================
