@@ -320,7 +320,7 @@ body{
 
 
 /* =============================
-   SERVIÇOS
+   SERVIÇOS.
 ============================= */
 
 .sobre-label{
@@ -394,7 +394,7 @@ body{
     font-size: 22px;
     font-weight: 400;
     color: #fff;
-    margin-bottom: 12px;
+    margin-bottom: 13px;
 }
 
 .cartao p {
@@ -855,3 +855,5 @@ body{
   height: 900px;
   max-width: 100%;
 }
+
+/* Responsividade: veja responsivo.css (carregado por último em cada página). */
