@@ -7,6 +7,8 @@ from .models import (
     Servico,
     Agendamento,
     Pagamento,
+    FichaSaude,
+    TermoAssinado,
 )
 
 
@@ -47,3 +49,27 @@ class AgendamentoAdmin(admin.ModelAdmin):
 class PagamentoAdmin(admin.ModelAdmin):
     list_display = ["agendamento", "forma_pagamento", "valor_total", "status"]
     list_filter = ["forma_pagamento", "status"]
+
+
+@admin.register(FichaSaude)
+class FichaSaudeAdmin(admin.ModelAdmin):
+    list_display = ["cliente", "atualizado_em"]
+    search_fields = ["cliente__nome_completo"]
+
+
+@admin.register(TermoAssinado)
+class TermoAssinadoAdmin(admin.ModelAdmin):
+    """Somente leitura: termos assinados são prova e não podem ser alterados."""
+
+    list_display = ["usuario", "tipo", "versao", "assinado_em", "ip", "hash_sha256"]
+    list_filter = ["tipo"]
+    search_fields = ["usuario__email", "hash_sha256"]
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False

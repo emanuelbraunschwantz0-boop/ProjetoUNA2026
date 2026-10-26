@@ -1,357 +1,338 @@
-"""Endpoints JSON do painel. Substituem os dados que ficavam fixos no JavaScript.
-
-Todos exigem login; os de gestão exigem profissional aprovada. O CSRF é
-verificado pelo Django (o JS manda o token no cabeçalho X-CSRFToken).
-"""
-import base64
-import binascii
-import hashlib
 import json
-from datetime import timedelta
+from datetime import date, datetime, time, timedelta
 from functools import wraps
-from io import BytesIO
 
-from django.conf import settings
-from django.core.files.base import ContentFile
+from django.db import transaction
+from django.db.models import ProtectedError
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
 from django.utils import timezone
-from django.views.decorators.http import require_http_methods
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
+from django.views.decorators.http import require_GET, require_http_methods, require_POST
 
-from . import agenda
-from .agenda import AgendamentoInvalido
-from .forms import ServicoForm
-from .models import (
-    AceiteTermos,
-    Agendamento,
-    Profissional,
-    Servico,
-)
-from .serializers import moeda, serializar_profissional, serializar_servico
-from .views import eh_admin, tipo_painel
+from .forms import PerfilForm, ServicoForm
+from .models import CONDICOES, Agendamento, Especialidade, Profissional, Servico
 
-# ---------------------------------------------------------------------------
-# utilitários
-# ---------------------------------------------------------------------------
-def erro(mensagem, status=400, **extra):
-    return JsonResponse({"ok": False, "erro": mensagem, **extra}, status=status)
+SLOTS = ["08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00",
+         "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00",
+         "17:30", "18:00"]
+FECHAMENTO = 20 * 60  # nenhum atendimento pode terminar depois das 20:00
+ROTULOS = dict(CONDICOES)
 
 
-def corpo_json(request):
+def _erro(msg, status=400):
+    return JsonResponse({"ok": False, "erro": msg}, status=status)
+
+
+def api_login(view):
+    @wraps(view)
+    def w(request, *a, **k):
+        if not request.user.is_authenticated:
+            return _erro("Sessão expirada. Faça login novamente.", 401)
+        return view(request, *a, **k)
+    return w
+
+
+def _body(request):
     try:
-        dados = json.loads(request.body or b"{}")
-    except json.JSONDecodeError:
-        raise AgendamentoInvalido("Requisição inválida.")
-    if not isinstance(dados, dict):
-        raise AgendamentoInvalido("Requisição inválida.")
-    return dados
+        d = json.loads(request.body or b"{}")
+        return d if isinstance(d, dict) else {}
+    except ValueError:
+        return {}
 
 
-def exige(tipo=None, admin=False):
-    """Decorator: exige login e, opcionalmente, o tipo de perfil ou a administração."""
-
-    def decorador(view):
-        @wraps(view)
-        def interna(request, *args, **kwargs):
-            if not request.user.is_authenticated:
-                return erro("Faça login para continuar.", 401)
-            quem, perfil = tipo_painel(request.user)
-            if quem is None or (tipo and quem != tipo) or (admin and not eh_admin(request.user)):
-                return erro("Você não tem permissão para esta ação.", 403)
-            request.tipo, request.perfil = quem, perfil
-            try:
-                return view(request, *args, **kwargs)
-            except AgendamentoInvalido as e:
-                return erro(e.mensagem, e.codigo)
-
-        return interna
-
-    return decorador
+def _cliente(u):
+    return getattr(u, "cliente", None)
 
 
-def _primeiro_erro(form):
-    for msgs in form.errors.values():
-        return str(msgs[0])
-    return "Dados inválidos."
+def _prof(u):
+    p = getattr(u, "profissional", None)
+    return p if p and p.aprovado else None
 
 
-# ---------------------------------------------------------------------------
-# serviços (leitura para todos, gestão só para profissionais)
-# ---------------------------------------------------------------------------
-@exige()
-@require_http_methods(["GET", "POST"])
-def servicos(request):
-    if request.method == "GET":
-        return JsonResponse({"servicos": [serializar_servico(s) for s in Servico.objects.filter(ativo=True)]})
-    if not eh_admin(request.user):
-        return erro("Apenas a administração pode cadastrar serviços.", 403)
-    form = ServicoForm(_dados_servico(corpo_json(request)))
-    if not form.is_valid():
-        return erro(_primeiro_erro(form), campos=form.errors.get_json_data())
-    return JsonResponse({"ok": True, "servico": serializar_servico(form.save())}, status=201)
+def _gestao(u):
+    return u.is_staff or bool(_prof(u))
 
 
-def _dados_servico(d):
-    return {
-        "nome": str(d.get("nome", "")).strip(),
-        "categoria": d.get("categoria", ""),
-        "preco": str(d.get("preco", "")).replace(",", "."),
-        "duracao_min": d.get("duracao_min", ""),
-        "icone": d.get("icone", ""),
-        "descricao": str(d.get("descricao", "")).strip(),
-        "ativo": "on",
+def _agora():
+    n = timezone.now()
+    return (timezone.localtime(n) if timezone.is_aware(n) else n).replace(tzinfo=None)
+
+
+def _min(hhmm):
+    h, m = str(hhmm)[:5].split(":")
+    return int(h) * 60 + int(m)
+
+
+def _servico(s):
+    return {"id": s.id, "nome": s.nome, "ico": s.icone or "bi-stars", "dur": s.duracao_min,
+            "preco": float(s.preco), "cat": s.categoria, "desc": s.descricao}
+
+
+def _brl(v):
+    return "R$ " + f"{v:.2f}".replace(".", ",")
+
+
+def _hhmm(m):
+    return f"{m // 60:02d}:{m % 60:02d}"
+
+
+def _blocos(qs):
+    out = []
+    for ag in qs.exclude(status="cancelado").select_related("servico"):
+        ini = _min(ag.hora.strftime("%H:%M"))
+        out.append((ini, ini + ag.servico.duracao_min))
+    return out
+
+
+def _disponiveis(prof, dia, dur, cliente=None):
+    """Inícios livres para um serviço de `dur` minutos.
+
+    Além da grade de 30 em 30 min, o horário em que cada atendimento já marcado
+    TERMINA vira uma opção (ex.: 08:00 + 80 min => 09:20 livre). Nada sobrepõe
+    atendimentos da profissional nem outros agendamentos da própria cliente.
+    """
+    if dia.isoweekday() == 7:
+        return []
+    blocos = _blocos(Agendamento.objects.filter(profissional=prof, data=dia))
+    if cliente:
+        blocos += _blocos(Agendamento.objects.filter(cliente=cliente, data=dia))
+    candidatos = {_min(h) for h in SLOTS}
+    for _, fim in blocos:
+        fim = -(-fim // 5) * 5  # arredonda para cima de 5 em 5 min
+        if _min(SLOTS[0]) <= fim <= _min(SLOTS[-1]):
+            candidatos.add(fim)
+    agora, res = _agora(), []
+    for ini in sorted(candidatos):
+        fim = ini + dur
+        if fim > FECHAMENTO:
+            continue
+        if datetime.combine(dia, time(ini // 60, ini % 60)) <= agora:
+            continue
+        if any(ini < b1 and fim > b0 for b0, b1 in blocos):
+            continue
+        res.append(_hhmm(ini))
+    return res
+
+
+@api_login
+@require_GET
+def dados(request):
+    u = request.user
+    cli, prof = _cliente(u), _prof(u)
+    perfil = cli or prof
+    if not perfil:
+        return _erro("Conta sem perfil ativo.", 403)
+    profs = Profissional.objects.filter(aprovado=True).prefetch_related("especialidades")
+    d = {
+        "servicos": [_servico(s) for s in Servico.objects.filter(ativo=True)],
+        "profissionais": [{
+            "id": p.id, "nome": p.nome_completo,
+            "esp": ", ".join(e.nome for e in p.especialidades.all()[:2]) or "Profissional",
+            "ini": "".join(x[0] for x in p.nome_completo.split()[:2]).upper(),
+        } for p in profs],
+        "perfil": {"tipo": "profissional" if prof else "cliente", "nome": perfil.nome_completo,
+                   "email": u.email, "tel": perfil.telefone, "prof_id": prof.id if prof else None},
     }
+    if cli:
+        agora = _agora()
+        d["historico"] = [{
+            "id": a.id, "data": a.data.strftime("%d/%m/%Y"), "hora": a.hora.strftime("%H:%M"),
+            "serv": a.servico.nome, "prof": a.profissional.nome_completo,
+            "preco": _brl(a.preco_cobrado), "status": a.status,
+            "pode_cancelar": a.status in ("pendente", "confirmado")
+            and datetime.combine(a.data, a.hora) > agora,
+        } for a in cli.agendamentos.select_related("servico", "profissional")[:50]]
+    return JsonResponse(d)
 
 
-@exige(admin=True)
-@require_http_methods(["PUT", "DELETE"])
-def servico_detalhe(request, pk):
-    servico = get_object_or_404(Servico, pk=pk, ativo=True)
-    if request.method == "PUT":
-        form = ServicoForm(_dados_servico(corpo_json(request)), instance=servico)
-        if not form.is_valid():
-            return erro(_primeiro_erro(form), campos=form.errors.get_json_data())
-        return JsonResponse({"ok": True, "servico": serializar_servico(form.save())})
-    # DELETE: com histórico apenas desativa (o histórico depende do serviço)
-    if servico.agendamentos.exists():
-        servico.ativo = False
-        servico.save(update_fields=["ativo"])
+@api_login
+@require_GET
+def horarios(request):
+    try:
+        prof = Profissional.objects.get(pk=request.GET.get("prof"), aprovado=True)
+        serv = Servico.objects.get(pk=request.GET.get("servico"), ativo=True)
+        dia = date.fromisoformat(request.GET.get("data", ""))
+    except (Profissional.DoesNotExist, Servico.DoesNotExist, ValueError, TypeError):
+        return _erro("Parâmetros inválidos.")
+    livres = _disponiveis(prof, dia, serv.duracao_min, _cliente(request.user))
+    return JsonResponse({"ok": True, "disponiveis": livres, "duracao": serv.duracao_min})
+
+
+@api_login
+@require_POST
+def agendar(request):
+    cli = _cliente(request.user)
+    if not cli:
+        return _erro("Apenas clientes podem agendar.", 403)
+    if not hasattr(cli, "ficha_saude"):
+        return _erro("Preencha o termo e a ficha de saúde antes de agendar.", 403)
+    b = _body(request)
+    try:
+        serv = Servico.objects.get(pk=b.get("servico"), ativo=True)
+        prof = Profissional.objects.get(pk=b.get("prof"), aprovado=True)
+        dia = date.fromisoformat(b.get("data", ""))
+        hora = str(b.get("hora", ""))
+        time.fromisoformat(hora)
+    except (Servico.DoesNotExist, Profissional.DoesNotExist, ValueError, TypeError):
+        return _erro("Dados do agendamento inválidos.")
+    with transaction.atomic():
+        if hora[:5] not in _disponiveis(prof, dia, serv.duracao_min, cli):
+            return _erro("Esse horário não está mais disponível (ocupado ou em conflito "
+                         "com outro agendamento). Escolha outro.", 409)
+        a = Agendamento.objects.create(
+            cliente=cli, profissional=prof, servico=serv, data=dia,
+            hora=time.fromisoformat(hora), preco_cobrado=serv.preco,
+            observacoes=str(b.get("obs", ""))[:500])
+    return JsonResponse({"ok": True, "id": a.id})
+
+
+@api_login
+@require_POST
+def mudar_status(request, pk):
+    u = request.user
+    a = Agendamento.objects.filter(pk=pk).first()
+    cli, prof = _cliente(u), _prof(u)
+    if a and cli and a.cliente_id == cli.id:
+        permitido = {"pendente": ["cancelado"], "confirmado": ["cancelado"]}
+    elif a and prof and a.profissional_id == prof.id:
+        permitido = {"pendente": ["confirmado", "cancelado"], "confirmado": ["concluido", "cancelado"]}
     else:
-        servico.delete()
+        return _erro("Agendamento não encontrado.", 404)
+    novo = _body(request).get("status")
+    if novo not in permitido.get(a.status, []):
+        return _erro("Ação não permitida para este agendamento.")
+    a.status = novo
+    a.save(update_fields=["status"])
     return JsonResponse({"ok": True})
 
 
-# ---------------------------------------------------------------------------
-# disponibilidade (cliente escolhendo profissional, dia e horário)
-# ---------------------------------------------------------------------------
-def _servico_ativo(request):
-    try:
-        return get_object_or_404(Servico, pk=int(request.GET.get("servico", "")), ativo=True)
-    except ValueError:
-        raise AgendamentoInvalido("Serviço inválido.")
-
-
-def _profissional_do_servico(request, servico):
-    try:
-        prof = get_object_or_404(Profissional, pk=int(request.GET.get("profissional", "")), aprovado=True)
-    except ValueError:
-        raise AgendamentoInvalido("Profissional inválida.")
-    if not agenda.profissional_atende(prof, servico):
-        raise AgendamentoInvalido("Esta profissional não realiza este serviço.")
-    return prof
-
-
-@exige()
-@require_http_methods(["GET"])
-def profissionais(request):
-    servico = _servico_ativo(request)
-    lista = agenda.profissionais_para_servico(servico)
-    return JsonResponse({"profissionais": [serializar_profissional(p) for p in lista]})
-
-
-@exige()
-@require_http_methods(["GET"])
-def dias(request):
-    servico = _servico_ativo(request)
-    prof = _profissional_do_servico(request, servico)
-    try:
-        ano, mes = int(request.GET["ano"]), int(request.GET["mes"])
-        if not (1 <= mes <= 12 and 2000 <= ano <= 2100):
-            raise ValueError
-    except (KeyError, ValueError):
-        raise AgendamentoInvalido("Mês inválido.")
-    return JsonResponse({"dias": agenda.dias_com_vaga(prof, ano, mes, servico.duracao_min)})
-
-
-@exige()
-@require_http_methods(["GET"])
-def horarios(request):
-    servico = _servico_ativo(request)
-    prof = _profissional_do_servico(request, servico)
-    dia = agenda.parse_data(request.GET.get("data"))
-    return JsonResponse({"horarios": agenda.grade_horarios(prof, dia, servico.duracao_min)})
-
-
-# ---------------------------------------------------------------------------
-# agendamentos
-# ---------------------------------------------------------------------------
-@exige("cliente")
-@require_http_methods(["POST"])
-def agendamentos(request):
-    d = corpo_json(request)
-    try:
-        servico_id, prof_id = int(d.get("servico") or 0), int(d.get("profissional") or 0)
-    except (TypeError, ValueError):
-        raise AgendamentoInvalido("Serviço ou profissional inválido.")
-    servico = get_object_or_404(Servico, pk=servico_id)
-    prof = get_object_or_404(Profissional, pk=prof_id)
-    ag = agenda.criar_agendamento(
-        cliente=request.perfil,
-        servico=servico,
-        profissional=prof,
-        dia=agenda.parse_data(d.get("data")),
-        hora=agenda.parse_hora(d.get("hora")),
-        observacoes=str(d.get("observacoes", "")),
-    )
-    return JsonResponse({
-        "ok": True,
-        "id": ag.pk,
-        "resumo": {
-            "servico": servico.nome,
-            "profissional": prof.nome_completo,
-            "data": ag.data.strftime("%d/%m"),
-            "hora": ag.hora.strftime("%H:%M"),
-        },
-    }, status=201)
-
-
-@exige()
-@require_http_methods(["POST"])
-def agendamento_status(request, pk):
-    ag = get_object_or_404(Agendamento, pk=pk)
-    if request.tipo == "cliente":
-        if ag.cliente_id != request.perfil.pk:
-            return erro("Agendamento não encontrado.", 404)
-    elif not eh_admin(request.user) and (request.perfil is None or ag.profissional_id != request.perfil.pk):
-        return erro("Você só pode alterar os seus próprios atendimentos.", 403)
-    novo = corpo_json(request).get("status", "")
-    agenda.alterar_status(ag, novo, por_cliente=request.tipo == "cliente")
-    return JsonResponse({"ok": True, "status": ag.status})
-
-
-@exige("cliente")
-@require_http_methods(["GET"])
-def meus_agendamentos(request):
-    agora = timezone.localtime().replace(tzinfo=None)
-    itens = []
-    qs = request.perfil.agendamentos.select_related("servico", "profissional")
-    for ag in qs:
-        itens.append({
-            "id": ag.pk,
-            "dia": ag.data.strftime("%d"),
-            "mes": ag.data.month,
-            "data": ag.data.strftime("%d/%m/%Y"),
-            "hora": ag.hora.strftime("%H:%M"),
-            "servico": ag.servico.nome,
-            "profissional": ag.profissional.nome_completo,
-            "preco": moeda(ag.preco_cobrado),
-            "status": ag.status,
-            "podeCancelar": ag.status in ("pendente", "confirmado") and ag.inicio_dt > agora,
-        })
-    return JsonResponse({"agendamentos": itens})
-
-
-# ---------------------------------------------------------------------------
-# painel da profissional (agenda)
-# ---------------------------------------------------------------------------
-def _ativos(qs):
-    return qs.exclude(status="cancelado")
-
-
-@exige("profissional")
-@require_http_methods(["GET"])
-def agenda_semana(request):
-    try:
-        prof = get_object_or_404(Profissional, pk=int(request.GET.get("profissional") or request.perfil.pk), aprovado=True)
-    except ValueError:
-        raise AgendamentoInvalido("Profissional inválida.")
-    base = agenda.parse_data(request.GET["semana"]) if request.GET.get("semana") else agenda.hoje()
-    segunda = agenda.segunda_da_semana(base)
-    fim = segunda + timedelta(days=5)
-
-    ags = list(
-        _ativos(Agendamento.objects.filter(profissional=prof, data__range=(segunda, fim)))
-        .select_related("cliente", "servico")
-        .order_by("data", "hora")
-    )
-    eventos = []
-    for ag in ags:
-        eventos.append({
-            "id": ag.pk,
-            "col": ag.data.weekday() + 1,
-            "h": ag.hora.strftime("%H:%M"),
-            "fim": ag.fim_dt.strftime("%H:%M"),
-            "cli": ag.cliente.nome_completo,
-            "tel": ag.cliente.telefone,
-            "serv": ag.servico.nome,
-            "dur": ag.duracao_min,
-            "tipo": ag.servico.categoria,
-            "status": ag.status,
-            "preco": moeda(ag.preco_cobrado),
-            "obs": ag.observacoes,
-        })
-    populares = {}
-    for ag in ags:
-        populares[ag.servico.nome] = populares.get(ag.servico.nome, 0) + 1
-    top = max(populares.items(), key=lambda kv: kv[1]) if populares else None
-    return JsonResponse({
-        "inicio": segunda.isoformat(),
-        "dias": [(segunda + timedelta(days=i)).isoformat() for i in range(6)],
-        "eventos": eventos,
-        "stats": {
-            "total": len(ags),
-            "faturamento": float(sum(a.preco_cobrado for a in ags)),
-            "horas": round(sum(a.duracao_min for a in ags) / 60),
-            "popular": {"nome": top[0], "qtd": top[1]} if top else None,
-        },
-    })
-
-
-# ---------------------------------------------------------------------------
-# assinatura eletrônica dos termos
-# ---------------------------------------------------------------------------
-MAX_ASSINATURA_BYTES = 700 * 1024
-
-
-@exige()
-@require_http_methods(["POST"])
-def assinar_termos(request):
-    d = corpo_json(request)
-    documento = d.get("documento_tipo", "")
-    if documento not in dict(AceiteTermos.DOCUMENTO_CHOICES):
-        raise AgendamentoInvalido("Documento inválido.")
-
-    existente = AceiteTermos.objects.filter(
-        usuario=request.user, documento=documento, versao=settings.VERSAO_TERMOS
-    ).first()
-    if existente:
-        return JsonResponse(_resposta_aceite(existente, ja_assinado=True))
-
-    try:
-        _, _, b64 = str(d.get("assinatura_base64", "")).partition("base64,")
-        png = base64.b64decode(b64, validate=True)
-    except (binascii.Error, ValueError):
-        raise AgendamentoInvalido("Assinatura inválida.")
-    if not png or len(png) > MAX_ASSINATURA_BYTES:
-        raise AgendamentoInvalido("Assinatura inválida ou muito grande.")
-    try:
-        from PIL import Image
-
-        Image.open(BytesIO(png)).verify()
-    except Exception:
-        raise AgendamentoInvalido("A assinatura precisa ser uma imagem PNG.")
-
-    agora = timezone.now()
-    ip = request.META.get("REMOTE_ADDR") or None
-    ua = request.META.get("HTTP_USER_AGENT", "")[:300]
-    selo = "|".join([str(request.user.pk), documento, settings.VERSAO_TERMOS, agora.isoformat(), ip or "", hashlib.sha256(png).hexdigest()])
-    hash_final = "sha256:" + hashlib.sha256(selo.encode()).hexdigest()
-
-    aceite = AceiteTermos(
-        usuario=request.user, documento=documento, versao=settings.VERSAO_TERMOS,
-        hash_assinatura=hash_final, ip=ip, user_agent=ua,
-    )
-    aceite.assinatura.save(f"{request.user.pk}-{documento}.png", ContentFile(png), save=False)
-    aceite.save()
-    return JsonResponse(_resposta_aceite(aceite), status=201)
-
-
-def _resposta_aceite(a, ja_assinado=False):
+def _ficha_resumo(cliente):
+    """Resumo de biossegurança, visível só para a profissional do atendimento."""
+    f = getattr(cliente, "ficha_saude", None)
+    if not f:
+        return None
+    r = f.respostas
     return {
-        "success": True,
-        "jaAssinado": ja_assinado,
-        "hash": a.hash_assinatura,
-        "id_assinatura": f"UNA-{a.pk}",
-        "ip": a.ip or "",
-        "assinadoEm": timezone.localtime(a.assinado_em).strftime("%d/%m/%Y %H:%M:%S"),
+        "sim": [ROTULOS[k] for k, v in r.items() if v == "S" and k in ROTULOS],
+        "nao_informado": [ROTULOS[k] for k, v in r.items() if v == "X" and k in ROTULOS],
+        "alergias": f.alergias, "medicamentos": f.medicamentos, "outras": f.outras_doencas,
     }
+
+
+@api_login
+@require_GET
+def agenda(request):
+    prof = _prof(request.user)
+    if not prof:
+        return _erro("Apenas profissionais aprovadas.", 403)
+    try:
+        ini = date.fromisoformat(request.GET.get("inicio", ""))
+    except ValueError:
+        h = _agora().date()
+        ini = h - timedelta(days=h.weekday())
+    qs = prof.agendamentos.filter(data__gte=ini, data__lt=ini + timedelta(days=7)) \
+        .select_related("cliente", "servico").order_by("data", "hora")
+    return JsonResponse({"ok": True, "eventos": [{
+        "id": a.id, "dia": a.data.isoweekday(), "data": a.data.isoformat(),
+        "h": a.hora.strftime("%H:%M"), "cli": a.cliente.nome_completo, "tel": a.cliente.telefone,
+        "serv": a.servico.nome, "dur": a.servico.duracao_min, "tipo": a.servico.categoria,
+        "preco": float(a.preco_cobrado), "status": a.status, "obs": a.observacoes,
+        "ficha": _ficha_resumo(a.cliente) if a.status != "cancelado" else None,
+    } for a in qs]})
+
+
+@api_login
+@require_POST
+def servico_salvar(request):
+    if not _gestao(request.user):
+        return _erro("Sem permissão.", 403)
+    b = _body(request)
+    inst = Servico.objects.filter(pk=b["id"]).first() if b.get("id") else None
+    form = ServicoForm({
+        "nome": b.get("nome"), "categoria": b.get("categoria"), "preco": b.get("preco"),
+        "duracao_min": b.get("duracao"), "icone": b.get("icone"),
+        "descricao": b.get("descricao"), "ativo": True}, instance=inst)
+    if not form.is_valid():
+        return _erro(" ".join(f"{k}: {' '.join(v)}" for k, v in form.errors.items()))
+    return JsonResponse({"ok": True, "servico": _servico(form.save())})
+
+
+@api_login
+@require_POST
+def servico_excluir(request, pk):
+    if not _gestao(request.user):
+        return _erro("Sem permissão.", 403)
+    s = Servico.objects.filter(pk=pk).first()
+    if not s:
+        return _erro("Serviço não encontrado.", 404)
+    try:
+        s.delete()
+    except ProtectedError:  # tem agendamentos: apenas desativa, preservando o histórico
+        s.ativo = False
+        s.save(update_fields=["ativo"])
+    return JsonResponse({"ok": True})
+
+
+@api_login
+@require_http_methods(["GET", "POST"])
+def perfil(request):
+    u = request.user
+    cli, prof = _cliente(u), _prof(u)
+    p = cli or prof
+    if not p:
+        return _erro("Conta sem perfil ativo.", 403)
+    if request.method == "POST":
+        form = PerfilForm(request.POST, request.FILES, user=u)
+        esps = [e.strip() for e in request.POST.getlist("especialidades") if e.strip()]
+        if not form.is_valid():
+            return _erro(" ".join(f"{k}: {' '.join(v)}" for k, v in form.errors.items()))
+        if prof and not esps:
+            return _erro("Selecione ao menos uma especialidade.")
+        d = form.cleaned_data
+        with transaction.atomic():
+            u.username = u.email = d["email"]
+            u.first_name = d["nome"].split()[0][:150]
+            u.save()
+            p.nome_completo, p.telefone, p.cep = d["nome"], d["tel"], d["cep"]
+            p.genero, p.data_nascimento = d["genero"], d["nasc"]
+            if d.get("foto"):
+                p.foto = d["foto"]
+            if prof:
+                p.apresentacao, p.horario_atendimento = d["bio"], d["horario"]
+            p.save()
+            if prof:
+                p.especialidades.set(
+                    [Especialidade.objects.get_or_create(nome=n[:50])[0] for n in esps])
+        return JsonResponse({"ok": True, "nome": p.nome_completo})
+    d = {"tipo": "profissional" if prof else "cliente", "nome": p.nome_completo, "email": u.email,
+         "tel": p.telefone, "cep": p.cep, "genero": p.genero, "cpf": p.cpf,
+         "nasc": p.data_nascimento.isoformat(), "foto": p.foto.url if p.foto else ""}
+    if prof:
+        d.update(bio=p.apresentacao, horario=p.horario_atendimento,
+                 esps=[e.nome for e in p.especialidades.all()],
+                 todas=list(Especialidade.objects.values_list("nome", flat=True)))
+    else:
+        f = getattr(cli, "ficha_saude", None)
+        t = u.termos.filter(tipo="saude").first()
+        d["ficha"] = {"em": timezone.localtime(f.atualizado_em).strftime("%d/%m/%Y") if f else None,
+                      "termo": t.pk if t else None}
+    return JsonResponse(d)
+
+
+@api_login
+@require_POST
+def senha(request):
+    b, u = _body(request), request.user
+    if not u.check_password(str(b.get("atual", ""))):
+        return _erro("Senha atual incorreta.")
+    nova = str(b.get("nova", ""))
+    try:
+        validate_password(nova, u)
+    except ValidationError as e:
+        return _erro(" ".join(e.messages))
+    u.set_password(nova)
+    u.save()
+    update_session_auth_hash(request, u)
+    return JsonResponse({"ok": True})

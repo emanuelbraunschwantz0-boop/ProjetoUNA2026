@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Una — Termo de Responsabilidade e Ficha de Saúde</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--m:#3D2B1A;--d:#C9A96E;--c:#F7F1E8;--ce:#E8DCC8}
+*{box-sizing:border-box}body{margin:0;background:var(--c);color:var(--m);font-family:Jost,Arial,sans-serif;line-height:1.5}
+.w{max-width:860px;margin:0 auto;padding:24px 16px 60px}h1,h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:400}
+h1 em,h2 em{color:var(--d)}.card{background:#fff;border:1px solid var(--ce);border-radius:12px;padding:22px;margin-bottom:20px}
+.termo{max-height:260px;overflow:auto;white-space:pre-wrap;font-size:14px;background:var(--c);border-radius:8px;padding:14px}
+table{width:100%;border-collapse:collapse}td{padding:8px 6px;border-bottom:1px solid var(--ce);font-size:14px;vertical-align:middle}
+.r div{display:inline-block;margin-right:12px;white-space:nowrap}textarea{width:100%;border:1px solid var(--ce);border-radius:8px;padding:8px;font:inherit}
+canvas{width:100%;max-width:520px;height:160px;border:1px dashed var(--d);border-radius:8px;background:#fff;touch-action:none;display:block}
+.btn{background:var(--m);color:#fff;border:0;border-radius:8px;padding:12px 26px;font:inherit;cursor:pointer;text-decoration:none;display:inline-block}
+.btn[disabled]{opacity:.4;cursor:not-allowed}.btn2{background:#fff;color:var(--m);border:1px solid var(--m)}
+.erro{color:#C0392B;font-size:13px;margin:4px 0}.aviso{background:#FFF6E0;border-left:4px solid var(--d);padding:10px 14px;border-radius:6px;font-size:14px}
+.hash{word-break:break-all;font-family:monospace;font-size:12px}@media print{.no-print{display:none}body{background:#fff}}
+</style></head><body><div class="w">
+<h1>Termo de <em>Responsabilidade</em> e Ficha de Saúde</h1>
+<p class="aviso">Antes de agendar, leia o termo e preencha a ficha. As informações protegem você e a equipe e são tratadas com sigilo. Ninguém tem atendimento recusado por condição de saúde.</p>
+
+<form method="post" id="form-ficha" novalidate>{% csrf_token %}
+<div class="card"><h2>1. Termo de <em>responsabilidade</em></h2>
+<div class="termo" id="termo">{{ texto }}</div>
+<p class="erro" id="aviso-leitura">Role o termo até o final para liberar a assinatura.</p></div>
+
+<div class="card"><h2>2. Ficha de <em>saúde</em></h2>
+{% if form.errors %}<p class="erro">Revise os campos obrigatórios, a assinatura e as confirmações.</p>{% endif %}
+<table>{% for f in form.condicoes %}<tr><td>{{ f.label }}</td><td class="r">{{ f }}</td></tr>{% endfor %}</table>
+<p><label>{{ form.alergias.label }}{{ form.alergias }}</label></p>
+<p><label>{{ form.medicamentos.label }}{{ form.medicamentos }}</label></p>
+<p><label>{{ form.outras_doencas.label }}{{ form.outras_doencas }}</label></p></div>
+
+<div class="card"><h2>3. <em>Assinatura</em></h2>
+<canvas id="cv" width="520" height="160"></canvas>
+<p><button type="button" class="btn btn2" onclick="limpar()">Limpar</button></p>
+{{ form.assinatura }}
+<p><label>{{ form.aceite_responsabilidade }} {{ form.aceite_responsabilidade.label }}</label></p>
+<p><label>{{ form.aceite_lgpd }} {{ form.aceite_lgpd.label }}</label></p>
+<p class="erro" id="erro-js"></p>
+<button class="btn" id="btn" disabled>Assinar e salvar</button></div>
+</form></div>
+<script>
+const t=document.getElementById('termo'),btn=document.getElementById('btn'),av=document.getElementById('aviso-leitura');
+function lido(){if(t.scrollTop+t.clientHeight>=t.scrollHeight-4){btn.disabled=false;av.style.display='none'}}
+t.addEventListener('scroll',lido);lido();
+const cv=document.getElementById('cv'),x=cv.getContext('2d');let des=false,pen=false;
+x.lineWidth=2.5;x.lineCap='round';x.strokeStyle='#3D2B1A';
+function pos(e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*cv.width/r.width,(e.clientY-r.top)*cv.height/r.height]}
+cv.addEventListener('pointerdown',e=>{pen=true;des=true;const[a,b]=pos(e);x.beginPath();x.moveTo(a,b);cv.setPointerCapture(e.pointerId)});
+cv.addEventListener('pointermove',e=>{if(!pen)return;const[a,b]=pos(e);x.lineTo(a,b);x.stroke()});
+['pointerup','pointercancel'].forEach(n=>cv.addEventListener(n,()=>pen=false));
+function limpar(){x.clearRect(0,0,cv.width,cv.height);des=false}
+document.getElementById('form-ficha').addEventListener('submit',e=>{
+  const er=document.getElementById('erro-js');er.textContent='';
+  if(!des){e.preventDefault();er.textContent='Desenhe sua assinatura no quadro.';return}
+  document.getElementById('id_assinatura').value=cv.toDataURL('image/png');
+});
+</script></body></html>

@@ -6,86 +6,100 @@ const MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Ag
 const DIAS_NOME = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
 const DIAS_LONGO = ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
 
-let SERVICOS = [
-  {id:1,nome:'Corte de Cabelo',ico:'bi-scissors',dur:45,preco:60,cat:'corte',desc:'Cortes personalizados por profissionais experientes.'},
-  {id:2,nome:'Manicure',ico:'bi-hand-index',dur:40,preco:35,cat:'manicure',desc:'Cuidado completo para suas unhas.'},
-  {id:3,nome:'Pedicure',ico:'bi-hand-index-thumb',dur:50,preco:40,cat:'manicure',desc:'Tratamento completo para os pés.'},
-  {id:4,nome:'Manicure + Pedicure',ico:'bi-stars',dur:90,preco:65,cat:'manicure',desc:'Combo completo mãos e pés.'},
-  {id:5,nome:'Tratamento Capilar',ico:'bi-droplet',dur:60,preco:80,cat:'tratamento',desc:'Revitalização profunda dos fios.'},
-  {id:6,nome:'Coloração',ico:'bi-palette',dur:120,preco:150,cat:'coloracao',desc:'Coloração e luzes profissionais.'},
-  {id:7,nome:'Escova Progressiva',ico:'bi-wind',dur:180,preco:200,cat:'tratamento',desc:'Alisamento e progressiva.'},
-  {id:8,nome:'Design de Sobrancelha',ico:'bi-eye',dur:20,preco:25,cat:'manicure',desc:'Modelagem e design preciso.'},
-];
+let SERVICOS = [], PROFISSIONAIS = [], AGENDA = [], HIST_CLIENTE = [], PERFIL = {};
 
-const PROFISSIONAIS = [
-  {id:1,nome:'Carla Mendes',esp:'Cabelos & Coloração',ini:'CM'},
-  {id:2,nome:'Juliana Ramos',esp:'Manicure & Pedicure',ini:'JR'},
-  {id:3,nome:'Beatriz Costa',esp:'Tratamentos Capilares',ini:'BC'},
-];
-
-const OCUPADOS = {
-  '1':{'2026-04-14':['09:00','10:00','14:30'],'2026-04-15':['08:00','11:00','15:00'],'2026-04-16':['09:30','13:00']},
-  '2':{'2026-04-14':['08:30','10:30','14:00'],'2026-04-15':['09:00','11:30'],'2026-04-16':['10:00','15:30']},
-  '3':{'2026-04-14':['09:00','11:00'],'2026-04-15':['08:30','14:00'],'2026-04-16':['13:00','14:00']},
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const brl = n => Number(n).toFixed(2).replace('.', ',');
+const TIPOS = ['corte','manicure','tratamento','coloracao'];
+const ST = {
+  pendente:{n:'Pendentes',i:'bi-hourglass-split'}, confirmado:{n:'Confirmados',i:'bi-calendar-check'},
+  concluido:{n:'Feitos',i:'bi-check2-all'}, cancelado:{n:'Cancelados',i:'bi-x-circle'}
 };
+const SL = {pendente:'Pendente', confirmado:'Confirmado', concluido:'Feito', cancelado:'Cancelado'};
+const FILT = {hist:new Set(Object.keys(ST)), ag:new Set(Object.keys(ST))};
+function chips(ctx, dados) {
+  return Object.entries(ST).map(([k,v]) => `<button class="chip st-${k}${FILT[ctx].has(k)?' on':''}" onclick="togFiltro('${ctx}','${k}')"><i class="bi ${v.i}"></i> ${v.n} <b>${dados.filter(x=>x.status===k).length}</b></button>`).join('');
+}
+function togFiltro(ctx, k) {
+  FILT[ctx].has(k) ? FILT[ctx].delete(k) : FILT[ctx].add(k);
+  ctx === 'hist' ? renderHist() : renderAgenda();
+}
+const tp = t => TIPOS.includes(t) ? t : 'corte';
 
-const AGENDA_PROF = {
-  'Carla Mendes':[
-    {dia:1,h:'08:00',cli:'Ana Paula',serv:'Coloração',dur:120,tipo:'coloracao'},
-    {dia:1,h:'11:00',cli:'Fernanda Lima',serv:'Corte de Cabelo',dur:45,tipo:'corte'},
-    {dia:2,h:'09:00',cli:'Roberta Silva',serv:'Corte de Cabelo',dur:45,tipo:'corte'},
-    {dia:2,h:'14:00',cli:'Letícia Matos',serv:'Escova Progressiva',dur:180,tipo:'tratamento'},
-    {dia:3,h:'10:00',cli:'Camila Rocha',serv:'Coloração',dur:120,tipo:'coloracao'},
-    {dia:4,h:'08:30',cli:'Priscila Dias',serv:'Corte de Cabelo',dur:45,tipo:'corte'},
-    {dia:4,h:'13:00',cli:'Daniela Souza',serv:'Tratamento Capilar',dur:60,tipo:'tratamento'},
-    {dia:5,h:'09:00',cli:'Viviane Nunes',serv:'Coloração',dur:120,tipo:'coloracao'},
-    {dia:6,h:'10:00',cli:'Patrícia Alves',serv:'Corte de Cabelo',dur:45,tipo:'corte'},
-  ],
-  'Juliana Ramos':[
-    {dia:1,h:'08:00',cli:'Marcia Freitas',serv:'Manicure + Pedicure',dur:90,tipo:'manicure'},
-    {dia:1,h:'10:00',cli:'Sandra Lima',serv:'Manicure',dur:40,tipo:'manicure'},
-    {dia:2,h:'08:30',cli:'Cláudia Melo',serv:'Pedicure',dur:50,tipo:'manicure'},
-    {dia:3,h:'09:00',cli:'Jéssica Porto',serv:'Manicure + Pedicure',dur:90,tipo:'manicure'},
-    {dia:4,h:'10:30',cli:'Natália Cruz',serv:'Manicure',dur:40,tipo:'manicure'},
-    {dia:5,h:'08:00',cli:'Luana Barros',serv:'Pedicure',dur:50,tipo:'manicure'},
-    {dia:6,h:'09:30',cli:'Tatiane Moura',serv:'Manicure + Pedicure',dur:90,tipo:'manicure'},
-  ],
-  'Beatriz Costa':[
-    {dia:1,h:'09:00',cli:'Eliane Gomes',serv:'Tratamento Capilar',dur:60,tipo:'tratamento'},
-    {dia:2,h:'09:30',cli:'Mônica Leal',serv:'Tratamento Capilar',dur:60,tipo:'tratamento'},
-    {dia:3,h:'08:00',cli:'Adriana Faria',serv:'Escova Progressiva',dur:180,tipo:'tratamento'},
-    {dia:4,h:'09:00',cli:'Simone Campos',serv:'Tratamento Capilar',dur:60,tipo:'tratamento'},
-    {dia:5,h:'10:00',cli:'Juliana Felix',serv:'Tratamento Capilar',dur:60,tipo:'tratamento'},
-    {dia:6,h:'08:30',cli:'Bruna Andrade',serv:'Escova Progressiva',dur:180,tipo:'tratamento'},
-  ],
-};
+// Comunicação com o Django (JSON + CSRF)
+async function api(url, body) {
+  const fd = body instanceof FormData;
+  const opts = body === undefined ? {} : {
+    method: 'POST',
+    headers: {...(fd ? {} : {'Content-Type':'application/json'}), 'X-CSRFToken':document.querySelector('[name=csrfmiddlewaretoken]').value},
+    body: fd ? body : JSON.stringify(body)
+  };
+  const r = await fetch(url, opts);
+  if (r.status === 401) { window.location.href = '/index_agenda.html'; throw new Error('Sessão expirada.'); }
+  let d = {}; try { d = await r.json(); } catch (e) {}
+  if (!r.ok || d.ok === false) throw new Error(d.erro || 'Erro ao comunicar com o servidor.');
+  return d;
+}
 
-const HIST_CLIENTE = [
-  {data:'08/04/2026',serv:'Coloração',prof:'Carla Mendes',hora:'09:00',preco:'R$ 150',status:'confirmado'},
-  {data:'25/03/2026',serv:'Corte de Cabelo',prof:'Carla Mendes',hora:'14:30',preco:'R$ 60',status:'confirmado'},
-  {data:'10/03/2026',serv:'Manicure + Pedicure',prof:'Juliana Ramos',hora:'10:00',preco:'R$ 65',status:'confirmado'},
-  {data:'20/02/2026',serv:'Tratamento Capilar',prof:'Beatriz Costa',hora:'11:00',preco:'R$ 80',status:'cancelado'},
-];
+async function carregar() {
+  const d = await api('/api/dados/');
+  SERVICOS = d.servicos; PROFISSIONAIS = d.profissionais; PERFIL = d.perfil;
+  HIST_CLIENTE = d.historico || [];
+  if (user.tipo === 'profissional') await carregarAgenda();
+}
+
+function inicioSemana() {
+  const h = new Date();
+  return new Date(h.getFullYear(), h.getMonth(), h.getDate() - ((h.getDay() + 6) % 7) + semOfsset * 7);
+}
+const isoData = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+
+async function carregarAgenda() {
+  AGENDA = (await api('/api/agenda/?inicio=' + isoData(inicioSemana()))).eventos;
+}
+
+// Atualiza com o banco a cada 30s (e ao voltar para a aba)
+async function atualizar() {
+  if (!user || document.hidden) return;
+  try {
+    await carregar();
+    if (user.tipo === 'cliente') renderHist(); else { renderAgenda(); renderServicosGestao(); }
+  } catch (e) {}
+}
+setInterval(atualizar, 30000);
+document.addEventListener('visibilitychange', atualizar);
+
+async function mudarStatus(id, st) {
+  try { await api(`/api/agendamento/${id}/status/`, {status: st}); notif('Agendamento atualizado.'); }
+  catch (e) { notif(e.message); return; }
+  fecharModal(); atualizar();
+}
 
 // ESTADO
 let user = null;
 let sel = {servico:null, prof:null, data:null, hora:null};
 let calM = new Date().getMonth(), calA = new Date().getFullYear();
 let semOff = 0;
-let pagSel = null;
 let editServId = null;
 let delServId = null;
 let icoSel = 'bi-scissors';
-let nextServId = 9;
 
 // ============================================================
 // INIT
 // ============================================================
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
   const raw = sessionStorage.getItem('una_user');
-  if(!raw) { window.location.href='index.html'; return; }
+  if(!raw) { window.location.href='/index_agenda.html'; return; }
   user = JSON.parse(raw);
+  try { await carregar(); } catch (e) { notif(e.message); }
   montarLayout();
+  if (user.tipo === 'cliente') {
+    renderHist();
+    document.getElementById('c-nome').value = PERFIL.nome || '';
+    document.getElementById('c-tel').value = PERFIL.tel || '';
+    document.getElementById('c-email').value = PERFIL.email || '';
+    ['c-nome','c-tel','c-email'].forEach(i => document.getElementById(i).readOnly = true);
+  }
 });
 
 function montarLayout() {
@@ -101,8 +115,9 @@ function montarLayout() {
     nav.innerHTML = `
       <li class="ativo" data-sec="sec-agendar"><a onclick="irSec('sec-agendar',this)"><i class="bi bi-calendar-plus"></i> Agendar</a></li>
       <li data-sec="sec-meus"><a onclick="irSec('sec-meus',this)"><i class="bi bi-calendar-check"></i> Meus agendamentos</a></li>
+      <li data-sec="sec-perfil"><a onclick="irSec('sec-perfil',this)"><i class="bi bi-person-circle"></i> Meu perfil</a></li>
       <li class="separador"></li>
-      <li><a href="index.html"><i class="bi bi-house"></i> Home</a></li>
+      <li><a href="/"><i class="bi bi-house"></i> Home</a></li>
     `;
     irSec('sec-agendar');
     document.getElementById('ph-tag').textContent = 'Agendamento online';
@@ -114,10 +129,9 @@ function montarLayout() {
     nav.innerHTML = `
       <li class="ativo" data-sec="sec-agenda"><a onclick="irSec('sec-agenda',this)"><i class="bi bi-calendar3"></i> Minha agenda</a></li>
       <li data-sec="sec-servicos-gestao"><a onclick="irSec('sec-servicos-gestao',this)"><i class="bi bi-scissors"></i> Serviços</a></li>
-      <li data-sec="sec-relatorios"><a onclick="irSec('sec-relatorios',this)"><i class="bi bi-bar-chart"></i> Relatórios</a></li>
-      <li data-sec="sec-clientes-gestao"><a onclick="irSec('sec-clientes-gestao',this)"><i class="bi bi-people"></i> Clientes</a></li>
+      <li data-sec="sec-perfil"><a onclick="irSec('sec-perfil',this)"><i class="bi bi-person-circle"></i> Meu perfil</a></li>
       <li class="separador"></li>
-      <li><a href="index.html"><i class="bi bi-house"></i> Home</a></li>
+      <li><a href="/"><i class="bi bi-house"></i> Home</a></li>
     `;
     const profNome = user.nome.split(' ')[0];
     document.getElementById('ph-tag').textContent = 'Painel profissional';
@@ -126,17 +140,15 @@ function montarLayout() {
     document.getElementById('prof-saudacao').textContent = profNome;
     // Setar profissional no select se for a profissional logada
     const sel = document.getElementById('sel-prof-agenda');
-    const match = Array.from(sel.options).findIndex(o=>o.text===user.nome);
-    if(match>=0) sel.selectedIndex=match;
+    sel.innerHTML = `<option>${esc(user.nome)}</option>`; sel.disabled = true;
     irSec('sec-agenda');
     renderAgenda();
     renderServicosGestao();
-    renderRelatorios();
-    renderClientesGestao();
   }
 }
 
 function irSec(id, el) {
+  if(id==='sec-perfil') carregarPerfil();
   document.querySelectorAll('.secao').forEach(s=>s.classList.remove('ativa'));
   document.getElementById(id).classList.add('ativa');
   document.querySelectorAll('#nav-menu li[data-sec]').forEach(li=>li.classList.remove('ativo'));
@@ -146,7 +158,7 @@ function irSec(id, el) {
 
 function sair() {
   sessionStorage.removeItem('una_user');
-  window.location.href='index.html';
+  window.location.href='/sair/';
 }
 
 // ============================================================
@@ -155,10 +167,10 @@ function sair() {
 function renderServicosAg() {
   document.getElementById('grade-servs').innerHTML = SERVICOS.map(s=>`
     <div class="serv-card" id="sc-${s.id}" onclick="selServ(${s.id})">
-      <div class="serv-ico"><i class="bi ${s.ico}"></i></div>
-      <h4>${s.nome}</h4>
+      <div class="serv-ico"><i class="bi ${esc(s.ico)}"></i></div>
+      <h4>${esc(s.nome)}</h4>
       <span class="dur"><i class="bi bi-clock" style="font-size:10px"></i> ${s.dur}min</span>
-      <p class="preco">R$ ${s.preco}</p>
+      <p class="preco">R$ ${brl(s.preco)}</p>
     </div>`).join('');
 }
 
@@ -172,8 +184,8 @@ function selServ(id) {
 function renderProfsAg() {
   document.getElementById('grade-profs-ag').innerHTML = PROFISSIONAIS.map(p=>`
     <div class="prof-card" id="pc-${p.id}" onclick="selProf(${p.id})">
-      <div class="prof-av">${p.ini}</div>
-      <div><h4>${p.nome}</h4><span>${p.esp}</span></div>
+      <div class="prof-av">${esc(p.ini)}</div>
+      <div><h4>${esc(p.nome)}</h4><span>${esc(p.esp)}</span></div>
       <div class="online-dot"></div>
     </div>`).join('');
 }
@@ -241,26 +253,37 @@ function selData(dt, d) {
   renderHorarios(dt);
 }
 
-function renderHorarios(dt) {
-  const profId = sel.prof ? String(sel.prof.id) : '1';
-  const ocup = (OCUPADOS[profId]||{})[dt]||[];
-  const todos=['08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30','12:00','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00'];
-  const manha=todos.filter(h=>h<'12:00'), tarde=todos.filter(h=>h>='12:00');
-  function bloco(titulo,horas){
-    return `<div>
-      <p class="turno-label">${titulo}</p>
-      <div class="grade-h">
-        ${horas.map(h=>{
-          const o=ocup.includes(h);
-          return `<button class="hbtn${o?' ocup':''}" ${o?'disabled':''} ${!o?`onclick="selH('${h}',this)"`:''}>
-            ${h}${o?'<i class="bi bi-x" style="font-size:9px;margin-left:3px"></i>':''}
-          </button>`;
-        }).join('')}
-      </div>
-    </div>`;
+async function renderHorarios(dt, silencioso) {
+  if (!sel.prof || !sel.servico) return;
+  let livres = [];
+  try { livres = (await api(`/api/horarios/?prof=${sel.prof.id}&servico=${sel.servico.id}&data=${dt}`)).disponiveis; }
+  catch (e) { if (!silencioso) notif(e.message); return; }
+  if (sel.data !== dt) return;  // usuário trocou de dia durante a consulta
+  if (sel.hora && !livres.includes(sel.hora)) {
+    if (silencioso) notif('O horário escolhido acabou de ser ocupado. Escolha outro.');
+    sel.hora = null;
+    document.getElementById('btn-n3').disabled = true;
   }
-  document.getElementById('turnos-box').innerHTML=bloco('☀ Manhã',manha)+bloco('🌤 Tarde',tarde);
+  const dur = sel.servico.dur;
+  const fim = h => { const [a,b] = h.split(':').map(Number), t = a*60+b+dur; return String(Math.floor(t/60)).padStart(2,'0')+':'+String(t%60).padStart(2,'0'); };
+  const manha = livres.filter(h => h < '12:00'), tarde = livres.filter(h => h >= '12:00');
+  const bloco = (titulo, horas) => horas.length ? `<div>
+      <p class="turno-label">${titulo}</p>
+      <div class="grade-h">${horas.map(h => `<button class="hbtn${sel.hora===h?' sel':''}" title="Termina às ${fim(h)}" onclick="selH('${h}',this)">${h}</button>`).join('')}</div>
+    </div>` : '';
+  document.getElementById('turnos-box').innerHTML = livres.length
+    ? `<p style="font-size:12px;opacity:.6;margin-bottom:10px">Duração: ${dur} min · mostramos só os horários livres (sem conflito).</p>` + bloco('☀ Manhã', manha) + bloco('🌤 Tarde', tarde)
+    : '<p style="padding:14px 0;opacity:.7">Não há horários livres neste dia para este serviço. Tente outra data ou profissional.</p>';
 }
+
+// mantém os horários sempre atualizados com o banco
+setInterval(() => {
+  if (!document.hidden && user && user.tipo === 'cliente' && sel.data &&
+      document.getElementById('et3').style.display === 'block') renderHorarios(sel.data, true);
+}, 15000);
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && sel.data && document.getElementById('et3').style.display === 'block') renderHorarios(sel.data, true);
+});
 
 function selH(h,btn){
   sel.hora=h;
@@ -278,44 +301,29 @@ function preencherResumo(){
   document.getElementById('r-data').textContent=`${DIAS_LONGO[obj.getDay()]}, ${d}/${m}/${a}`;
   document.getElementById('r-hora').textContent=sel.hora||'—';
   document.getElementById('r-dur').textContent=s?.dur+'min'||'—';
-  document.getElementById('r-preco').textContent=s?.preco||'—';
-  // Parcelas cartão
-  const parc=document.getElementById('parcelas-sel');
-  parc.innerHTML='';
-  for(let i=1;i<=3;i++){
-    const v=(s?.preco/i).toFixed(2).replace('.',',');
-    parc.innerHTML+=`<option value="${i}">${i}x de R$ ${v}${i===1?' (sem juros)':''}</option>`;
+  document.getElementById('r-preco').textContent=s?brl(s.preco):'—';
+}
+
+
+async function confirmar(){
+  try {
+    await api('/api/agendar/', {servico: sel.servico.id, prof: sel.prof.id, data: sel.data, hora: sel.hora,
+                                obs: document.getElementById('c-obs').value});
+  } catch (e) {
+    notif(e.message);
+    if (sel.data) { sel.hora = null; document.getElementById('btn-n3').disabled = true; renderHorarios(sel.data, true); goEt(3); }
+    return;
   }
-}
-
-function selPag(tipo,el){
-  pagSel=tipo;
-  document.querySelectorAll('.metodo').forEach(m=>m.classList.remove('sel'));
-  el.classList.add('sel');
-  document.getElementById('pix-box').classList.toggle('visivel',tipo==='pix');
-  const cartaoBox=document.getElementById('cartao-box');
-  cartaoBox.classList.toggle('visivel',tipo==='credito'||tipo==='debito');
-  document.getElementById('parcelas-wrap').style.display=tipo==='credito'?'block':'none';
-}
-
-function maskCard(inp){
-  let v=inp.value.replace(/\D/g,'').substring(0,16);
-  inp.value=v.replace(/(.{4})/g,'$1 ').trim();
-}
-
-function confirmar(){
-  const nome=document.getElementById('c-nome').value.trim();
-  if(!nome){notif('Por favor, informe seu nome.');return;}
   const [a,m,d]=sel.data.split('-');
-  document.getElementById('suc-info').innerHTML=`<strong>${sel.servico.nome}</strong> com ${sel.prof.nome}<br>${d}/${m} às ${sel.hora}`;
+  document.getElementById('suc-info').innerHTML=`<strong>${esc(sel.servico.nome)}</strong> com ${esc(sel.prof.nome)}<br>${d}/${m} às ${sel.hora}<br><small>Aguardando confirmação da profissional.</small>`;
   ['et1','et2','et3','et4'].forEach(id=>document.getElementById(id).style.display='none');
   document.getElementById('et-suc').style.display='block';
-  notif('Agendamento confirmado com sucesso! ✓');
+  notif('Agendamento solicitado com sucesso! ✓');
+  atualizar();
 }
 
 function novoAg(){
   sel={servico:null,prof:null,data:null,hora:null};
-  pagSel=null;
   document.getElementById('et-suc').style.display='none';
   document.getElementById('et1').style.display='block';
   for(let i=1;i<=4;i++) document.getElementById('st'+i).className='step'+(i===1?' ativo':'');
@@ -325,36 +333,41 @@ function novoAg(){
 
 // HISTÓRICO CLIENTE
 function renderHist(){
-  document.getElementById('hist-lista').innerHTML=HIST_CLIENTE.map(h=>{
+  const el=document.getElementById('hist-lista');
+  document.getElementById('chips-hist').innerHTML=chips('hist',HIST_CLIENTE);
+  const lista=HIST_CLIENTE.filter(h=>FILT.hist.has(h.status));
+  if(!lista.length){el.innerHTML='<p style="opacity:.6;padding:12px">Nenhum agendamento neste filtro.</p>';return;}
+  el.innerHTML=lista.map(h=>{
     const [d,m]=h.data.split('/');
     const mNom=MESES[parseInt(m)-1].substring(0,3);
-    return `<div class="hist-item">
+    return `<div class="hist-item st st-${esc(h.status)}">
       <div class="hist-data"><div class="hd">${d}</div><div class="hm">${mNom}</div></div>
       <div class="hist-div"></div>
       <div class="hist-info">
-        <h4>${h.serv}</h4>
-        <p>${h.prof} &bull; ${h.hora}</p>
+        <h4>${esc(h.serv)}</h4>
+        <p>${esc(h.prof)} &bull; ${h.hora}</p>
       </div>
-      <div class="hist-status hs-${h.status}">${h.status}</div>
-      <div class="hist-preco">${h.preco}</div>
+      <div class="hist-status"><i class="bi ${ST[h.status].i}"></i> ${SL[h.status]}</div>
+      <div class="hist-preco">${esc(h.preco)}</div>
+      ${h.pode_cancelar?`<button class="btn-danger" title="Cancelar" onclick="if(confirm('Cancelar este agendamento?'))mudarStatus(${h.id},'cancelado')"><i class="bi bi-x-lg"></i></button>`:''}
     </div>`;
   }).join('');
 }
-document.addEventListener('DOMContentLoaded',()=>setTimeout(renderHist,100));
 
 // ============================================================
 // PROFISSIONAL — AGENDA
 // ============================================================
 let semOfsset=0;
-function movSemana(d){if(d===0)semOfsset=0;else semOfsset+=d;renderAgenda();}
+async function movSemana(d){if(d===0)semOfsset=0;else semOfsset+=d;try{await carregarAgenda();}catch(e){notif(e.message);}renderAgenda();}
 
 function renderAgenda(){
   const profNome=document.getElementById('sel-prof-agenda')?.value||'Carla Mendes';
   document.getElementById('prof-saudacao').textContent=profNome.split(' ')[0];
-  const evs=AGENDA_PROF[profNome]||[];
+  const ativos=AGENDA.filter(e=>e.status!=='cancelado');
+  const evs=AGENDA.filter(e=>FILT.ag.has(e.status));
+  document.getElementById('chips-ag').innerHTML=chips('ag',AGENDA);
   const hoje=new Date();
-  const ini=new Date(hoje);
-  ini.setDate(hoje.getDate()-hoje.getDay()+1+semOfsset*7);
+  const ini=inicioSemana();
   const dias=[];
   for(let i=0;i<6;i++){const d=new Date(ini);d.setDate(ini.getDate()+i);dias.push(d);}
   const nDias=['Seg','Ter','Qua','Qui','Sex','Sáb'];
@@ -380,47 +393,58 @@ function renderAgenda(){
   horas.forEach(h=>{
     corpo+=`<div class="ag-h">${h}</div>`;
     for(let col=1;col<=6;col++){
-      const evCol=evs.filter(e=>e.dia===col&&e.h===h);
+      const evCol=evs.filter(e=>e.dia===col&&e.h.slice(0,2)===h.slice(0,2));
       corpo+=`<div class="ag-slot">${evCol.map(e=>`
-        <div class="ev ${e.tipo}" onclick='abrirEvento(${JSON.stringify(JSON.stringify(e))})'>
-          <div class="eh">${e.h}</div>
-          <div class="en">${e.cli}</div>
-          <div class="es">${e.serv}</div>
+        <div class="ev ${tp(e.tipo)} st st-${e.status}" onclick="abrirEvento(${e.id})">
+          <div class="eh"><i class="bi ${ST[e.status].i}"></i> ${e.h}</div>
+          <div class="en">${esc(e.cli)}</div>
+          <div class="es">${esc(e.serv)}</div>
         </div>`).join('')}</div>`;
     }
   });
   document.getElementById('ag-corpo').innerHTML=corpo;
 
   // Stats
-  const PREC={corte:60,manicure:50,tratamento:80,coloracao:150};
-  const fat=evs.reduce((a,e)=>a+(PREC[e.tipo]||60),0);
-  const horas_t=Math.round(evs.reduce((a,e)=>a+e.dur,0)/60);
-  const tipos={};evs.forEach(e=>tipos[e.tipo]=(tipos[e.tipo]||0)+1);
+  const fat=brl(ativos.reduce((a,e)=>a+e.preco,0));
+  const horas_t=Math.round(ativos.reduce((a,e)=>a+e.dur,0)/60);
+  const tipos={};ativos.forEach(e=>{const t=tp(e.tipo);tipos[t]=(tipos[t]||0)+1;});
   const top=Object.entries(tipos).sort((a,b)=>b[1]-a[1])[0];
   const tNom={corte:'Cortes',manicure:'Manicure',tratamento:'Tratamentos',coloracao:'Colorações'};
   document.getElementById('stats-agenda').innerHTML=`
-    <div class="stat-box"><div class="sn">${evs.length}</div><div class="sd">Agendamentos</div><div class="sd2">Na semana</div></div>
+    <div class="stat-box"><div class="sn">${ativos.length}</div><div class="sd">Agendamentos</div><div class="sd2">Na semana</div></div>
     <div class="stat-box"><div class="sn">R$ ${fat}</div><div class="sd">Faturamento estimado</div><div class="sd2">Semana atual</div></div>
-    <div class="stat-box"><div class="sn">${horas_t}h</div><div class="sd">Horas agendadas</div><div class="sd2">${evs.length} atendimentos</div></div>
+    <div class="stat-box"><div class="sn">${horas_t}h</div><div class="sd">Horas agendadas</div><div class="sd2">${ativos.length} atendimentos</div></div>
     <div class="stat-box"><div class="sn">${top?tipos[top[0]]:0}</div><div class="sd">Serviço mais popular</div><div class="sd2">${top?tNom[top[0]]:'—'}</div></div>`;
 }
 
-function abrirEvento(jsonStr){
-  const e=JSON.parse(jsonStr);
+function abrirEvento(id){
+  const e=AGENDA.find(x=>x.id===id); if(!e) return;
+  const t=tp(e.tipo);
   const dNomes={corte:'Corte de Cabelo',manicure:'Manicure / Pedicure',tratamento:'Tratamento Capilar',coloracao:'Coloração'};
   const corBg={corte:'rgba(201,169,110,0.12)',manicure:'rgba(192,57,43,0.08)',tratamento:'rgba(76,175,125,0.08)',coloracao:'rgba(142,68,173,0.07)'};
   const corTx={corte:'#6B4226',manicure:'#8B1A10',tratamento:'#1A5E35',coloracao:'#5B2C6F'};
-  document.getElementById('modal-tipo-badge').innerHTML=`<span style="display:inline-block;padding:3px 12px;border-radius:20px;font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:500;background:${corBg[e.tipo]};color:${corTx[e.tipo]}">${dNomes[e.tipo]}</span>`;
-  document.getElementById('modal-titulo').innerHTML=e.cli;
-  const dNomes2=['','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+  document.getElementById('modal-tipo-badge').innerHTML=`<span style="display:inline-block;padding:3px 12px;border-radius:20px;font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:500;background:${corBg[t]};color:${corTx[t]}">${dNomes[t]}</span>`;
+  document.getElementById('modal-titulo').textContent=e.cli;
+  const [a,m,d]=e.data.split('-');
+  const f=e.ficha;
+  const fichaHtml=!f?'':`<hr style="margin:10px 0;opacity:.2"><strong style="color:var(--marrom)">Ficha de saúde (sigilosa):</strong><br>
+    ${f.sim.length?'Atenção: '+f.sim.map(esc).join(', ')+'<br>':'Nenhuma condição informada.<br>'}
+    ${f.nao_informado.length?'Não informado: '+f.nao_informado.map(esc).join(', ')+'<br>':''}
+    ${f.alergias?'Alergias: '+esc(f.alergias)+'<br>':''}${f.medicamentos?'Medicamentos: '+esc(f.medicamentos)+'<br>':''}${f.outras?'Outras: '+esc(f.outras):''}`;
   document.getElementById('modal-body').innerHTML=`
-    <strong style="color:var(--marrom)">Serviço:</strong> ${e.serv}<br>
-    <strong style="color:var(--marrom)">Horário:</strong> ${e.h} &bull; ${dNomes2[e.dia]}-feira<br>
-    <strong style="color:var(--marrom)">Duração:</strong> ${e.dur} minutos<br>
-    <strong style="color:var(--marrom)">Profissional:</strong> ${document.getElementById('sel-prof-agenda').value}`;
-  document.getElementById('modal-acoes').innerHTML=`
-    <button class="btn-pri" onclick="window.open('https://wa.me/556984696874','_blank')"><i class="bi bi-whatsapp"></i> WhatsApp</button>
-    <button class="btn-sec" onclick="fecharModal()">Fechar</button>`;
+    <strong style="color:var(--marrom)">Serviço:</strong> ${esc(e.serv)}<br>
+    <strong style="color:var(--marrom)">Quando:</strong> ${d}/${m}/${a} às ${e.h}<br>
+    <strong style="color:var(--marrom)">Duração:</strong> ${e.dur} minutos &bull; R$ ${brl(e.preco)}<br>
+    <strong style="color:var(--marrom)">Status:</strong> <span style="color:${{pendente:'#E6A23C',confirmado:'#2980B9',concluido:'#4CAF7D',cancelado:'#C0392B'}[e.status]}"><i class="bi ${ST[e.status].i}"></i> ${SL[e.status]}</span><br>
+    ${e.obs?`<strong style="color:var(--marrom)">Obs.:</strong> ${esc(e.obs)}<br>`:''}${fichaHtml}`;
+  const bt=[];
+  if(e.status==='pendente') bt.push(`<button class="btn-pri" onclick="mudarStatus(${e.id},'confirmado')">Confirmar</button>`);
+  if(e.status==='confirmado') bt.push(`<button class="btn-pri" onclick="mudarStatus(${e.id},'concluido')">Concluir</button>`);
+  if(['pendente','confirmado'].includes(e.status)) bt.push(`<button class="btn-danger" onclick="mudarStatus(${e.id},'cancelado')">Cancelar</button>`);
+  const wpp=(e.tel||'').replace(/\D/g,'');
+  if(wpp) bt.push(`<button class="btn-sec" onclick="window.open('https://wa.me/55${wpp}','_blank')"><i class="bi bi-whatsapp"></i> WhatsApp</button>`);
+  bt.push('<button class="btn-sec" onclick="fecharModal()">Fechar</button>');
+  document.getElementById('modal-acoes').innerHTML=bt.join('');
   document.getElementById('modal-overlay').classList.add('open');
 }
 
@@ -429,18 +453,18 @@ function abrirEvento(jsonStr){
 // ============================================================
 function renderServicosGestao(){
   const lista=document.getElementById('servicos-lista-gestao');
-  const catNom={corte:'Corte / Cabelo',manicure:'Manicure / Pedicure',tratamento:'Tratamento Capilar',coloracao:'Coloração'};
+  const catNom={corte:'Corte / Cabelo',manicure:'Manicure / Pedicure',tratamento:'Tratamento Capilar',coloracao:'Coloração',sobrancelha:'Sobrancelha / Cílios',estetica:'Estética Facial'};
   lista.innerHTML=SERVICOS.map(s=>`
     <div class="serv-row" id="sr-${s.id}">
-      <div class="serv-row-ico"><i class="bi ${s.ico}"></i></div>
+      <div class="serv-row-ico"><i class="bi ${esc(s.ico)}"></i></div>
       <div class="serv-row-info">
-        <h4>${s.nome}</h4>
+        <h4>${esc(s.nome)}</h4>
         <div class="meta">
-          <span class="cat-badge cat-${s.cat}">${catNom[s.cat]}</span>
+          <span class="cat-badge cat-${s.cat}">${catNom[s.cat]||esc(s.cat)}</span>
           &nbsp; <i class="bi bi-clock" style="font-size:10px"></i> ${s.dur}min
         </div>
       </div>
-      <div class="serv-row-preco">R$ ${s.preco}</div>
+      <div class="serv-row-preco">R$ ${brl(s.preco)}</div>
       <div class="serv-row-acoes">
         <button class="btn-ghost" onclick="editarServ(${s.id})"><i class="bi bi-pencil"></i></button>
         <button class="btn-danger" onclick="pedirDel(${s.id})"><i class="bi bi-trash"></i></button>
@@ -454,24 +478,23 @@ function selIco(el){
   icoSel=el.dataset.ico;
 }
 
-function salvarServico(){
+async function salvarServico(){
   const nome=document.getElementById('fs-nome').value.trim();
   const preco=parseFloat(document.getElementById('fs-preco').value);
   const dur=parseInt(document.getElementById('fs-dur').value);
   const cat=document.getElementById('fs-cat').value;
   const desc=document.getElementById('fs-desc').value.trim();
   if(!nome||!preco||!dur){notif('Preencha todos os campos obrigatórios.');return;}
+  try {
+    await api('/api/servicos/salvar/',{id:editServId,nome,preco,duracao:dur,categoria:cat,icone:icoSel,descricao:desc});
+    await carregar();
+  } catch(e) { notif(e.message); return; }
+  notif(editServId?`Serviço "${nome}" atualizado com sucesso!`:`Serviço "${nome}" adicionado com sucesso!`);
   if(editServId){
-    const idx=SERVICOS.findIndex(s=>s.id===editServId);
-    SERVICOS[idx]={...SERVICOS[idx],nome,preco,dur,cat,ico:icoSel,desc};
-    notif(`Serviço "${nome}" atualizado com sucesso!`);
     editServId=null;
     document.getElementById('form-serv-titulo').innerHTML='Novo <em>serviço</em>';
     document.getElementById('fs-btn-salvar').innerHTML='<i class="bi bi-plus-circle"></i> Adicionar serviço';
     document.getElementById('fs-btn-cancelar').style.display='none';
-  } else {
-    SERVICOS.push({id:nextServId++,nome,preco,dur,cat,ico:icoSel,desc});
-    notif(`Serviço "${nome}" adicionado com sucesso!`);
   }
   limparFormServ();
   renderServicosGestao();
@@ -517,94 +540,71 @@ function pedirDel(id){
   document.getElementById('del-overlay').classList.add('open');
 }
 
-function confirmarDel(){
-  SERVICOS=SERVICOS.filter(s=>s.id!==delServId);
+async function confirmarDel(){
   document.getElementById('del-overlay').classList.remove('open');
+  try { await api(`/api/servicos/${delServId}/excluir/`,{}); await carregar(); }
+  catch(e) { notif(e.message); return; }
   notif('Serviço removido.');
   renderServicosGestao();
   renderServicosAg();
 }
-
 // ============================================================
-// RELATÓRIOS
+// MEU PERFIL
 // ============================================================
-function renderRelatorios(){
-  const total=Object.values(AGENDA_PROF).flat().length;
-  const fat=Object.values(AGENDA_PROF).flat().reduce((a,e)=>{
-    const p={corte:60,manicure:50,tratamento:80,coloracao:150};return a+(p[e.tipo]||60);},0);
-  const porProf=Object.entries(AGENDA_PROF).map(([n,evs])=>{
-    const f=evs.reduce((a,e)=>{const p={corte:60,manicure:50,tratamento:80,coloracao:150};return a+(p[e.tipo]||60);},0);
-    return {nome:n,qtd:evs.length,fat:f};
-  });
-  document.getElementById('relatorios-conteudo').innerHTML=`
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px;">
-      <div class="stat-box"><div class="sn">${total}</div><div class="sd">Atendimentos totais</div><div class="sd2">Semana atual</div></div>
-      <div class="stat-box"><div class="sn">R$ ${fat}</div><div class="sd">Faturamento bruto</div><div class="sd2">Estimativa da semana</div></div>
-      <div class="stat-box"><div class="sn">${SERVICOS.length}</div><div class="sd">Serviços ativos</div><div class="sd2">Disponíveis no sistema</div></div>
-    </div>
-    <div class="card" style="margin-bottom:20px;">
-      <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--marrom);margin-bottom:20px;">Desempenho por <em style="font-style:italic;color:var(--marrom-medio)">profissional</em></h3>
-      ${porProf.map(p=>`
-        <div style="display:flex;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid var(--creme-escuro);">
-          <div style="width:40px;height:40px;border-radius:50%;background:var(--marrom);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--dourado-claro);flex-shrink:0;">${p.nome.split(' ').map(x=>x[0]).join('').substring(0,2)}</div>
-          <div style="flex:1;"><div style="font-size:14px;font-weight:500;color:var(--marrom);">${p.nome}</div><div style="font-size:12px;color:rgba(61,43,26,0.4);margin-top:2px;">${p.qtd} atendimentos</div></div>
-          <div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--dourado);">R$ ${p.fat}</div>
-          <div style="width:80px;">
-            <div style="height:4px;background:var(--creme-escuro);border-radius:2px;">
-              <div style="height:4px;background:var(--dourado);border-radius:2px;width:${Math.round(p.qtd/total*100)}%"></div>
-            </div>
-            <div style="font-size:10px;color:rgba(61,43,26,0.35);margin-top:3px;text-align:right;">${Math.round(p.qtd/total*100)}%</div>
-          </div>
-        </div>`).join('')}
-    </div>
-    <div class="card">
-      <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--marrom);margin-bottom:20px;">Serviços mais <em style="font-style:italic;color:var(--marrom-medio)">solicitados</em></h3>
-      ${(() => {
-        const tc={};
-        Object.values(AGENDA_PROF).flat().forEach(e=>tc[e.tipo]=(tc[e.tipo]||0)+1);
-        const tn={corte:'Corte de Cabelo',manicure:'Manicure/Pedicure',tratamento:'Tratamento Capilar',coloracao:'Coloração'};
-        const tc2={corte:'#C9A96E',manicure:'#C0392B',tratamento:'#4CAF7D',coloracao:'#8E44AD'};
-        return Object.entries(tc).sort((a,b)=>b[1]-a[1]).map(([t,n])=>`
-          <div style="display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--creme-escuro);">
-            <div style="width:10px;height:10px;border-radius:2px;background:${tc2[t]};flex-shrink:0;"></div>
-            <div style="flex:1;font-size:14px;color:var(--marrom);">${tn[t]}</div>
-            <div style="font-size:13px;color:rgba(61,43,26,0.4);">${n} atendimentos</div>
-            <div style="width:100px;"><div style="height:4px;background:var(--creme-escuro);border-radius:2px;"><div style="height:4px;background:${tc2[t]};border-radius:2px;width:${Math.round(n/total*100)}%"></div></div></div>
-          </div>`).join('');
-      })()}
-    </div>`;
+async function carregarPerfil(){
+  let d; try { d = await api('/api/perfil/'); } catch(e) { notif(e.message); return; }
+  const set=(i,v)=>document.getElementById(i).value=v||'';
+  set('pf-nome',d.nome); set('pf-email',d.email); set('pf-tel',d.tel); set('pf-cep',d.cep);
+  set('pf-genero',d.genero); set('pf-nasc',d.nasc); set('pf-cpf',d.cpf);
+  document.getElementById('pf-foto-prev').innerHTML = d.foto ? `<img src="${esc(d.foto)}" alt="">` : '<i class="bi bi-person-fill"></i>';
+  const prof = d.tipo === 'profissional';
+  document.getElementById('pf-prof').style.display = prof ? 'block' : 'none';
+  document.getElementById('pf-ficha').style.display = prof ? 'none' : 'block';
+  if (prof) {
+    set('pf-horario',d.horario); set('pf-bio',d.bio);
+    document.getElementById('pf-esps').innerHTML = d.todas.map(n => `<button type="button" class="chip${d.esps.includes(n)?' on':''}" data-esp="${esc(n)}" onclick="this.classList.toggle('on')">${esc(n)}</button>`).join('');
+  } else {
+    document.getElementById('pf-ficha-txt').textContent = d.ficha.em ? `Última atualização e assinatura em ${d.ficha.em}. Se algo mudou na sua saúde, atualize antes do próximo atendimento.` : 'Você ainda não preencheu a ficha de saúde.';
+    const t = document.getElementById('pf-termo');
+    t.style.display = d.ficha.termo ? 'inline-flex' : 'none';
+    if (d.ficha.termo) t.href = '/termo/' + d.ficha.termo + '/';
+  }
 }
 
-// ============================================================
-// CLIENTES GESTÃO
-// ============================================================
-function renderClientesGestao(){
-  const clientes=[
-    {nome:'Ana Paula Ferreira',tel:'(69) 9 8401-2345',ultimo:'08/04/2026',serv:'Coloração',total:'R$ 450'},
-    {nome:'Fernanda Lima',tel:'(69) 9 8523-4567',ultimo:'07/04/2026',serv:'Corte de Cabelo',total:'R$ 240'},
-    {nome:'Roberta Silva',tel:'(69) 9 9112-3456',ultimo:'08/04/2026',serv:'Corte de Cabelo',total:'R$ 180'},
-    {nome:'Letícia Matos',tel:'(69) 9 9234-5678',ultimo:'08/04/2026',serv:'Escova Progressiva',total:'R$ 200'},
-    {nome:'Marcia Freitas',tel:'(69) 9 9345-6789',ultimo:'07/04/2026',serv:'Manicure + Pedicure',total:'R$ 195'},
-    {nome:'Eliane Gomes',tel:'(69) 9 9456-7890',ultimo:'07/04/2026',serv:'Tratamento Capilar',total:'R$ 320'},
-  ];
-  document.getElementById('clientes-lista-gestao').innerHTML=`
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
-      <span style="font-size:13px;color:rgba(61,43,26,0.4);">${clientes.length} clientes cadastrados</span>
-      <button class="btn-ghost"><i class="bi bi-search"></i> Buscar cliente</button>
-    </div>
-    ${clientes.map(c=>`
-    <div class="serv-row" style="margin-bottom:10px;">
-      <div style="width:40px;height:40px;border-radius:50%;background:var(--marrom);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--dourado-claro);flex-shrink:0;">${c.nome.split(' ').map(x=>x[0]).join('').substring(0,2)}</div>
-      <div class="serv-row-info">
-        <h4>${c.nome}</h4>
-        <div class="meta"><i class="bi bi-telephone" style="font-size:10px"></i> ${c.tel} &bull; Último: ${c.ultimo} &bull; ${c.serv}</div>
-      </div>
-      <div class="serv-row-preco">${c.total}</div>
-      <div class="serv-row-acoes">
-        <button class="btn-ghost" onclick="notif('Em breve: histórico completo do cliente')"><i class="bi bi-eye"></i></button>
-        <button class="btn-ghost" onclick="window.open('https://wa.me/5569','_blank')"><i class="bi bi-whatsapp"></i></button>
-      </div>
-    </div>`).join('')}`;
+function prevFotoPerfil(inp){
+  const f = inp.files[0]; if (!f) return;
+  if (f.size > 2*1024*1024) { notif('A imagem deve ter no máximo 2MB.'); inp.value=''; return; }
+  const r = new FileReader();
+  r.onload = e => document.getElementById('pf-foto-prev').innerHTML = `<img src="${e.target.result}" alt="">`;
+  r.readAsDataURL(f);
+}
+
+async function salvarPerfil(){
+  const g = i => document.getElementById(i).value;
+  const fd = new FormData();
+  fd.append('nome',g('pf-nome')); fd.append('email',g('pf-email')); fd.append('tel',g('pf-tel'));
+  fd.append('cep',g('pf-cep')); fd.append('genero',g('pf-genero')); fd.append('nasc',g('pf-nasc'));
+  if (user.tipo === 'profissional') {
+    fd.append('bio',g('pf-bio')); fd.append('horario',g('pf-horario'));
+    document.querySelectorAll('#pf-esps .chip.on').forEach(c => fd.append('especialidades', c.dataset.esp));
+  }
+  const foto = document.getElementById('pf-foto').files[0]; if (foto) fd.append('foto', foto);
+  try {
+    const d = await api('/api/perfil/', fd);
+    user.nome = d.nome; sessionStorage.setItem('una_user', JSON.stringify(user));
+    document.getElementById('user-nome-sidebar').textContent = d.nome;
+    notif('Perfil atualizado com sucesso! ✓');
+  } catch(e) { notif(e.message); }
+}
+
+async function trocarSenha(){
+  const atual=document.getElementById('pw-atual').value, nova=document.getElementById('pw-nova').value;
+  if (nova !== document.getElementById('pw-nova2').value) { notif('As senhas novas não coincidem.'); return; }
+  try {
+    await api('/api/senha/', {atual, nova});
+    ['pw-atual','pw-nova','pw-nova2'].forEach(i => document.getElementById(i).value='');
+    notif('Senha atualizada com sucesso! ✓');
+  } catch(e) { notif(e.message); }
 }
 
 // ============================================================

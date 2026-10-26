@@ -8,9 +8,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/static/css/login.css">
 
-<link rel="stylesheet" href="/static/css/responsivo.css">
 </head>
-<body class="pg-login">
+<body>
 
 <div class="login-wrap">
 
@@ -51,14 +50,6 @@
       <p class="form-sub">Acesse sua conta para continuar</p>
 
       <!-- TABS TIPO -->
-      <div class="tipo-tabs">
-        <button class="tipo-btn ativo" id="tab-cliente" onclick="setTipo('cliente')">
-          <i class="bi bi-person"></i> Sou cliente
-        </button>
-        <button class="tipo-btn" id="tab-profissional" onclick="setTipo('profissional')">
-          <i class="bi bi-scissors"></i> Sou profissional
-        </button>
-      </div>
 
       <!-- ALERTA ERRO -->
       <div class="alerta-erro" id="alerta-erro">
@@ -101,28 +92,11 @@
       </button>
 
       <div class="divisor"><span>ou</span></div>
-      <p class="link-cadastro">Não tem conta? <a href="#">Cadastre-se</a></p>
-
-      <!-- DEMO -->
-      <div class="demo-hint">
-        <div class="demo-titulo"><i class="bi bi-info-circle"></i> Contas de demonstração</div>
-        <div class="demo-contas">
-          <div class="demo-conta">
-            <span class="tipo">Cliente</span>
-            <span class="creds">cliente@una.com / 123456</span>
-            <button class="btn-preencher" onclick="preencher('cliente@una.com','123456','cliente')">Usar</button>
-          </div>
-          <div class="demo-conta">
-            <span class="tipo">Profissional</span>
-            <span class="creds">prof@una.com / 123456</span>
-            <button class="btn-preencher" onclick="preencher('prof@una.com','123456','profissional')">Usar</button>
-          </div>
-        </div>
-      </div>
-
+      <p class="link-cadastro">Não tem conta? <a href="{% url 'agendamentos:cadastro' %}">Cadastre-se</a></p>
     </div>
   </div>
 </div>
+{% csrf_token %}
 <script src="/static/js/login.js"></script>
 
 

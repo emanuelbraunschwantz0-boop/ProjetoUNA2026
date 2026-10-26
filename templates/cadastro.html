@@ -6,10 +6,10 @@
   <title>Una Instituto de Beleza — Criar Conta</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="/static/css/cadastro.css">
-<link rel="stylesheet" href="/static/css/responsivo.css">
 </head>
-<body class="pg-cadastro">
+<body>
 
+{% csrf_token %}
 <div class="cad-wrap">
 
   <!-- ======================================================
@@ -59,10 +59,7 @@
     <div class="cv-steps">
       <p class="cv-steps-titulo">Etapas do cadastro</p>
       <div class="cv-step-list" id="cv-step-list">
-        <div class="cv-step-item ativo" data-s="1">
-          <div class="cv-step-num">1</div> Tipo de conta
-        </div>
-        <div class="cv-step-item" data-s="2">
+        <div class="cv-step-item ativo" data-s="2">
           <div class="cv-step-num">2</div> Dados pessoais
         </div>
         <div class="cv-step-item" data-s="3">
@@ -89,11 +86,11 @@
     <!-- Barra de progresso -->
     <div class="progresso-wrap">
       <div class="progresso-barra-bg">
-        <div class="progresso-barra" id="prog-barra" style="width:25%"></div>
+        <div class="progresso-barra" id="prog-barra" style="width:33%"></div>
       </div>
       <div class="progresso-info">
-        <span class="etapa-atual" id="prog-label">Etapa 1 — Tipo de conta</span>
-        <span class="etapa-total" id="prog-total">1 de 4</span>
+        <span class="etapa-atual" id="prog-label">Etapa 1 — Dados pessoais</span>
+        <span class="etapa-total" id="prog-total">1 de 3</span>
       </div>
     </div>
 
@@ -108,40 +105,10 @@
     ==================================================== -->
     <div class="cad-etapa-wrap">
 
-      <!-- ---- ETAPA 1: TIPO DE CONTA ---- -->
-      <div class="cad-etapa ativa" id="etapa1">
-        <span class="etapa-secao-label">Passo 1</span>
-        <p class="etapa-secao-titulo">Qual é o seu <em>perfil?</em></p>
-
-        <div class="tipo-grid">
-          <div class="tipo-card" id="tc-cliente" onclick="selecionarTipo('cliente')">
-            <div class="tipo-card-ico"><i class="bi bi-person-heart"></i></div>
-            <h3>Sou cliente</h3>
-            <p>Quero agendar serviços e acompanhar meu histórico de atendimentos.</p>
-          </div>
-          <div class="tipo-card" id="tc-profissional" onclick="selecionarTipo('profissional')">
-            <div class="tipo-card-ico"><i class="bi bi-scissors"></i></div>
-            <h3>Sou profissional</h3>
-            <p>Trabalho no salão e quero gerenciar minha agenda e atendimentos.</p>
-          </div>
-        </div>
-
-        <div class="alerta info vis" id="info-tipo" style="display:flex!important">
-          <i class="bi bi-info-circle"></i>
-          <span>Contas profissionais passam por aprovação da administração do salão.</span>
-        </div>
-
-        <div class="nav-btns">
-          <button class="btn-pri" id="btn-proximo1" onclick="avancar(1)" disabled>
-            <span class="btn-txt">Próximo <i class="bi bi-arrow-right"></i></span>
-            <div class="spinner"></div>
-          </button>
-        </div>
-      </div>
 
       <!-- ---- ETAPA 2: DADOS PESSOAIS ---- -->
-      <div class="cad-etapa" id="etapa2">
-        <span class="etapa-secao-label">Passo 2</span>
+      <div class="cad-etapa ativa" id="etapa2">
+        <span class="etapa-secao-label">Passo 1</span>
         <p class="etapa-secao-titulo">Seus <em>dados pessoais</em></p>
 
         <!-- Foto de perfil -->
@@ -232,8 +199,23 @@
           </div>
         </div>
 
-        <!-- Bloco extra PROFISSIONAL -->
+        <label class="check-linha" style="margin:4px 0 18px">
+          <input type="checkbox" id="chk-func" onchange="toggleFunc(this)">
+          <span>Estou cadastrando um(a) <b>funcionário(a)</b> do salão (exige senha de administrador)</span>
+        </label>
+
+        <!-- Bloco extra FUNCIONÁRIO -->
         <div id="bloco-prof" style="display:none">
+          <div class="campo-row col1">
+            <div class="campo-g">
+              <label>Senha de administrador *</label>
+              <div class="campo-inner">
+                <i class="bi bi-shield-lock campo-ico"></i>
+                <input type="password" id="inp-admin" autocomplete="off" placeholder="Fornecida pela gestão">
+              </div>
+              <span class="campo-erro-txt" id="err-admin">Informe a senha de administrador.</span>
+            </div>
+          </div>
           <div class="divider"><span>Informações profissionais</span></div>
 
           <!-- Especialidades -->
@@ -289,7 +271,6 @@
         </div>
 
         <div class="nav-btns">
-          <button class="btn-sec" onclick="voltar(2)"><i class="bi bi-arrow-left"></i> Voltar</button>
           <button class="btn-pri" onclick="avancar(2)">
             <span class="btn-txt">Próximo <i class="bi bi-arrow-right"></i></span>
             <div class="spinner"></div>
@@ -299,7 +280,7 @@
 
       <!-- ---- ETAPA 3: SEGURANÇA ---- -->
       <div class="cad-etapa" id="etapa3">
-        <span class="etapa-secao-label">Passo 3</span>
+        <span class="etapa-secao-label">Passo 2</span>
         <p class="etapa-secao-titulo" id="titulo-etapa3">Crie sua <em>senha</em></p>
 
         <!-- Senha -->
@@ -348,21 +329,6 @@
           <span>Use letras maiúsculas, números e símbolos para uma senha mais forte.</span>
         </div>
 
-        <!-- Código de convite (PROFISSIONAL) -->
-        <div id="bloco-codigo" style="display:none">
-          <div class="divider"><span>Acesso profissional</span></div>
-          <div class="campo-row col1">
-            <div class="campo-g">
-              <label>Código de convite <span style="color:rgba(61,43,26,0.35);text-transform:none;font-size:11px">(fornecido pela gestão)</span></label>
-              <div class="campo-inner">
-                <i class="bi bi-key campo-ico"></i>
-                <input type="text" id="inp-codigo" placeholder="Ex: UNA-2026" style="text-transform:uppercase;letter-spacing:2px">
-              </div>
-              <span class="campo-erro-txt" id="err-codigo">Código inválido.</span>
-            </div>
-          </div>
-        </div>
-
         <div class="nav-btns">
           <button class="btn-sec" onclick="voltar(3)"><i class="bi bi-arrow-left"></i> Voltar</button>
           <button class="btn-pri" onclick="avancar(3)">
@@ -374,7 +340,7 @@
 
       <!-- ---- ETAPA 4: CONFIRMAÇÃO / REVISÃO ---- -->
       <div class="cad-etapa" id="etapa4">
-        <span class="etapa-secao-label">Passo 4</span>
+        <span class="etapa-secao-label">Passo 3</span>
         <p class="etapa-secao-titulo">Revise e <em>confirme</em></p>
 
         <!-- Card de revisão -->
@@ -383,6 +349,7 @@
         </div>
 
         <!-- Checkboxes obrigatórios -->
+        <div class="alerta info vis" style="margin-bottom:14px"><i class="bi bi-clipboard2-pulse"></i><span>Clientes: após criar a conta você preencherá o <b>Termo de Responsabilidade e a Ficha de Saúde</b> (com assinatura) antes de agendar.</span></div>
         <label class="check-linha">
           <input type="checkbox" id="chk-termos">
           <span>Li e aceito os
@@ -427,18 +394,18 @@
         <div id="suc-aviso-prof" style="display:none">
           <div class="alerta info vis" style="margin-bottom:20px;max-width:400px;margin-left:auto;margin-right:auto">
             <i class="bi bi-clock-history"></i>
-            <span>Sua conta profissional está em análise. A gestão do salão irá aprová-la em breve.</span>
+            <span>Conta de funcionário criada e já liberada para uso.</span>
           </div>
         </div>
-        <a href="{% url 'agendamentos:home' %}" class="btn-pri" style="text-decoration:none;display:inline-flex">
-          <i class="bi bi-box-arrow-in-right"></i> Fazer login
+        <a href="{% url 'agendamentos:login' %}" id="btn-pos-cadastro" class="btn-pri" style="text-decoration:none;display:inline-flex">
+          <i class="bi bi-box-arrow-in-right"></i> Continuar
         </a>
       </div>
 
     </div><!-- /cad-etapa-wrap -->
 
     <!-- Link voltar login -->
-    <p class="link-login">Já tem uma conta? <a href="{% url 'agendamentos:home' %}">Entrar</a></p>
+    <p class="link-login">Já tem uma conta? <a href="{% url 'agendamentos:login' %}">Entrar</a></p>
 
   </div><!-- /cad-form-area -->
 </div><!-- /cad-wrap -->

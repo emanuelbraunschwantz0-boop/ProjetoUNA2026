@@ -494,4 +494,20 @@ html,body{height:100%;font-family:'Jost',sans-serif;background:var(--creme);colo
 .empty i{font-size:36px;color:rgba(201,169,110,0.3);display:block;margin-bottom:12px;}
 .empty p{font-size:14px;color:rgba(61,43,26,0.35);letter-spacing:0.3px;}
 
-/* Responsividade: veja responsivo.css (carregado por último em cada página). */
+
+/* ===== Status (cores + ícones) e perfil ===== */
+.st-pendente{--sc:#E6A23C}.st-confirmado{--sc:#2980B9}.st-concluido{--sc:#4CAF7D}.st-cancelado{--sc:#C0392B}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}
+.chip{border:1.5px solid var(--sc,var(--marrom));color:var(--sc,var(--marrom));background:#fff;border-radius:20px;padding:6px 14px;font:inherit;font-size:12px;cursor:pointer;display:inline-flex;gap:6px;align-items:center;opacity:.55;transition:all .15s}
+.chip.on{background:var(--sc,var(--marrom));color:#fff;opacity:1}
+.chip b{font-weight:500;background:rgba(255,255,255,.25);border-radius:10px;padding:0 7px}
+.chip:not(.on) b{background:rgba(0,0,0,.06)}
+.ev.st{background:#fff;border-left:3px solid var(--sc);color:var(--texto)}
+@supports (background:color-mix(in srgb,red,blue)){.ev.st{background:color-mix(in srgb,var(--sc) 14%,#fff)}}
+.ev.st .eh i{color:var(--sc)}
+.ev.st-cancelado{text-decoration:line-through;opacity:.6}
+.hist-item.st{border-left:4px solid var(--sc)}
+.hist-item.st .hist-status{background:var(--sc);color:#fff;display:inline-flex;gap:5px;align-items:center}
+#sec-perfil .resumo-card{max-width:760px}
+#sec-perfil .prof-av{display:flex;align-items:center;justify-content:center;border-radius:50%}
+#sec-perfil .prof-av img{width:100%;height:100%;object-fit:cover}

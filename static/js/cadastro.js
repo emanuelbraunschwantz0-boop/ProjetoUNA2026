@@ -3,8 +3,8 @@
 // ESTADO
 // ============================================================
 const estado = {
-  tipo: null,
-  etapa: 1,
+  tipo: 'cliente',
+  etapa: 2,
   nome: '', email: '', tel: '', cpf: '',
   nasc: '', genero: '', cep: '',
   especialidades: [],
@@ -12,45 +12,32 @@ const estado = {
   senha: ''
 };
 
-const TOTAL_ETAPAS = 4;
-const PROGRESSO_LABELS = [
-  '', // index 0 vazio
-  'Etapa 1 — Tipo de conta',
-  'Etapa 2 — Dados pessoais',
-  'Etapa 3 — Segurança',
-  'Etapa 4 — Confirmação'
-];
-const CODIGO_VALIDO = 'UNA-2026'; // código de demonstração
+const TOTAL_ETAPAS = 3;
+const PROGRESSO_LABELS = ['', '', 'Etapa 1 — Dados pessoais', 'Etapa 2 — Segurança', 'Etapa 3 — Confirmação'];
 
 // ============================================================
 // SELEÇÃO DE TIPO
 // ============================================================
-function selecionarTipo(tipo) {
-  estado.tipo = tipo;
-  document.getElementById('tc-cliente').classList.toggle('sel', tipo === 'cliente');
-  document.getElementById('tc-profissional').classList.toggle('sel', tipo === 'profissional');
-  document.getElementById('btn-proximo1').disabled = false;
-
-  // Ajustar rótulos das etapas laterais
-  document.getElementById('cv-label-etapa3').textContent = tipo === 'profissional' ? 'Acesso & Código' : 'Segurança';
-  document.getElementById('cv-label-etapa4').textContent = 'Confirmação';
+function toggleFunc(chk) {
+  estado.tipo = chk.checked ? 'profissional' : 'cliente';
+  document.getElementById('bloco-prof').style.display = chk.checked ? 'block' : 'none';
 }
 
 // ============================================================
 // PROGRESSO
 // ============================================================
 function atualizarProgresso(n) {
-  const pct = Math.round((n / TOTAL_ETAPAS) * 100);
+  const pct = Math.round(((n - 1) / TOTAL_ETAPAS) * 100);
   document.getElementById('prog-barra').style.width = pct + '%';
   document.getElementById('prog-label').textContent = PROGRESSO_LABELS[n];
-  document.getElementById('prog-total').textContent = n + ' de ' + TOTAL_ETAPAS;
+  document.getElementById('prog-total').textContent = (n - 1) + ' de ' + TOTAL_ETAPAS;
 
   // Steps laterais
   document.querySelectorAll('.cv-step-item').forEach(el => {
     const s = parseInt(el.dataset.s);
     el.className = 'cv-step-item' + (s < n ? ' concluido' : s === n ? ' ativo' : '');
     const num = el.querySelector('.cv-step-num');
-    num.innerHTML = s < n ? '<i class="bi bi-check-lg" style="font-size:10px"></i>' : s;
+    num.innerHTML = s < n ? '<i class="bi bi-check-lg" style="font-size:10px"></i>' : (s - 1);
   });
 }
 
@@ -65,11 +52,6 @@ function irParaEtapa(n) {
   esconderAlertaGlobal();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 
-  // Ajustes contextuais
-  if (n >= 2) {
-    document.getElementById('bloco-prof').style.display = estado.tipo === 'profissional' ? 'block' : 'none';
-    document.getElementById('bloco-codigo').style.display = estado.tipo === 'profissional' ? 'block' : 'none';
-  }
   if (n === 4) preencherRevisao();
 }
 
@@ -90,13 +72,6 @@ function validarEtapa(n) {
   limparErros();
   let ok = true;
 
-  if (n === 1) {
-    if (!estado.tipo) {
-      mostrarAlertaGlobal('Selecione o tipo de conta para continuar.');
-      return false;
-    }
-  }
-
   if (n === 2) {
     const nome = document.getElementById('inp-nome').value.trim();
     const email = document.getElementById('inp-email').value.trim();
@@ -111,6 +86,8 @@ function validarEtapa(n) {
     if (!nasc) { erro('err-nasc', 'inp-nasc'); ok = false; }
 
     if (estado.tipo === 'profissional') {
+      const adm = document.getElementById('inp-admin').value;
+      if (!adm) { erro('err-admin', 'inp-admin'); ok = false; }
       const esps = document.querySelectorAll('.esp-chip.sel');
       if (esps.length === 0) { document.getElementById('err-esp').classList.add('vis'); ok = false; }
       estado.especialidades = Array.from(esps).map(e => e.dataset.esp);
@@ -133,11 +110,6 @@ function validarEtapa(n) {
 
     if (!senhaValida(senha)) { erro('err-senha', 'inp-senha'); ok = false; }
     if (senha !== senha2) { erro('err-senha2', 'inp-senha2'); ok = false; }
-
-    if (estado.tipo === 'profissional') {
-      const cod = document.getElementById('inp-codigo').value.trim().toUpperCase();
-      if (cod !== CODIGO_VALIDO) { erro('err-codigo', 'inp-codigo'); ok = false; }
-    }
 
     if (ok) estado.senha = senha;
   }
@@ -181,10 +153,8 @@ function linha(ico, label, val) {
 // ============================================================
 // FINALIZAR CADASTRO
 // ============================================================
-function finalizar() {
-  const chkT = document.getElementById('chk-termos').checked;
-  const chkC = document.getElementById('chk-termo-compromisso').checked;
-  if (!chkT || !chkC) {
+async function finalizar() {
+  if (!document.getElementById('chk-termos').checked || !document.getElementById('chk-termo-compromisso').checked) {
     document.getElementById('err-termos').style.display = 'block';
     return;
   }
@@ -193,24 +163,53 @@ function finalizar() {
   const btn = document.getElementById('btn-finalizar');
   btn.classList.add('carregando');
 
-  setTimeout(() => {
+  const fd = new FormData();
+  const campos = {
+    nome: estado.nome, email: estado.email, tel: estado.tel,
+    cpf: estado.cpf, nasc: estado.nasc, bio: estado.bio, senha: estado.senha,
+    genero: document.getElementById('inp-genero').value,
+    cep: document.getElementById('inp-cep').value
+  };
+  Object.entries(campos).forEach(([k, v]) => fd.append(k, v || ''));
+  estado.especialidades.forEach(e => fd.append('especialidades', e));
+  if (estado.tipo === 'profissional') {
+    fd.append('funcionario', 'on');
+    fd.append('senha_adm', document.getElementById('inp-admin').value);
+    fd.append('horario', montarHorario());
+  }
+  fd.append('aceite_termos', 'on');
+  fd.append('aceite_compromisso', 'on');
+  const foto = document.getElementById('inp-foto').files[0];
+  if (foto) fd.append('foto', foto);
+
+  try {
+    const r = await fetch(window.location.pathname, {
+      method: 'POST', body: fd,
+      headers: { 'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value }
+    });
+    const d = await r.json();
     btn.classList.remove('carregando');
-    // Ocultar etapa e mostrar sucesso
+    if (!d.ok) {
+      mostrarAlertaGlobal(Object.entries(d.erros || {}).map(([k, v]) => `${k}: ${v}`).join(' | ') || 'Erro ao cadastrar.');
+      return;
+    }
     document.getElementById('etapa4').classList.remove('ativa');
     document.getElementById('cad-sucesso').classList.add('vis');
     document.getElementById('prog-barra').style.width = '100%';
     document.getElementById('prog-label').textContent = 'Cadastro concluído!';
     document.querySelector('.link-login').style.display = 'none';
-
     document.getElementById('suc-nome-email').textContent = `${estado.nome} · ${estado.email}`;
+    document.getElementById('btn-pos-cadastro').href = d.redirect;
     if (estado.tipo === 'profissional') {
-      document.getElementById('suc-desc').textContent = 'Seu cadastro profissional foi recebido. Aguarde a aprovação da equipe Una.';
-      document.getElementById('suc-aviso-prof').style.display = 'block';
+      document.getElementById('suc-desc').textContent = 'Conta de funcionário criada e liberada. Você já pode entrar.';
+      document.getElementById('suc-aviso-prof').style.display = 'none';
+    } else {
+      document.getElementById('suc-desc').textContent = 'Conta criada! Agora preencha o Termo de Responsabilidade e a Ficha de Saúde.';
     }
-
-    // Salvar na sessão
-    sessionStorage.setItem('una_user', JSON.stringify({ email: estado.email, nome: estado.nome, tipo: estado.tipo }));
-  }, 1800);
+  } catch (e) {
+    btn.classList.remove('carregando');
+    mostrarAlertaGlobal('Falha de conexão. Tente novamente.');
+  }
 }
 
 // ============================================================
@@ -355,13 +354,17 @@ function toggleDia(val, btn) {
   document.getElementById('he-' + val).disabled = !on;
 }
 
-// ============================================================
-// AUTO-FILL SE VIER DO LOGIN (tipo já escolhido)
-// ============================================================
-window.addEventListener('DOMContentLoaded', () => {
-  const params = new URLSearchParams(window.location.search);
-  const t = params.get('tipo');
-  if (t === 'profissional' || t === 'cliente') selecionarTipo(t);
+function montarHorario() {
+  const nomes = {1:'Seg',2:'Ter',3:'Qua',4:'Qui',5:'Sex',6:'Sáb'};
+  const at = [];
+  for (let d = 1; d <= 6; d++) {
+    if (document.getElementById('dt-' + d).classList.contains('on'))
+      at.push({n: nomes[d], i: document.getElementById('hs-' + d).value, f: document.getElementById('he-' + d).value});
+  }
+  if (!at.length) return '';
+  if (at.every(x => x.i === at[0].i && x.f === at[0].f))
+    return at.map(x => x.n).join(', ') + ' · ' + at[0].i + ' às ' + at[0].f;
+  return at.map(x => `${x.n} ${x.i}-${x.f}`).join('; ');
+}
 
-  atualizarProgresso(1);
-});
+window.addEventListener('DOMContentLoaded', () => atualizarProgresso(2));

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Una — Termo assinado</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--m:#3D2B1A;--d:#C9A96E;--c:#F7F1E8;--ce:#E8DCC8}
+*{box-sizing:border-box}body{margin:0;background:var(--c);color:var(--m);font-family:Jost,Arial,sans-serif;line-height:1.5}
+.w{max-width:860px;margin:0 auto;padding:24px 16px 60px}h1,h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:400}
+h1 em,h2 em{color:var(--d)}.card{background:#fff;border:1px solid var(--ce);border-radius:12px;padding:22px;margin-bottom:20px}
+.termo{max-height:260px;overflow:auto;white-space:pre-wrap;font-size:14px;background:var(--c);border-radius:8px;padding:14px}
+table{width:100%;border-collapse:collapse}td{padding:8px 6px;border-bottom:1px solid var(--ce);font-size:14px;vertical-align:middle}
+.r div{display:inline-block;margin-right:12px;white-space:nowrap}textarea{width:100%;border:1px solid var(--ce);border-radius:8px;padding:8px;font:inherit}
+canvas{width:100%;max-width:520px;height:160px;border:1px dashed var(--d);border-radius:8px;background:#fff;touch-action:none;display:block}
+.btn{background:var(--m);color:#fff;border:0;border-radius:8px;padding:12px 26px;font:inherit;cursor:pointer;text-decoration:none;display:inline-block}
+.btn[disabled]{opacity:.4;cursor:not-allowed}.btn2{background:#fff;color:var(--m);border:1px solid var(--m)}
+.erro{color:#C0392B;font-size:13px;margin:4px 0}.aviso{background:#FFF6E0;border-left:4px solid var(--d);padding:10px 14px;border-radius:6px;font-size:14px}
+.hash{word-break:break-all;font-family:monospace;font-size:12px}@media print{.no-print{display:none}body{background:#fff}}
+</style></head><body><div class="w">
+<h1>Termo <em>assinado</em></h1>
+<div class="card"><div class="termo" style="max-height:none;overflow:visible">{{ termo.texto }}</div></div>
+{% if respostas %}<div class="card"><h2>Ficha de <em>saúde</em></h2>
+<table>{% for r, v in respostas %}<tr><td>{{ r }}</td><td><strong>{{ v }}</strong></td></tr>{% endfor %}</table>
+{% if termo.dados.alergias %}<p><b>Alergias:</b> {{ termo.dados.alergias }}</p>{% endif %}
+{% if termo.dados.medicamentos %}<p><b>Medicamentos:</b> {{ termo.dados.medicamentos }}</p>{% endif %}
+{% if termo.dados.outras_doencas %}<p><b>Outras:</b> {{ termo.dados.outras_doencas }}</p>{% endif %}</div>{% endif %}
+<div class="card"><h2>Registro da <em>assinatura</em></h2>
+{% if termo.assinatura %}<img src="{{ termo.assinatura }}" alt="Assinatura" style="max-width:320px;border-bottom:1px solid var(--m)">{% endif %}
+<p>Signatário: <b>{{ termo.usuario.get_full_name|default:termo.usuario.email }}</b> ({{ termo.usuario.email }})<br>
+Data/hora: {{ termo.assinado_em|date:"d/m/Y H:i:s" }} · IP: {{ termo.ip|default:"—" }}<br>Versão: {{ termo.versao }}</p>
+<p class="hash">SHA-256: {{ termo.hash_sha256 }}</p></div>
+<p class="no-print"><button class="btn btn2" onclick="window.print()">Imprimir / salvar PDF</button>
+<a class="btn" href="{% url 'agendamentos:agendamento' %}">Continuar para o agendamento</a></p>
+</div></body></html>

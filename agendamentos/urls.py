@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import views
+from . import api, views
 
 app_name = "agendamentos"
 
@@ -18,6 +18,19 @@ urlpatterns = [
     path("index_agenda.html", views.login_view, name="login"),
     path("index_inical.html", views.inicial, name="inicial"),
     path("agendamento.html", views.agendamento, name="agendamento"),
+    # API JSON do painel de agendamento
+    path("api/dados/", api.dados, name="api_dados"),
+    path("api/horarios/", api.horarios, name="api_horarios"),
+    path("api/perfil/", api.perfil, name="api_perfil"),
+    path("api/senha/", api.senha, name="api_senha"),
+    path("api/agendar/", api.agendar, name="api_agendar"),
+    path("api/agenda/", api.agenda, name="api_agenda"),
+    path("api/agendamento/<int:pk>/status/", api.mudar_status, name="api_status"),
+    path("api/servicos/salvar/", api.servico_salvar, name="api_servico_salvar"),
+    path("api/servicos/<int:pk>/excluir/", api.servico_excluir, name="api_servico_excluir"),
+    path("sair/", views.sair, name="sair"),
+    path("ficha-saude/", views.ficha_saude, name="ficha_saude"),
+    path("termo/<int:pk>/", views.termo_detalhe, name="termo_detalhe"),
 
     # Rota dinâmica, com parâmetro capturado da URL (path converter <int:pk>).
     # Ex.: /profissional/3/  ->  abre a página da profissional de id 3.

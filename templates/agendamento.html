@@ -10,10 +10,9 @@
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="/static/css/agenda.css">
-<link rel="stylesheet" href="/static/css/responsivo.css">
 </head>
 
-<body class="pg-agenda">
+<body>
 
   <!-- SIDEBAR -->
   <nav class="sidebar" id="sidebar">
@@ -172,77 +171,22 @@
                   <div class="campo-f"><label class="inp-label">E-mail</label><input class="inp" id="c-email"
                       placeholder="maria@email.com"></div>
                 </div>
-                <div class="campo-f"><label class="inp-label">Observações</label><textarea class="inp" rows="2"
+                <div class="campo-f"><label class="inp-label">Observações</label><textarea class="inp" id="c-obs" rows="2"
                     placeholder="Preferências, alergias, etc..."></textarea></div>
               </div>
             </div>
             <!-- PAGAMENTO -->
-            <div>
+
               <div class="resumo-card">
                 <p class="resumo-titulo">Forma de <em>pagamento</em></p>
-                <div class="metodos-pag" id="metodos-pag">
-                  <div class="metodo" onclick="selPag('pix',this)">
-                    <div class="metodo-ico" style="background:rgba(76,175,125,0.1);color:#4CAF7D;"><i
-                        class="bi bi-qr-code"></i></div>
-                    <div class="metodo-info">
-                      <h5>PIX</h5>
-                      <p>Confirmação instantânea</p>
-                    </div>
-                    <div class="metodo-radio"></div>
-                  </div>
-                  <div class="metodo" onclick="selPag('credito',this)">
-                    <div class="metodo-ico"><i class="bi bi-credit-card"></i></div>
-                    <div class="metodo-info">
-                      <h5>Cartão de Crédito</h5>
-                      <p>Parcele em até 3x</p>
-                    </div>
-                    <div class="metodo-radio"></div>
-                  </div>
-                  <div class="metodo" onclick="selPag('debito',this)">
-                    <div class="metodo-ico"><i class="bi bi-credit-card-2-front"></i></div>
-                    <div class="metodo-info">
-                      <h5>Cartão de Débito</h5>
-                      <p>Débito na hora</p>
-                    </div>
-                    <div class="metodo-radio"></div>
-                  </div>
-                  <div class="metodo" onclick="selPag('local',this)">
-                    <div class="metodo-ico"><i class="bi bi-cash-coin"></i></div>
-                    <div class="metodo-info">
-                      <h5>Pagar no local</h5>
-                      <p>Dinheiro ou maquininha</p>
-                    </div>
-                    <div class="metodo-radio"></div>
-                  </div>
-                </div>
-                <!-- PIX -->
-                <div class="pix-box" id="pix-box">
-                  <i class="bi bi-qr-code" style="font-size:36px;color:#4CAF7D;display:block;margin-bottom:10px;"></i>
-                  <p style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(61,43,26,0.4);">Chave
-                    PIX</p>
-                  <p class="pix-key"><span>📱</span> (69) 9 8469-6874</p>
-                  <p style="font-size:12px;color:rgba(61,43,26,0.4);">Envie o comprovante via WhatsApp após o pagamento
-                  </p>
-                </div>
-                <!-- CARTÃO -->
-                <div class="cartao-box" id="cartao-box">
-                  <div class="campo-f"><label class="inp-label">Número do cartão</label><input class="inp"
-                      placeholder="0000 0000 0000 0000" maxlength="19" oninput="maskCard(this)"></div>
-                  <div class="grid2">
-                    <div class="campo-f"><label class="inp-label">Validade</label><input class="inp" placeholder="MM/AA"
-                        maxlength="5"></div>
-                    <div class="campo-f"><label class="inp-label">CVV</label><input class="inp" placeholder="123"
-                        maxlength="3"></div>
-                  </div>
-                  <div class="campo-f"><label class="inp-label">Nome no cartão</label><input class="inp"
-                      placeholder="MARIA SILVA"></div>
-                  <div id="parcelas-wrap" style="display:none">
-                    <div class="campo-f"><label class="inp-label">Parcelas</label>
-                      <select class="sel-inp" id="parcelas-sel"></select>
-                    </div>
+                <div class="rl">
+                <div class="rl-ico"><i class="bi bi-cash-coin"></i></div>
+                <div class="rl-info"><label>Pagamento no local</label>
+                  <p>Dinheiro,maquininha ou pix, após o atendimento</p>
                   </div>
                 </div>
               </div>
+
               <div style="display:flex;gap:12px;margin-top:20px;">
                 <button class="btn-sec" onclick="goEt(3)"><i class="bi bi-arrow-left"></i> Voltar</button>
                 <button class="btn-pri" onclick="confirmar()"><i class="bi bi-check2-circle"></i> Confirmar
@@ -250,7 +194,6 @@
               </div>
             </div>
           </div>
-        </div>
 
         <!-- SUCESSO -->
         <div id="et-suc" style="display:none">
@@ -275,7 +218,61 @@
         <p class="label-sec">Meu histórico</p>
         <h2 class="titulo-sec">Meus <em>agendamentos</em></h2>
         <p class="sub-sec">Consulte e gerencie seus agendamentos passados e futuros</p>
+        <div class="chips" id="chips-hist"></div>
         <div class="hist-lista" id="hist-lista"></div>
+      </div>
+
+      <!-- ========================================
+         SEÇÃO: MEU PERFIL (cliente e profissional)
+    ======================================== -->
+      <div class="secao" id="sec-perfil">
+        <p class="label-sec">Minha conta</p>
+        <h2 class="titulo-sec">Meu <em>perfil</em></h2>
+        <p class="sub-sec">Atualize seus dados, foto e senha</p>
+
+        <div class="resumo-card" style="margin-bottom:20px">
+          <div style="display:flex;align-items:center;gap:16px;margin-bottom:18px">
+            <div id="pf-foto-prev" class="prof-av" style="width:72px;height:72px;overflow:hidden;font-size:26px"><i class="bi bi-person-fill"></i></div>
+            <div><label class="inp-label">Foto de perfil (máx. 2MB)</label><input type="file" id="pf-foto" accept="image/*" onchange="prevFotoPerfil(this)"></div>
+          </div>
+          <div class="grid2">
+            <div class="campo-f"><label class="inp-label">Nome completo</label><input class="inp" id="pf-nome"></div>
+            <div class="campo-f"><label class="inp-label">E-mail</label><input class="inp" id="pf-email" type="email"></div>
+          </div>
+          <div class="grid2">
+            <div class="campo-f"><label class="inp-label">WhatsApp / Telefone</label><input class="inp" id="pf-tel" maxlength="16"></div>
+            <div class="campo-f"><label class="inp-label">CEP</label><input class="inp" id="pf-cep" maxlength="9"></div>
+          </div>
+          <div class="grid2">
+            <div class="campo-f"><label class="inp-label">Gênero</label>
+              <select class="inp" id="pf-genero"><option value="">—</option><option value="F">Feminino</option><option value="M">Masculino</option><option value="O">Outro</option><option value="N">Prefiro não informar</option></select></div>
+            <div class="campo-f"><label class="inp-label">Data de nascimento</label><input class="inp" id="pf-nasc" type="date"></div>
+          </div>
+          <div class="campo-f"><label class="inp-label">CPF (não editável)</label><input class="inp" id="pf-cpf" disabled></div>
+          <div id="pf-prof" style="display:none">
+            <div class="campo-f"><label class="inp-label">Horário de atendimento</label><input class="inp" id="pf-horario" maxlength="100" placeholder="Seg a Sáb, 08:00 às 18:00"></div>
+            <div class="campo-f"><label class="inp-label">Apresentação</label><textarea class="inp" id="pf-bio" rows="3"></textarea></div>
+            <div class="campo-f"><label class="inp-label">Especialidades</label><div class="chips" id="pf-esps"></div></div>
+          </div>
+          <button class="btn-pri" onclick="salvarPerfil()"><i class="bi bi-check2"></i> Salvar perfil</button>
+        </div>
+
+        <div class="resumo-card" id="pf-ficha" style="display:none;margin-bottom:20px">
+          <p class="resumo-titulo">Ficha de <em>saúde</em></p>
+          <p id="pf-ficha-txt" style="font-size:13px;margin-bottom:14px"></p>
+          <a class="btn-pri" href="/ficha-saude/" style="text-decoration:none;display:inline-flex"><i class="bi bi-pen"></i> Atualizar ficha e assinar</a>
+          <a class="btn-sec" id="pf-termo" target="_blank" style="text-decoration:none;display:none;margin-left:8px">Ver último termo assinado</a>
+        </div>
+
+        <div class="resumo-card">
+          <p class="resumo-titulo">Alterar <em>senha</em></p>
+          <div class="campo-f"><label class="inp-label">Senha atual</label><input class="inp" id="pw-atual" type="password" autocomplete="current-password"></div>
+          <div class="grid2">
+            <div class="campo-f"><label class="inp-label">Nova senha</label><input class="inp" id="pw-nova" type="password" autocomplete="new-password"></div>
+            <div class="campo-f"><label class="inp-label">Confirmar nova senha</label><input class="inp" id="pw-nova2" type="password" autocomplete="new-password"></div>
+          </div>
+          <button class="btn-sec" onclick="trocarSenha()"><i class="bi bi-key"></i> Atualizar senha</button>
+        </div>
       </div>
 
       <!-- ========================================
@@ -297,6 +294,7 @@
             </select>
           </div>
         </div>
+        <div class="chips" id="chips-ag"></div>
         <div class="stats-bar" id="stats-agenda"></div>
         <div class="semana-nav">
           <h3 id="semana-titulo">—</h3>
@@ -352,6 +350,8 @@
                 <option value="manicure">Manicure / Pedicure</option>
                 <option value="tratamento">Tratamento Capilar</option>
                 <option value="coloracao">Coloração</option>
+                <option value="sobrancelha">Sobrancelha / Cílios</option>
+                <option value="estetica">Estética Facial</option>
               </select>
             </div>
             <div class="campo-f">
@@ -382,27 +382,6 @@
           </div>
         </div>
       </div>
-
-      <!-- ========================================
-         SEÇÃO: PROF — RELATÓRIOS
-    ======================================== -->
-      <div class="secao" id="sec-relatorios">
-        <p class="label-sec">Financeiro</p>
-        <h2 class="titulo-sec">Relatórios e <em>métricas</em></h2>
-        <p class="sub-sec">Visão geral do faturamento e desempenho do salão</p>
-        <div id="relatorios-conteudo"></div>
-      </div>
-
-      <!-- ========================================
-         SEÇÃO: PROF — CLIENTES
-    ======================================== -->
-      <div class="secao" id="sec-clientes-gestao">
-        <p class="label-sec">Base de clientes</p>
-        <h2 class="titulo-sec">Gestão de <em>clientes</em></h2>
-        <p class="sub-sec">Histórico e informações dos clientes do salão</p>
-        <div id="clientes-lista-gestao"></div>
-      </div>
-
     </div><!-- /conteudo -->
   </main>
 
@@ -435,7 +414,9 @@
 
   <!-- NOTIF -->
   <div class="notif" id="notif"><i class="bi bi-check-circle"></i> <span id="notif-txt"></span></div>
-  <script src="/static/js/menu-mobile.js"></script>
+  {% csrf_token %}
+  {{ sessao|json_script:"una-user" }}
+  <script>sessionStorage.setItem("una_user", document.getElementById("una-user").textContent);</script>
   <script src="/static/js/agendamento.js"></script>
 </body>
 

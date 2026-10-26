@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="ALL" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="bdc1b596-7d26-4680-9d1d-25d06975ba96" name="Changes" comment="criando formulário e funcionalidades CORRIJIR BUGS NA PRÓXIMA AULA" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/ProjetoUNA2026" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/ProjetoUNA2026" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;andrefelip-bot&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/emanuelbraunschwantz0-boop/ProjetoUNA2026.git&quot;,
+    &quot;accountId&quot;: &quot;0b51942e-039f-4f7f-84e2-c037060d6b20&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="3KvKTKxXhTvOcpcsHDOW3QHKdPV" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Batch.INICIAR_PROJETO.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python.Run Server.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "main",
+    "nodejs_package_manager_path": "npm"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="INICIAR_PROJETO" type="BatchConfigurationType" factoryName="Batch" temporary="true">
+      <module name="projeto_django" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SCRIPT_NAME" value="INICIAR_PROJETO.bat" />
+      <option name="PARAMETERS" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Batch.INICIAR_PROJETO" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-6fa658e1df1a-5bd6d13a2a75-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-262.8665.369" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="bdc1b596-7d26-4680-9d1d-25d06975ba96" name="Changes" comment="" />
+      <created>1792432609583</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1792432609583</updated>
+      <workItem from="1792432613161" duration="3935000" />
+      <workItem from="1792497317291" duration="302000" />
+      <workItem from="1793023186275" duration="881000" />
+      <workItem from="1793037355296" duration="2384000" />
+      <workItem from="1793039804539" duration="1143000" />
+      <workItem from="1793041267499" duration="1145000" />
+    </task>
+    <task id="LOCAL-00001" summary="criando formulário e funcionalidades CORRIJIR BUGS NA PRÓXIMA AULA">
+      <option name="closed" value="true" />
+      <created>1792436504646</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1792436504647</updated>
+    </task>
+    <task id="LOCAL-00002" summary="criando formulário e funcionalidades CORRIJIR BUGS NA PRÓXIMA AULA">
+      <option name="closed" value="true" />
+      <created>1792436809197</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1792436809197</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="testes" />
+    <MESSAGE value="correção do erro em aparelhos menores" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/andrefelip-bot-patch-1' into andrefelip-bot-patch-1" />
+    <MESSAGE value="criando formulário e funcionalidades CORRIJIR BUGS NA PRÓXIMA AULA" />
+    <option name="LAST_COMMIT_MESSAGE" value="criando formulário e funcionalidades CORRIJIR BUGS NA PRÓXIMA AULA" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/ProjetoUNA2026$Run_Server.coverage" NAME="Run Server Coverage Results" MODIFIED="1792497321680" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
+</project>
