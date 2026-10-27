@@ -66,7 +66,7 @@ async function atualizar() {
     if (user.tipo === 'cliente') renderHist(); else { renderAgenda(); renderServicosGestao(); }
   } catch (e) {}
 }
-setInterval(atualizar, 30000);
+setInterval(atualizar, 10000);
 document.addEventListener('visibilitychange', atualizar);
 
 async function mudarStatus(id, st) {
@@ -156,9 +156,10 @@ function irSec(id, el) {
   if(li) li.classList.add('ativo');
 }
 
-function sair() {
+async function sair() {
   sessionStorage.removeItem('una_user');
-  window.location.href='/sair/';
+  try { await fetch('/sair/', {method:'POST', headers:{'X-CSRFToken':document.querySelector('[name=csrfmiddlewaretoken]').value}}); } catch (e) {}
+  window.location.href='/';
 }
 
 // ============================================================
@@ -244,7 +245,7 @@ function renderCalendario() {
 function mvM(d){calM+=d;if(calM>11){calM=0;calA++;}if(calM<0){calM=11;calA--;}renderCalendario();}
 
 function selData(dt, d) {
-  sel.data=dt; sel.hora=null;
+  sel.data=dt; sel.hora=null; ultimaAssinatura=null;
   document.getElementById('btn-n3').disabled=true;
   const [a,m,di]=dt.split('-');
   const obj=new Date(a,m-1,di);
@@ -253,34 +254,53 @@ function selData(dt, d) {
   renderHorarios(dt);
 }
 
+let ultimaAssinatura = null;
+
+function statusHorarios(ok) {
+  const el = document.getElementById('hor-status');
+  if (!el) return;
+  el.textContent = ok
+    ? `Duração: ${sel.servico.dur} min · atualizado às ${new Date().toLocaleTimeString('pt-BR')} · atualiza sozinho`
+    : 'Sem conexão com o servidor. Tentando novamente...';
+  el.style.color = ok ? '' : '#C0392B';
+}
+
 async function renderHorarios(dt, silencioso) {
   if (!sel.prof || !sel.servico) return;
-  let livres = [];
-  try { livres = (await api(`/api/horarios/?prof=${sel.prof.id}&servico=${sel.servico.id}&data=${dt}`)).disponiveis; }
-  catch (e) { if (!silencioso) notif(e.message); return; }
-  if (sel.data !== dt) return;  // usuário trocou de dia durante a consulta
+  let d;
+  try { d = await api(`/api/horarios/?prof=${sel.prof.id}&servico=${sel.servico.id}&data=${dt}`); }
+  catch (e) { if (!silencioso) notif(e.message); statusHorarios(false); return; }
+  if (sel.data !== dt) return;  // a pessoa trocou de dia durante a consulta
+  const livres = d.horarios.filter(x => x.livre).map(x => x.h);
   if (sel.hora && !livres.includes(sel.hora)) {
     if (silencioso) notif('O horário escolhido acabou de ser ocupado. Escolha outro.');
     sel.hora = null;
     document.getElementById('btn-n3').disabled = true;
   }
+  const assinatura = JSON.stringify(d.horarios) + '|' + sel.hora;
+  if (silencioso && assinatura === ultimaAssinatura) { statusHorarios(true); return; }  // nada mudou
+  ultimaAssinatura = assinatura;
   const dur = sel.servico.dur;
   const fim = h => { const [a,b] = h.split(':').map(Number), t = a*60+b+dur; return String(Math.floor(t/60)).padStart(2,'0')+':'+String(t%60).padStart(2,'0'); };
-  const manha = livres.filter(h => h < '12:00'), tarde = livres.filter(h => h >= '12:00');
-  const bloco = (titulo, horas) => horas.length ? `<div>
+  const botao = x => x.livre
+    ? `<button class="hbtn${sel.hora===x.h?' sel':''}" title="Termina às ${fim(x.h)}" onclick="selH('${x.h}',this)">${x.h}</button>`
+    : `<button class="hbtn ocup" disabled title="Indisponível">${x.h}</button>`;
+  const bloco = (titulo, lista) => lista.length ? `<div>
       <p class="turno-label">${titulo}</p>
-      <div class="grade-h">${horas.map(h => `<button class="hbtn${sel.hora===h?' sel':''}" title="Termina às ${fim(h)}" onclick="selH('${h}',this)">${h}</button>`).join('')}</div>
+      <div class="grade-h">${lista.map(botao).join('')}</div>
     </div>` : '';
-  document.getElementById('turnos-box').innerHTML = livres.length
-    ? `<p style="font-size:12px;opacity:.6;margin-bottom:10px">Duração: ${dur} min · mostramos só os horários livres (sem conflito).</p>` + bloco('☀ Manhã', manha) + bloco('🌤 Tarde', tarde)
-    : '<p style="padding:14px 0;opacity:.7">Não há horários livres neste dia para este serviço. Tente outra data ou profissional.</p>';
+  document.getElementById('turnos-box').innerHTML =
+    '<p id="hor-status" style="font-size:12px;opacity:.65;margin-bottom:10px"></p>' +
+    (livres.length ? '' : '<p style="padding:6px 0 14px;font-weight:500">Não há horários livres neste dia para este serviço. Tente outra data ou profissional.</p>') +
+    bloco('Manhã', d.horarios.filter(x => x.h < '12:00')) + bloco('Tarde', d.horarios.filter(x => x.h >= '12:00'));
+  statusHorarios(true);
 }
 
-// mantém os horários sempre atualizados com o banco
+// mantém os horários sempre atualizados com o banco (a cada 5s enquanto a tela estiver aberta)
 setInterval(() => {
   if (!document.hidden && user && user.tipo === 'cliente' && sel.data &&
       document.getElementById('et3').style.display === 'block') renderHorarios(sel.data, true);
-}, 15000);
+}, 5000);
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden && sel.data && document.getElementById('et3').style.display === 'block') renderHorarios(sel.data, true);
 });
@@ -318,7 +338,7 @@ async function confirmar(){
   document.getElementById('suc-info').innerHTML=`<strong>${esc(sel.servico.nome)}</strong> com ${esc(sel.prof.nome)}<br>${d}/${m} às ${sel.hora}<br><small>Aguardando confirmação da profissional.</small>`;
   ['et1','et2','et3','et4'].forEach(id=>document.getElementById(id).style.display='none');
   document.getElementById('et-suc').style.display='block';
-  notif('Agendamento solicitado com sucesso! ✓');
+  notif('Agendamento solicitado com sucesso!');
   atualizar();
 }
 
@@ -593,7 +613,7 @@ async function salvarPerfil(){
     const d = await api('/api/perfil/', fd);
     user.nome = d.nome; sessionStorage.setItem('una_user', JSON.stringify(user));
     document.getElementById('user-nome-sidebar').textContent = d.nome;
-    notif('Perfil atualizado com sucesso! ✓');
+    notif('Perfil atualizado com sucesso!');
   } catch(e) { notif(e.message); }
 }
 
@@ -603,7 +623,7 @@ async function trocarSenha(){
   try {
     await api('/api/senha/', {atual, nova});
     ['pw-atual','pw-nova','pw-nova2'].forEach(i => document.getElementById(i).value='');
-    notif('Senha atualizada com sucesso! ✓');
+    notif('Senha atualizada com sucesso!');
   } catch(e) { notif(e.message); }
 }
 

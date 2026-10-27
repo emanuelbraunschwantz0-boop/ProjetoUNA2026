@@ -465,7 +465,7 @@ function registrarAssinaturaUI(resultado) {
   // Hash
   document.getElementById('hash-valor').textContent = resultado.hash;
 
-  notif('Documento assinado com sucesso! ✓');
+  notif('Documento assinado com sucesso!');
 }
 
 // ============================================================

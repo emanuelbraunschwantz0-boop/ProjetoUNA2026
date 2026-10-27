@@ -45,6 +45,18 @@ class ServicoForm(forms.ModelForm):
             "icone": "Ícone (classe Bootstrap Icons, ex.: bi-scissors)",
         }
 
+    def clean_preco(self):
+        p = self.cleaned_data["preco"]
+        if p <= 0 or p > 99999:
+            raise ValidationError("Informe um preço válido.")
+        return p
+
+    def clean_duracao_min(self):
+        d = self.cleaned_data["duracao_min"]
+        if not 10 <= d <= 480:
+            raise ValidationError("A duração deve ficar entre 10 e 480 minutos.")
+        return d
+
 
 class CadastroForm(forms.Form):
     """Cadastro real (substitui a simulação em JS): cria User + Cliente/Profissional."""

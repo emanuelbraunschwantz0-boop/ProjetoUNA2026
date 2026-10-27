@@ -149,6 +149,14 @@ class Agendamento(models.Model):
         verbose_name = "Agendamento"
         verbose_name_plural = "Agendamentos"
         ordering = ["-data", "-hora"]
+        constraints = [
+            # Garantia no banco: dois atendimentos ativos não podem começar no mesmo horário
+            models.UniqueConstraint(
+                fields=["profissional", "data", "hora"],
+                condition=~models.Q(status="cancelado"),
+                name="agendamento_unico_por_horario",
+            )
+        ]
 
 
 class Pagamento(models.Model):

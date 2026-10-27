@@ -9,7 +9,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="/static/css/agenda.css">
+  <link rel="stylesheet" href="/static/css/agenda.css?v={% now 'U' %}">
 </head>
 
 <body>
@@ -107,7 +107,7 @@
               <h4>Horários disponíveis</h4>
               <span class="data-txt" id="data-txt-sel">Selecione uma data</span>
               <div class="turnos" id="turnos-box">
-                <p style="font-size:13px;color:rgba(61,43,26,0.3);">← Selecione uma data</p>
+                <p style="font-size:13px;color:rgba(61,43,26,0.3);">Selecione uma data no calendário</p>
               </div>
             </div>
           </div>
@@ -417,7 +417,7 @@
   {% csrf_token %}
   {{ sessao|json_script:"una-user" }}
   <script>sessionStorage.setItem("una_user", document.getElementById("una-user").textContent);</script>
-  <script src="/static/js/agendamento.js"></script>
+  <script src="/static/js/agendamento.js?v={% now 'U' %}"></script>
 </body>
 
 </html>

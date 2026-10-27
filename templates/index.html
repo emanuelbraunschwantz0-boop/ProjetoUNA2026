@@ -16,18 +16,18 @@
   <button class="burger" type="button" aria-label="Abrir menu" onclick="document.getElementById('menu').classList.toggle('aberto')">&#9776;</button>
   <nav>
     <ul>
-      <li><a href="#inicio" class="on"><i class="bi bi-house"></i> Home</a></li>
-      <li><a href="#servicos"><i class="bi bi-scissors"></i> Serviços</a></li>
-      <li><a href="#sobre"><i class="bi bi-info-circle"></i> Sobre</a></li>
-      <li><a href="#como-funciona"><i class="bi bi-list-check"></i> Como funciona</a></li>
-      <li><a href="{% url 'agendamentos:agendamento' %}"><i class="bi bi-calendar-check"></i> Agendar</a></li>
-      <li><a href="#contato"><i class="bi bi-envelope"></i> Contato</a></li>
+      <li><a href="#inicio" class="on">Home</a></li>
+      <li><a href="#servicos">Serviços</a></li>
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#como-funciona">Como funciona</a></li>
+      <li><a href="{% url 'agendamentos:agendamento' %}">Agendar</a></li>
+      <li><a href="#contato">Contato</a></li>
     </ul>
   </nav>
   <div class="menu-acoes">
     {% if user.is_authenticated %}
-      <a href="{% url 'agendamentos:agendamento' %}" class="btn btn-ouro"><i class="bi bi-person-circle"></i> Meu painel</a>
-      <a href="{% url 'agendamentos:sair' %}" class="btn btn-contorno">Sair</a>
+      <a href="{% url 'agendamentos:agendamento' %}" class="btn btn-ouro">Meu painel</a>
+      <form method="post" action="{% url 'agendamentos:sair' %}">{% csrf_token %}<button type="submit" class="btn btn-contorno">Sair</button></form>
     {% else %}
       <a href="{% url 'agendamentos:login' %}" class="btn btn-ouro">Entrar</a>
       <a href="{% url 'agendamentos:cadastro' %}" class="btn btn-contorno">Criar conta</a>
@@ -44,23 +44,23 @@
     <h1>Realce a sua beleza com <em>cuidado</em> e elegância</h1>
     <p class="sub">Unhas, cabelo, sobrancelha e estética com profissionais de excelência, biossegurança rigorosa e agendamento online em poucos cliques.</p>
     <div class="cta">
-      <a href="{% url 'agendamentos:agendamento' %}" class="btn btn-ouro"><i class="bi bi-calendar-check"></i> Agendar agora</a>
+      <a href="{% url 'agendamentos:agendamento' %}" class="btn btn-ouro">Agendar agora</a>
       <a href="#servicos" class="btn btn-linha">Ver serviços</a>
     </div>
     <div class="selos">
-      <span><i class="bi bi-shield-check"></i> Materiais esterilizados</span>
-      <span><i class="bi bi-stars"></i> Profissionais qualificadas</span>
-      <span><i class="bi bi-phone"></i> Agende pelo celular</span>
+      <span>Materiais esterilizados</span>
+      <span>Profissionais qualificadas</span>
+      <span>Agende pelo celular</span>
     </div>
   </div>
 </section>
 
 <div class="faixa">
   <div class="wrap">
-    <div class="it"><i class="bi bi-shield-heart"></i><div><h4>Biossegurança</h4><p>Ficha de saúde e protocolos para todas as clientes.</p></div></div>
-    <div class="it"><i class="bi bi-calendar2-week"></i><div><h4>Agenda online</h4><p>Escolha serviço, profissional e horário.</p></div></div>
-    <div class="it"><i class="bi bi-gem"></i><div><h4>Produtos selecionados</h4><p>Qualidade que cuida de verdade.</p></div></div>
-    <div class="it"><i class="bi bi-heart"></i><div><h4>Atendimento acolhedor</h4><p>Ambiente charmoso e organizado.</p></div></div>
+    <div class="it"><div><h4>Biossegurança</h4><p>Ficha de saúde e protocolos para todas as clientes.</p></div></div>
+    <div class="it"><div><h4>Agenda online</h4><p>Escolha serviço, profissional e horário.</p></div></div>
+    <div class="it"><div><h4>Produtos selecionados</h4><p>Qualidade que cuida de verdade.</p></div></div>
+    <div class="it"><div><h4>Atendimento acolhedor</h4><p>Ambiente charmoso e organizado.</p></div></div>
   </div>
 </div>
 
@@ -70,10 +70,9 @@
     <div class="grade">
       {% for servico in servicos %}
       <div class="card">
-        <div class="ic"><i class="bi {{ servico.icone|default:'bi-stars' }}"></i></div>
         <h3>{{ servico.nome }}</h3>
         <p>{{ servico.descricao|default:"Fale com a gente para saber mais sobre esse serviço." }}</p>
-        <div class="rod"><span><i class="bi bi-clock"></i> {{ servico.duracao_min }} min</span><span class="preco">R$ {{ servico.preco|floatformat:2 }}</span></div>
+        <a class="mais" href="{% url 'agendamentos:agendamento' %}">Agendar</a>
       </div>
       {% empty %}
       <p style="grid-column:1/-1;text-align:center">Nenhum serviço cadastrado no momento.</p>
@@ -115,7 +114,7 @@
   <div class="wrap">
     <h2>Pronta para o seu <em>momento Una</em>?</h2>
     <p>Reserve seu horário agora e garanta o seu atendimento.</p>
-    <a href="{% url 'agendamentos:agendamento' %}" class="btn btn-ouro"><i class="bi bi-calendar-check"></i> Agendar agora</a>
+    <a href="{% url 'agendamentos:agendamento' %}" class="btn btn-ouro">Agendar agora</a>
   </div>
 </section>
 

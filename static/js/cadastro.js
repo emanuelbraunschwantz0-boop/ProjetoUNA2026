@@ -121,15 +121,17 @@ function validarEtapa(n) {
 // ============================================================
 // REVISÃO FINAL
 // ============================================================
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
 function preencherRevisao() {
-  const d = estado;
+  const d = Object.fromEntries(Object.entries(estado).map(([k, v]) => [k, typeof v === 'string' ? esc(v) : v]));
   const dt = d.nasc ? new Date(d.nasc + 'T00:00:00').toLocaleDateString('pt-BR') : '—';
-  const esps = d.especialidades.length ? d.especialidades.join(', ') : '—';
+  const esps = d.especialidades.length ? esc(d.especialidades.join(', ')) : '—';
   const tipoLabel = d.tipo === 'profissional' ? 'Profissional' : 'Cliente';
 
   document.getElementById('card-revisao').innerHTML = `
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--creme-escuro)">
-      <div id="rev-avatar" style="width:52px;height:52px;border-radius:50%;background:var(--marrom);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--dourado-claro);flex-shrink:0;">${d.nome.split(' ').map(p=>p[0]).join('').substring(0,2).toUpperCase()}</div>
+      <div id="rev-avatar" style="width:52px;height:52px;border-radius:50%;background:var(--marrom);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--dourado-claro);flex-shrink:0;">${esc(estado.nome.split(' ').map(p=>p[0]).join('').substring(0,2).toUpperCase())}</div>
       <div>
         <p style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;color:var(--marrom)">${d.nome}</p>
         <span style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:500;background:${d.tipo==='profissional'?'rgba(201,169,110,0.12)':'rgba(41,128,185,0.1)'};color:${d.tipo==='profissional'?'#6B4226':'#1A5276'}">${tipoLabel}</span>

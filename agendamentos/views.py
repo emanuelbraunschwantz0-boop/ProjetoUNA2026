@@ -1,4 +1,6 @@
 from django.core.cache import cache
+from django.views.decorators.cache import never_cache
+from django.views.decorators.http import require_POST
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -59,10 +61,16 @@ def cadastro(request):
 
 def login_view(request):
     if request.method == "POST":
-        email = request.POST.get("email", "").strip().lower()
+        email = request.POST.get("email", "").strip().lower()[:254]
+        chave = f"login:{request.META.get('REMOTE_ADDR')}:{email}"
+        if cache.get(chave, 0) >= 5:  # proteção contra tentativa de adivinhar senha
+            return JsonResponse(
+                {"ok": False, "erro": "Muitas tentativas. Aguarde 15 minutos."}, status=429)
         user = authenticate(request, username=email, password=request.POST.get("senha", ""))
         if not user:
+            cache.set(chave, cache.get(chave, 0) + 1, 900)
             return JsonResponse({"ok": False, "erro": "E-mail ou senha incorretos."}, status=400)
+        cache.delete(chave)
         perfil = "profissional" if hasattr(user, "profissional") else (
             "cliente" if hasattr(user, "cliente") else None)
         if perfil is None and not user.is_staff:
@@ -77,6 +85,7 @@ def login_view(request):
     return render(request, "index_agenda.html")
 
 
+@require_POST
 def sair(request):
     logout(request)
     return redirect("agendamentos:home")
@@ -87,6 +96,7 @@ def inicial(request):
     return render(request, "index_inical.html", {"servicos": servicos})
 
 
+@never_cache
 @login_required
 def agendamento(request):
     u = request.user
@@ -114,6 +124,7 @@ def agendamento(request):
     )
 
 
+@never_cache
 @login_required
 def ficha_saude(request):
     """Tela de termo de responsabilidade + ficha de saúde (nail designer)."""
@@ -144,6 +155,7 @@ def ficha_saude(request):
     return render(request, "ficha_saude.html", {"form": form, "texto": texto})
 
 
+@never_cache
 @login_required
 def termo_detalhe(request, pk):
     termo = get_object_or_404(TermoAssinado, pk=pk)

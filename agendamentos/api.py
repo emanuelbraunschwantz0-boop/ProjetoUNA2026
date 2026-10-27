@@ -5,7 +5,9 @@ from functools import wraps
 from django.db import transaction
 from django.db.models import ProtectedError
 from django.http import JsonResponse
+from django.db import IntegrityError
 from django.utils import timezone
+from django.utils.cache import add_never_cache_headers
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
@@ -30,7 +32,9 @@ def api_login(view):
     def w(request, *a, **k):
         if not request.user.is_authenticated:
             return _erro("Sessão expirada. Faça login novamente.", 401)
-        return view(request, *a, **k)
+        resp = view(request, *a, **k)
+        add_never_cache_headers(resp)  # horários e agenda nunca podem vir de cache
+        return resp
     return w
 
 
@@ -86,15 +90,15 @@ def _blocos(qs):
     return out
 
 
-def _disponiveis(prof, dia, dur, cliente=None):
-    """Inícios livres para um serviço de `dur` minutos.
+def _grade(prof, dia, dur, cliente=None):
+    """Todos os inícios possíveis do dia, cada um marcado como livre ou não.
 
     Além da grade de 30 em 30 min, o horário em que cada atendimento já marcado
-    TERMINA vira uma opção (ex.: 08:00 + 80 min => 09:20 livre). Nada sobrepõe
-    atendimentos da profissional nem outros agendamentos da própria cliente.
+    TERMINA vira uma opção (08:00 + 80 min => 09:20). Nada sobrepõe atendimentos da
+    profissional nem outros agendamentos da própria cliente.
     """
     if dia.isoweekday() == 7:
-        return []
+        return [(h, False) for h in SLOTS]
     blocos = _blocos(Agendamento.objects.filter(profissional=prof, data=dia))
     if cliente:
         blocos += _blocos(Agendamento.objects.filter(cliente=cliente, data=dia))
@@ -106,14 +110,17 @@ def _disponiveis(prof, dia, dur, cliente=None):
     agora, res = _agora(), []
     for ini in sorted(candidatos):
         fim = ini + dur
-        if fim > FECHAMENTO:
-            continue
-        if datetime.combine(dia, time(ini // 60, ini % 60)) <= agora:
-            continue
-        if any(ini < b1 and fim > b0 for b0, b1 in blocos):
-            continue
-        res.append(_hhmm(ini))
+        livre = (
+            fim <= FECHAMENTO
+            and datetime.combine(dia, time(ini // 60, ini % 60)) > agora
+            and not any(ini < b1 and fim > b0 for b0, b1 in blocos)
+        )
+        res.append((_hhmm(ini), livre))
     return res
+
+
+def _disponiveis(prof, dia, dur, cliente=None):
+    return [h for h, livre in _grade(prof, dia, dur, cliente) if livre]
 
 
 @api_login
@@ -156,8 +163,12 @@ def horarios(request):
         dia = date.fromisoformat(request.GET.get("data", ""))
     except (Profissional.DoesNotExist, Servico.DoesNotExist, ValueError, TypeError):
         return _erro("Parâmetros inválidos.")
-    livres = _disponiveis(prof, dia, serv.duracao_min, _cliente(request.user))
-    return JsonResponse({"ok": True, "disponiveis": livres, "duracao": serv.duracao_min})
+    grade = _grade(prof, dia, serv.duracao_min, _cliente(request.user))
+    return JsonResponse({
+        "ok": True, "duracao": serv.duracao_min,
+        "horarios": [{"h": h, "livre": livre} for h, livre in grade],
+        "disponiveis": [h for h, livre in grade if livre],
+    })
 
 
 @api_login
@@ -177,14 +188,20 @@ def agendar(request):
         time.fromisoformat(hora)
     except (Servico.DoesNotExist, Profissional.DoesNotExist, ValueError, TypeError):
         return _erro("Dados do agendamento inválidos.")
-    with transaction.atomic():
-        if hora[:5] not in _disponiveis(prof, dia, serv.duracao_min, cli):
-            return _erro("Esse horário não está mais disponível (ocupado ou em conflito "
+    if dia > _agora().date() + timedelta(days=180):
+        return _erro("Só é possível agendar com até 6 meses de antecedência.")
+    indisponivel = _erro("Esse horário não está mais disponível (ocupado ou em conflito "
                          "com outro agendamento). Escolha outro.", 409)
-        a = Agendamento.objects.create(
-            cliente=cli, profissional=prof, servico=serv, data=dia,
-            hora=time.fromisoformat(hora), preco_cobrado=serv.preco,
-            observacoes=str(b.get("obs", ""))[:500])
+    try:
+        with transaction.atomic():
+            if hora[:5] not in _disponiveis(prof, dia, serv.duracao_min, cli):
+                return indisponivel
+            a = Agendamento.objects.create(
+                cliente=cli, profissional=prof, servico=serv, data=dia,
+                hora=time.fromisoformat(hora[:5]), preco_cobrado=serv.preco,
+                observacoes=str(b.get("obs", ""))[:500])
+    except IntegrityError:  # outra cliente pegou o mesmo horário no mesmo instante
+        return indisponivel
     return JsonResponse({"ok": True, "id": a.id})
 
 
@@ -203,6 +220,11 @@ def mudar_status(request, pk):
     novo = _body(request).get("status")
     if novo not in permitido.get(a.status, []):
         return _erro("Ação não permitida para este agendamento.")
+    comecou = datetime.combine(a.data, a.hora) <= _agora()
+    if novo == "concluido" and not comecou:
+        return _erro("Só é possível concluir um atendimento que já começou.")
+    if novo == "cancelado" and cli and a.cliente_id == cli.id and comecou:
+        return _erro("Não é possível cancelar um atendimento que já começou.")
     a.status = novo
     a.save(update_fields=["status"])
     return JsonResponse({"ok": True})

@@ -26,7 +26,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-dev-only-troqu
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', '1') == '1'
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'testserver']
+ALLOWED_HOSTS = [h for h in os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,testserver').split(',') if h]
 
 
 # Application definition
@@ -132,3 +132,21 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 LOGIN_URL = '/index_agenda.html'
 SENHA_ADM_CADASTRO = os.environ.get('UNA_SENHA_ADM', 'Una@Adm2026')  # exigida para cadastrar funcionários
+
+
+# ---- Segurança ----
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_AGE = 60 * 60 * 12          # sessão expira em 12h
+DATA_UPLOAD_MAX_MEMORY_SIZE = 3 * 1024 * 1024
+X_FRAME_OPTIONS = 'DENY'
+
+if not DEBUG:  # produção: defina DJANGO_DEBUG=0, DJANGO_SECRET_KEY e DJANGO_ALLOWED_HOSTS
+    from django.core.exceptions import ImproperlyConfigured
+    if SECRET_KEY.startswith('django-insecure'):
+        raise ImproperlyConfigured('Defina DJANGO_SECRET_KEY em produção.')
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 31536000
