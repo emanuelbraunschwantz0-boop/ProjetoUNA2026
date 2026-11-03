@@ -26,9 +26,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-dev-only-troqu
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', '1') == '1'
 
-ALLOWED_HOSTS = ['projeto-una-2026.vercel.app',
-    'localhost',
-    '127.0.0.1',]
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'testserver' ]
 
 
 # Application definition
