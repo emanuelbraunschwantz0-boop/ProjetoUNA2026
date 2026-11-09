@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block titulo %}Conta{% endblock %} — Una Instituto de Beleza</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/conta.css">
+</head>
+<body>
+  <main class="conta">
+    <a href="{% url 'agendamentos:home' %}" class="conta-logo"><img src="/static/img/logo_redonda.png" alt="Una Instituto de Beleza"></a>
+    <section class="conta-card {% block classe %}{% endblock %}">
+      {% block conteudo %}{% endblock %}
+    </section>
+    <p class="conta-rodape">&copy; 2026 Una Instituto de Beleza</p>
+  </main>
+</body>
+</html>

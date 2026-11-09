@@ -1,0 +1,7 @@
+{% extends "conta/base.html" %}
+{% block titulo %}Senha alterada{% endblock %}
+{% block conteudo %}
+  <h1>Senha <em>alterada</em></h1>
+  <p class="conta-sub">Pronto! Sua senha foi atualizada. Entre com a nova senha.</p>
+  <a href="{% url 'agendamentos:login' %}" class="conta-btn">Ir para o login</a>
+{% endblock %}

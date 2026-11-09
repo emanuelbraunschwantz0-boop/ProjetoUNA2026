@@ -1,0 +1,8 @@
+{% extends "conta/base.html" %}
+{% block titulo %}Link enviado{% endblock %}
+{% block conteudo %}
+  <h1>Confira seu <em>e-mail</em></h1>
+  <p class="conta-sub">Se existir uma conta com o e-mail informado, enviamos um link para criar uma nova senha. Ele vale por 2 horas e só pode ser usado uma vez.</p>
+  <p class="conta-nota">Não chegou? Veja a caixa de spam ou peça um novo link.</p>
+  <a href="{% url 'agendamentos:login' %}" class="conta-btn">Voltar para o login</a>
+{% endblock %}

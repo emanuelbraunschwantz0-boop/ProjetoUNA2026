@@ -1,0 +1,10 @@
+Olá,
+
+Recebemos um pedido para redefinir a senha da sua conta na Una Instituto de Beleza.
+Para criar uma nova senha, acesse o link abaixo (válido por 2 horas):
+
+{{ protocol }}://{{ domain }}{% url 'agendamentos:senha_confirmar' uidb64=uid token=token %}
+
+Se você não fez esse pedido, ignore este e-mail: sua senha continua a mesma.
+
+Una Instituto de Beleza

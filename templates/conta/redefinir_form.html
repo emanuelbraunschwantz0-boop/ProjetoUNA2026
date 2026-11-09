@@ -1,0 +1,19 @@
+{% extends "conta/base.html" %}
+{% block titulo %}Redefinir senha{% endblock %}
+{% block conteudo %}
+  <h1>Redefinir <em>senha</em></h1>
+  <p class="conta-sub">Por segurança, confirme o e-mail e o CPF da sua conta. Enviaremos um link para você criar uma nova senha.</p>
+  {% if bloqueado %}<p class="conta-erro">Muitas tentativas. Aguarde um pouco antes de pedir um novo link.</p>{% endif %}
+  <form method="post" novalidate>
+    {% csrf_token %}
+    <label for="id_email">E-mail</label>
+    <input type="email" name="email" id="id_email" autocomplete="email" maxlength="254" required autofocus placeholder="seuemail@email.com" value="{{ form.email.value|default_if_none:'' }}">
+    {% for e in form.email.errors %}<p class="conta-erro">{{ e }}</p>{% endfor %}
+    <label for="id_cpf">CPF</label>
+    <input type="text" name="cpf" id="id_cpf" inputmode="numeric" autocomplete="off" maxlength="14" required placeholder="000.000.000-00" value="{{ form.cpf.value|default_if_none:'' }}">
+    {% for e in form.cpf.errors %}<p class="conta-erro">{{ e }}</p>{% endfor %}
+    <button type="submit" class="conta-btn">Enviar link</button>
+  </form>
+  <script>document.getElementById('id_cpf').addEventListener('input',function(){var v=this.value.replace(/\D/g,'').slice(0,11);v=v.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');this.value=v;});</script>
+  <p class="conta-link"><a href="{% url 'agendamentos:login' %}">Voltar para o login</a></p>
+{% endblock %}

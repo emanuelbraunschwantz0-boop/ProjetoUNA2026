@@ -1,0 +1,26 @@
+{% extends "conta/base.html" %}
+{% block titulo %}Nova senha{% endblock %}
+{% block conteudo %}
+  {% if validlink %}
+    <h1>Crie uma <em>nova senha</em></h1>
+    <p class="conta-sub">Confirme sua data de nascimento e escolha uma senha forte.</p>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      <label for="id_data_nascimento">Data de nascimento</label>
+      <input type="date" name="data_nascimento" id="id_data_nascimento" required autofocus value="{{ form.data_nascimento.value|default_if_none:'' }}">
+      {% for e in form.data_nascimento.errors %}<p class="conta-erro">{{ e }}</p>{% endfor %}
+      <label for="id_new_password1">Nova senha</label>
+      <input type="password" name="new_password1" id="id_new_password1" autocomplete="new-password" required>
+      {% for e in form.new_password1.errors %}<p class="conta-erro">{{ e }}</p>{% endfor %}
+      <label for="id_new_password2">Confirmar nova senha</label>
+      <input type="password" name="new_password2" id="id_new_password2" autocomplete="new-password" required>
+      {% for e in form.new_password2.errors %}<p class="conta-erro">{{ e }}</p>{% endfor %}
+      <p class="conta-nota">Mínimo de 8 caracteres. Evite senhas comuns ou só com números.</p>
+      <button type="submit" class="conta-btn">Salvar nova senha</button>
+    </form>
+  {% else %}
+    <h1>Link <em>inválido</em></h1>
+    <p class="conta-sub">Este link expirou ou já foi usado. Peça um novo para continuar.</p>
+    <a href="{% url 'agendamentos:senha_redefinir' %}" class="conta-btn">Pedir novo link</a>
+  {% endif %}
+{% endblock %}
