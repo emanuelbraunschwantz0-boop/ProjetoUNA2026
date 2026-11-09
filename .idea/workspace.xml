@@ -4,23 +4,11 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bdc1b596-7d26-4680-9d1d-25d06975ba96" name="Changes" comment="criando formulário e funcionalidades CORRIJIR BUGS NA PRÓXIMA AULA">
+    <list default="true" id="bdc1b596-7d26-4680-9d1d-25d06975ba96" name="Changes" comment="hcj">
+      <change beforePath="$PROJECT_DIR$/.idea/ProjetoUNA2026.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ProjetoUNA2026.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agendamentos/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/agendamentos/api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agendamentos/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/agendamentos/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agendamentos/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/agendamentos/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agendamentos/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/agendamentos/tests.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agendamentos/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/agendamentos/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projetointegrador/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/projetointegrador/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/css/home.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/home.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/agendamento.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/agendamento.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/cadastro.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/cadastro.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/termos.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/termos.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/agendamento.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/agendamento.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index_agenda.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index_agenda.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/index_inical.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index_inical.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/termo_assinado.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/termo_assinado.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,9 +36,72 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/emanuelbraunschwantz0-boop/ProjetoUNA2026.git&quot;,
-    &quot;accountId&quot;: &quot;0b51942e-039f-4f7f-84e2-c037060d6b20&quot;
+    &quot;accountId&quot;: &quot;8ac315f2-64e6-484b-966c-a2e0b4f3b73c&quot;
   }
 }</component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.0" />
+      <entry key="MS500" value="1.0" />
+      <entry key="S2" value="1.0000012841827934" />
+      <entry key="S5" value="1.006368934789335" />
+      <entry key="S10" value="1.12730015089475" />
+      <entry key="S30" value="2.2668065257731334" />
+      <entry key="S60" value="3.4557518552850333" />
+      <entry key="M2" value="4.481676137786481" />
+      <entry key="M5" value="5.392607381966995" />
+      <entry key="M10" value="6.18792533597104" />
+      <entry key="M15" value="6.81605760016218" />
+      <entry key="M30" value="7.933320574338527" />
+      <entry key="H1" value="8.805716853722503" />
+      <entry key="H2" value="9.35567551791637" />
+      <entry key="H4" value="9.665041916682855" />
+      <entry key="D1" value="9.942304612888487" />
+      <entry key="W1" value="9.991710781946212" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="1.7144481281895984E-87" />
+      <entry key="MS500" value="4.434297939958667E-18" />
+      <entry key="S2" value="4.5888748914215783E-5" />
+      <entry key="S5" value="0.018394267035835837" />
+      <entry key="S10" value="0.13562546602993053" />
+      <entry key="S30" value="0.5137838094564863" />
+      <entry key="S60" value="0.7167871437578147" />
+      <entry key="M2" value="0.8466328270022458" />
+      <entry key="M5" value="0.9355737789186068" />
+      <entry key="M10" value="0.9672506288023839" />
+      <entry key="M15" value="0.9780461484178992" />
+      <entry key="M30" value="0.9889621572223576" />
+      <entry key="H1" value="0.9944657647311735" />
+      <entry key="H2" value="0.997229043264973" />
+      <entry key="H4" value="0.9986135605252779" />
+      <entry key="D1" value="0.9997687931538901" />
+      <entry key="W1" value="0.9999669671772338" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="1.1641532182693469E-10" />
+      <entry key="MS500" value="0.010308655552913241" />
+      <entry key="S2" value="0.3186842038924462" />
+      <entry key="S5" value="0.6563042885363918" />
+      <entry key="S10" value="1.04636102245875" />
+      <entry key="S30" value="2.6759722119140252" />
+      <entry key="S60" value="4.108854628282423" />
+      <entry key="M2" value="5.292352908632138" />
+      <entry key="M5" value="6.312569563036949" />
+      <entry key="M10" value="7.1470836491646415" />
+      <entry key="M15" value="7.788611356772244" />
+      <entry key="M30" value="8.919465491353934" />
+      <entry key="H1" value="9.798749131475008" />
+      <entry key="H2" value="10.352180316304764" />
+      <entry key="H4" value="10.663291285470635" />
+      <entry key="D1" value="10.942012401735644" />
+      <entry key="W1" value="10.991669026484692" />
+    </decayedShown>
+  </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 1
@@ -60,22 +111,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Batch.INICIAR_PROJETO.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python.Run Server.executor": "Run",
-    "Python.criar_demo.executor": "Run",
-    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "andrefelip-bot-patch-1",
-    "nodejs_package_manager_path": "npm"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Batch.INICIAR_PROJETO.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.Run Server.executor&quot;: &quot;Run&quot;,
+    &quot;Python.criar_demo.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;django.template.preview.state&quot;: &quot;SHOW_EDITOR_AND_PREVIEW&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Rogerio&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
   }
-}]]></component>
-  <component name="RunManager" selected="Python.criar_demo">
+}</component>
+  <component name="RunManager" selected="Django Server.ProjetoUNA2026">
     <configuration name="INICIAR_PROJETO" type="BatchConfigurationType" factoryName="Batch" temporary="true">
       <module name="projeto_django" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -139,7 +196,6 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.criar_demo" />
-        <item itemvalue="Batch.INICIAR_PROJETO" />
       </list>
     </recent_temporary>
   </component>
@@ -164,6 +220,9 @@
       <workItem from="1793039804539" duration="1143000" />
       <workItem from="1793041267499" duration="1278000" />
       <workItem from="1793100740287" duration="1967000" />
+      <workItem from="1793710657249" duration="703000" />
+      <workItem from="1794246923769" duration="2203000" />
+      <workItem from="1794249533030" duration="28000" />
     </task>
     <task id="LOCAL-00001" summary="criando formulário e funcionalidades CORRIJIR BUGS NA PRÓXIMA AULA">
       <option name="closed" value="true" />

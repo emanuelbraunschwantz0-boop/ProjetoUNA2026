@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
- <head>
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Una — Termo assinado</title>
@@ -166,15 +166,21 @@
       <h2>Registro da <em>assinatura</em></h2>
 
       {% if termo.assinatura %}
-      <img class="assinatura-img" src="{{ termo.assinatura }}" alt="Assinatura">
+      <img
+        class="assinatura-img"
+        src="{{ termo.assinatura }}"
+        alt="Assinatura"
+      >
       {% endif %}
 
       <p>
         Signatário:
         <b>{{ termo.usuario.get_full_name|default:termo.usuario.email }}</b>
         ({{ termo.usuario.email }})<br>
+
         Data/hora: {{ termo.assinado_em|date:"d/m/Y H:i:s" }}
         · IP: {{ termo.ip|default:"—" }}<br>
+
         Versão: {{ termo.versao }}
       </p>
 
@@ -183,8 +189,20 @@
 
     <!-- Ações -->
     <p class="no-print">
-      <button class="btn btn--outline" onclick="window.print()">Imprimir / salvar PDF</button>
-      <a class="btn" href="{% url 'agendamentos:age+ndamento' %}">Continuar para o agendamento</a>
+      <button
+        type="button"
+        class="btn btn--outline"
+        onclick="window.print()"
+      >
+        Imprimir / salvar PDF
+      </button>
+
+      <a
+        class="btn"
+        href="{% url 'agendamentos:agendamento' %}"
+      >
+        Continuar para o agendamento
+      </a>
     </p>
 
   </div>

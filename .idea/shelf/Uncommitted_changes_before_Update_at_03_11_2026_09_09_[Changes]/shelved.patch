@@ -1,0 +1,178 @@
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"ALL\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"bdc1b596-7d26-4680-9d1d-25d06975ba96\" name=\"Changes\" comment=\"criando formulário e funcionalidades CORRIJIR BUGS NA PRÓXIMA AULA\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/agendamentos/api.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/agendamentos/api.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/agendamentos/forms.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/agendamentos/forms.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/agendamentos/models.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/agendamentos/models.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/agendamentos/tests.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/agendamentos/tests.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/agendamentos/views.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/agendamentos/views.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/db.sqlite3\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/db.sqlite3\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/projetointegrador/settings.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/projetointegrador/settings.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/requirements.txt\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/requirements.txt\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/static/css/home.css\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/static/css/home.css\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/static/js/agendamento.js\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/static/js/agendamento.js\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/static/js/cadastro.js\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/static/js/cadastro.js\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/static/js/termos.js\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/static/js/termos.js\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/templates/agendamento.html\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/templates/agendamento.html\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/templates/index.html\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/templates/index.html\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/templates/index_agenda.html\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/templates/index_agenda.html\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"DjangoConsoleOptions\" custom-start-script=\"import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)\">\r\n    <option name=\"myCustomStartScript\" value=\"import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)\" />\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\r\n      <map>\r\n        <entry key=\"$PROJECT_DIR$/ProjetoUNA2026\" value=\"main\" />\r\n      </map>\r\n    </option>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n    <option name=\"ROOT_SYNC\" value=\"DONT_SYNC\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;andrefelip-bot&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/emanuelbraunschwantz0-boop/ProjetoUNA2026.git&quot;,\r\n    &quot;accountId&quot;: &quot;0b51942e-039f-4f7f-84e2-c037060d6b20&quot;\r\n  }\r\n}</component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;customColor&quot;: &quot;&quot;,\r\n  &quot;associatedIndex&quot;: 1\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"3KvKTKxXhTvOcpcsHDOW3QHKdPV\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"Batch.INICIAR_PROJETO.executor\": \"Run\",\r\n    \"ModuleVcsDetector.initialDetectionPerformed\": \"true\",\r\n    \"Python.Run Server.executor\": \"Run\",\r\n    \"Python.criar_demo.executor\": \"Run\",\r\n    \"RunOnceActivity.OpenDjangoStructureViewOnStart\": \"true\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"RunOnceActivity.git.unshallow\": \"true\",\r\n    \"RunOnceActivity.typescript.service.memoryLimit.init\": \"true\",\r\n    \"codeWithMe.voiceChat.enabledByDefault\": \"false\",\r\n    \"git-widget-placeholder\": \"andrefelip-bot-patch-1\",\r\n    \"nodejs_package_manager_path\": \"npm\"\r\n  }\r\n}]]></component>\r\n  <component name=\"RunManager\" selected=\"Python.criar_demo\">\r\n    <configuration name=\"INICIAR_PROJETO\" type=\"BatchConfigurationType\" factoryName=\"Batch\" temporary=\"true\">\r\n      <module name=\"projeto_django\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <option name=\"SCRIPT_NAME\" value=\"INICIAR_PROJETO.bat\" />\r\n      <option name=\"PARAMETERS\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"criar_demo\" type=\"PythonConfigurationType\" factoryName=\"Python\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <module name=\"ProjetoUNA2026\" />\r\n      <option name=\"ENV_FILES\" value=\"\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <envs>\r\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\r\n      </envs>\r\n      <option name=\"SDK_HOME\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"true\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <option name=\"DEBUG_JUST_MY_CODE\" value=\"false\" />\r\n      <EXTENSION ID=\"PythonCoverageRunConfigurationExtension\" runner=\"coverage.py\" />\r\n      <option name=\"RUN_TOOL\" value=\"\" />\r\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$/criar_demo.py\" />\r\n      <option name=\"PARAMETERS\" value=\"\" />\r\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\r\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\r\n      <option name=\"MODULE_MODE\" value=\"false\" />\r\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\r\n      <option name=\"INPUT_FILE\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"ProjetoUNA2026\" type=\"Python.DjangoServer\" factoryName=\"Django server\">\r\n      <module name=\"ProjetoUNA2026\" />\r\n      <option name=\"ENV_FILES\" value=\"\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <envs>\r\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\r\n      </envs>\r\n      <option name=\"SDK_HOME\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"false\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <option name=\"DEBUG_JUST_MY_CODE\" value=\"false\" />\r\n      <option name=\"RUN_TOOL\" value=\"\" />\r\n      <option name=\"launchJavascriptDebuger\" value=\"false\" />\r\n      <option name=\"port\" value=\"8000\" />\r\n      <option name=\"host\" value=\"\" />\r\n      <option name=\"additionalOptions\" value=\"\" />\r\n      <option name=\"browserUrl\" value=\"\" />\r\n      <option name=\"runTestServer\" value=\"false\" />\r\n      <option name=\"runNoReload\" value=\"false\" />\r\n      <option name=\"useCustomRunCommand\" value=\"false\" />\r\n      <option name=\"customRunCommand\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Python.criar_demo\" />\r\n        <item itemvalue=\"Batch.INICIAR_PROJETO\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-python-sdk-6fa658e1df1a-5bd6d13a2a75-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-262.8665.369\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"bdc1b596-7d26-4680-9d1d-25d06975ba96\" name=\"Changes\" comment=\"\" />\r\n      <created>1792432609583</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1792432609583</updated>\r\n      <workItem from=\"1792432613161\" duration=\"3935000\" />\r\n      <workItem from=\"1792497317291\" duration=\"302000\" />\r\n      <workItem from=\"1793023186275\" duration=\"881000\" />\r\n      <workItem from=\"1793037355296\" duration=\"2384000\" />\r\n      <workItem from=\"1793039804539\" duration=\"1143000\" />\r\n      <workItem from=\"1793041267499\" duration=\"1278000\" />\r\n      <workItem from=\"1793100740287\" duration=\"1967000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"criando formulário e funcionalidades CORRIJIR BUGS NA PRÓXIMA AULA\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1792436504646</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1792436504647</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"criando formulário e funcionalidades CORRIJIR BUGS NA PRÓXIMA AULA\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1792436809197</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1792436809197</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"3\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"testes\" />\r\n    <MESSAGE value=\"correção do erro em aparelhos menores\" />\r\n    <MESSAGE value=\"Merge remote-tracking branch 'origin/andrefelip-bot-patch-1' into andrefelip-bot-patch-1\" />\r\n    <MESSAGE value=\"criando formulário e funcionalidades CORRIJIR BUGS NA PRÓXIMA AULA\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"criando formulário e funcionalidades CORRIJIR BUGS NA PRÓXIMA AULA\" />\r\n  </component>\r\n  <component name=\"com.intellij.coverage.CoverageDataManagerImpl\">\r\n    <SUITE FILE_PATH=\"coverage/ProjetoUNA2026$criar_demo.coverage\" NAME=\"criar_demo Coverage Results\" MODIFIED=\"1793102072364\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\r\n    <SUITE FILE_PATH=\"coverage/ProjetoUNA2026$Run_Server.coverage\" NAME=\"Run Server Coverage Results\" MODIFIED=\"1792497321680\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 4a0c4f944917ae55cb90f68a4a0acf01b98c0494)
++++ b/.idea/workspace.xml	(date 1793711361693)
+@@ -5,22 +5,10 @@
+   </component>
+   <component name="ChangeListManager">
+     <list default="true" id="bdc1b596-7d26-4680-9d1d-25d06975ba96" name="Changes" comment="criando formulário e funcionalidades CORRIJIR BUGS NA PRÓXIMA AULA">
++      <change beforePath="$PROJECT_DIR$/.idea/ProjetoUNA2026.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ProjetoUNA2026.iml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/dataSources/data_sources_history.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/data_sources_history.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/agendamentos/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/agendamentos/api.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/agendamentos/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/agendamentos/forms.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/agendamentos/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/agendamentos/models.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/agendamentos/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/agendamentos/tests.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/agendamentos/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/agendamentos/views.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/projetointegrador/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/projetointegrador/settings.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/static/css/home.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/home.css" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/static/js/agendamento.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/agendamento.js" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/static/js/cadastro.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/cadastro.js" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/static/js/termos.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/termos.js" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/templates/agendamento.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/agendamento.html" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/templates/index_agenda.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index_agenda.html" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/templates/termos.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/termos.html" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -45,12 +33,75 @@
+     &quot;assignee&quot;: &quot;andrefelip-bot&quot;
+   }
+ }</component>
+-  <component name="GithubPullRequestsUISettings">{
+-  &quot;selectedUrlAndAccountId&quot;: {
+-    &quot;url&quot;: &quot;https://github.com/emanuelbraunschwantz0-boop/ProjetoUNA2026.git&quot;,
+-    &quot;accountId&quot;: &quot;0b51942e-039f-4f7f-84e2-c037060d6b20&quot;
+-  }
+-}</component>
++  <component name="GithubPullRequestsUISettings"><![CDATA[{
++  "selectedUrlAndAccountId": {
++    "url": "https://github.com/emanuelbraunschwantz0-boop/ProjetoUNA2026.git",
++    "accountId": "8ac315f2-64e6-484b-966c-a2e0b4f3b73c"
++  }
++}]]></component>
++  <component name="McpProjectServerCommands">
++    <commands />
++    <urls />
++  </component>
++  <component name="NextEditCompletionFeaturesState">
++    <decayedCancelled>
++      <entry key="MS100" value="1.0000083487995473" />
++      <entry key="MS500" value="1.1005611551173073" />
++      <entry key="S2" value="1.810428635755427" />
++      <entry key="S5" value="2.368689117640307" />
++      <entry key="S10" value="2.6493957216501376" />
++      <entry key="S30" value="2.8742530440223115" />
++      <entry key="S60" value="2.9359384883292927" />
++      <entry key="M2" value="2.967666013894746" />
++      <entry key="M5" value="2.9869928180786958" />
++      <entry key="M10" value="2.993484076104564" />
++      <entry key="M15" value="2.9956533049967646" />
++      <entry key="M30" value="2.997825278354389" />
++      <entry key="H1" value="2.998912295402067" />
++      <entry key="H2" value="2.999456061727342" />
++      <entry key="H4" value="2.9997280093665077" />
++      <entry key="D1" value="2.9999546652417166" />
++      <entry key="W1" value="2.999993523532828" />
++    </decayedCancelled>
++    <decayedSelected>
++      <entry key="MS100" value="0.0" />
++      <entry key="MS500" value="0.0" />
++      <entry key="S2" value="0.0" />
++      <entry key="S5" value="0.0" />
++      <entry key="S10" value="0.0" />
++      <entry key="S30" value="0.0" />
++      <entry key="S60" value="0.0" />
++      <entry key="M2" value="0.0" />
++      <entry key="M5" value="0.0" />
++      <entry key="M10" value="0.0" />
++      <entry key="M15" value="0.0" />
++      <entry key="M30" value="0.0" />
++      <entry key="H1" value="0.0" />
++      <entry key="H2" value="0.0" />
++      <entry key="H4" value="0.0" />
++      <entry key="D1" value="0.0" />
++      <entry key="W1" value="0.0" />
++    </decayedSelected>
++    <decayedShown>
++      <entry key="MS100" value="0.907526999204016" />
++      <entry key="MS500" value="1.079890527386714" />
++      <entry key="S2" value="1.7998491518545967" />
++      <entry key="S5" value="2.3620941074424744" />
++      <entry key="S10" value="2.645452377430255" />
++      <entry key="S30" value="2.8727603603850924" />
++      <entry key="S60" value="2.9351673156785942" />
++      <entry key="M2" value="2.967274012236274" />
++      <entry key="M5" value="2.9868344504317186" />
++      <entry key="M10" value="2.9934046288108607" />
++      <entry key="M15" value="2.995600281413406" />
++      <entry key="M30" value="2.997798737159169" />
++      <entry key="H1" value="2.9988990174454817" />
++      <entry key="H2" value="2.999449420908293" />
++      <entry key="H4" value="2.9997246884966673" />
++      <entry key="D1" value="2.9999541116994664" />
++      <entry key="W1" value="2.9999934444537977" />
++    </decayedShown>
++  </component>
+   <component name="ProjectColorInfo">{
+   &quot;customColor&quot;: &quot;&quot;,
+   &quot;associatedIndex&quot;: 1
+@@ -66,16 +117,22 @@
+     "ModuleVcsDetector.initialDetectionPerformed": "true",
+     "Python.Run Server.executor": "Run",
+     "Python.criar_demo.executor": "Run",
++    "RunOnceActivity.MCP Project settings loaded": "true",
+     "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
+     "RunOnceActivity.ShowReadmeOnStart": "true",
+     "RunOnceActivity.git.unshallow": "true",
+     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+     "codeWithMe.voiceChat.enabledByDefault": "false",
+-    "git-widget-placeholder": "andrefelip-bot-patch-1",
++    "django.template.preview.state": "SHOW_EDITOR_AND_PREVIEW",
++    "git-widget-placeholder": "Rogerio",
++    "node.js.detected.package.eslint": "true",
++    "node.js.detected.package.tslint": "true",
++    "node.js.selected.package.eslint": "(autodetect)",
++    "node.js.selected.package.tslint": "(autodetect)",
+     "nodejs_package_manager_path": "npm"
+   }
+ }]]></component>
+-  <component name="RunManager" selected="Python.criar_demo">
++  <component name="RunManager" selected="Django Server.ProjetoUNA2026">
+     <configuration name="INICIAR_PROJETO" type="BatchConfigurationType" factoryName="Batch" temporary="true">
+       <module name="projeto_django" />
+       <option name="INTERPRETER_OPTIONS" value="" />
+@@ -139,7 +196,6 @@
+     <recent_temporary>
+       <list>
+         <item itemvalue="Python.criar_demo" />
+-        <item itemvalue="Batch.INICIAR_PROJETO" />
+       </list>
+     </recent_temporary>
+   </component>
+@@ -164,6 +220,7 @@
+       <workItem from="1793039804539" duration="1143000" />
+       <workItem from="1793041267499" duration="1278000" />
+       <workItem from="1793100740287" duration="1967000" />
++      <workItem from="1793710657249" duration="703000" />
+     </task>
+     <task id="LOCAL-00001" summary="criando formulário e funcionalidades CORRIJIR BUGS NA PRÓXIMA AULA">
+       <option name="closed" value="true" />
+Index: .idea/ProjetoUNA2026.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<module version=\"4\">\r\n  <component name=\"TemplatesService\">\r\n    <option name=\"TEMPLATE_CONFIGURATION\" value=\"Django\" />\r\n    <option name=\"TEMPLATE_FOLDERS\">\r\n      <list>\r\n        <option value=\"$MODULE_DIR$/ProjetoUNA2026/templates\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n</module>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/ProjetoUNA2026.iml b/.idea/ProjetoUNA2026.iml
+--- a/.idea/ProjetoUNA2026.iml	(revision 4a0c4f944917ae55cb90f68a4a0acf01b98c0494)
++++ b/.idea/ProjetoUNA2026.iml	(date 1793710662331)
+@@ -4,7 +4,7 @@
+     <option name="TEMPLATE_CONFIGURATION" value="Django" />
+     <option name="TEMPLATE_FOLDERS">
+       <list>
+-        <option value="$MODULE_DIR$/ProjetoUNA2026/templates" />
++        <option value="$MODULE_DIR$/templates" />
+       </list>
+     </option>
+   </component>
