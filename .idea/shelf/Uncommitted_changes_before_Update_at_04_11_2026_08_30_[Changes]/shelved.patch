@@ -1,0 +1,32 @@
+Index: ProjetoUNA2026
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ProjetoUNA2026 b/ProjetoUNA2026
+deleted file mode 100644
+--- a/ProjetoUNA2026	(revision 4a0c4f944917ae55cb90f68a4a0acf01b98c0494)
++++ /dev/null	(revision 4a0c4f944917ae55cb90f68a4a0acf01b98c0494)
+@@ -1,6 +0,0 @@
+-tree 57c78cd67928ae18c4fa4fd8eef40efa9261b93b
+-parent 7e47972985eb98fc74aa673bf19b8d31d81d920c
+-author 2024108060019 <andrefelipesouzadasilva730@gmail.com> 1791459724 -0400
+-committer 2024108060019 <andrefelipesouzadasilva730@gmail.com> 1791459724 -0400
+-
+-correção do erro em aparelhos menores
+Index: ProjetoUNA2026
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ProjetoUNA2026 b/ProjetoUNA2026
+deleted file mode 100644
+--- a/ProjetoUNA2026	(revision 4a0c4f944917ae55cb90f68a4a0acf01b98c0494)
++++ /dev/null	(revision 4a0c4f944917ae55cb90f68a4a0acf01b98c0494)
+@@ -1,6 +0,0 @@
+-tree 57c78cd67928ae18c4fa4fd8eef40efa9261b93b
+-parent 7e47972985eb98fc74aa673bf19b8d31d81d920c
+-author 2024108060019 <andrefelipesouzadasilva730@gmail.com> 1791459724 -0400
+-committer 2024108060019 <andrefelipesouzadasilva730@gmail.com> 1791459724 -0400
+-
+-correção do erro em aparelhos menores
