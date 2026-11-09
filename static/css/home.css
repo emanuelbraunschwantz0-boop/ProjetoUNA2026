@@ -34,8 +34,6 @@ section{padding:90px 0}
 .hero h1{font-size:clamp(38px,5vw,70px);max-width:540px;margin-bottom:20px}
 .hero p.sub{font-size:18px;max-width:500px;opacity:.88;margin-bottom:34px;font-weight:300}
 .hero .cta{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:46px}
-.selos{display:flex;gap:30px;flex-wrap:wrap;font-size:13px;opacity:.9}
-.selos span{display:flex;align-items:center;gap:8px}.selos i{color:var(--d);font-size:18px}
 
 /* destaques */
 .faixa{background:var(--m);color:#fff;padding:0}

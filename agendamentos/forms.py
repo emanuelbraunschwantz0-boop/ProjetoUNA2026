@@ -1,4 +1,3 @@
-import hmac
 import re
 from datetime import date
 
@@ -11,7 +10,7 @@ from django.db import transaction
 
 from . import textos
 from .models import (
-    CONDICOES, SIM_NAO, Cliente, Especialidade, Profissional, Servico, TermoAssinado,
+    CONDICOES, SIM_NAO, Cliente, ConfigSalao, Especialidade, Profissional, Servico, TermoAssinado,
 )
 
 GENEROS = {"Feminino": "F", "Masculino": "M", "Não-binário": "O", "Outro": "O"}
@@ -114,8 +113,7 @@ class CadastroForm(forms.Form):
     def clean(self):
         d = super().clean()
         if d.get("funcionario"):
-            esperado = settings.SENHA_ADM_CADASTRO.encode()
-            if not hmac.compare_digest((d.get("senha_adm") or "").encode(), esperado):
+            if not ConfigSalao.senha_adm_confere(d.get("senha_adm") or ""):
                 self.add_error("senha_adm", "Senha de administrador inválida.")
             if not [e for e in self.data.getlist("especialidades") if e.strip()]:
                 self.add_error("funcionario", "Selecione ao menos uma especialidade.")
@@ -215,3 +213,46 @@ class PerfilForm(forms.Form):
         if foto and foto.size > 2 * 1024 * 1024:
             raise ValidationError("Foto deve ter no máximo 2MB.")
         return foto
+
+
+# ---------------------------------------------------------------------------
+# Recuperação de senha com verificação de identidade
+#   1) e-mail + CPF  -> envia o link (sempre responde igual, não revela quem tem conta)
+#   2) link + data de nascimento + nova senha (máx. 5 erros por hora por conta)
+# ---------------------------------------------------------------------------
+import re as _re
+from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
+from django.core.cache import cache as _cache
+
+
+def _perfil(user):
+    return getattr(user, "cliente", None) or getattr(user, "profissional", None)
+
+
+class RedefinirForm(PasswordResetForm):
+    cpf = forms.CharField(max_length=14)
+
+    def get_users(self, email):
+        cpf = _re.sub(r"\D", "", self.cleaned_data.get("cpf", ""))
+        for u in super().get_users(email):
+            perfil = _perfil(u)
+            if perfil and _re.sub(r"\D", "", perfil.cpf) == cpf:
+                yield u
+
+
+class NovaSenhaForm(SetPasswordForm):
+    data_nascimento = forms.DateField(input_formats=["%Y-%m-%d", "%d/%m/%Y"])
+
+    def clean_data_nascimento(self):
+        chave = f"resetdn:{self.user.pk}"
+        if _cache.get(chave, 0) >= 5:
+            raise forms.ValidationError("Muitas tentativas. Peça um novo link mais tarde.")
+        perfil = _perfil(self.user)
+        if not perfil or self.cleaned_data["data_nascimento"] != perfil.data_nascimento:
+            _cache.set(chave, _cache.get(chave, 0) + 1, 3600)
+            raise forms.ValidationError("Data de nascimento não confere.")
+        return self.cleaned_data["data_nascimento"]
+
+    def save(self, commit=True):
+        _cache.delete(f"resetdn:{self.user.pk}")
+        return super().save(commit)

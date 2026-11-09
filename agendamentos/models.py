@@ -1,6 +1,9 @@
 import hashlib
+import hmac
 import json
 
+from django.conf import settings
+from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
@@ -289,3 +292,33 @@ class TermoAssinado(models.Model):
         verbose_name = "Termo assinado"
         verbose_name_plural = "Termos assinados"
         ordering = ["-assinado_em"]
+
+
+class ConfigSalao(models.Model):
+    """Configurações únicas do salão (um só registro).
+
+    Guarda a senha de administrador exigida para cadastrar funcionários — sempre
+    como hash, nunca em texto puro. Se nenhuma senha foi definida aqui, vale a do
+    `settings.SENHA_ADM_CADASTRO` (variável de ambiente UNA_SENHA_ADM).
+    """
+
+    senha_adm_hash = models.CharField(max_length=128, blank=True)
+    atualizado_em = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "Configuração do salão"
+
+    @property
+    def senha_personalizada(self):
+        return bool(self.senha_adm_hash)
+
+    @classmethod
+    def senha_adm_confere(cls, senha):
+        cfg = cls.objects.filter(pk=1).first()
+        if cfg and cfg.senha_adm_hash:
+            return check_password(senha, cfg.senha_adm_hash)
+        return hmac.compare_digest(senha.encode(), settings.SENHA_ADM_CADASTRO.encode())
+
+    class Meta:
+        verbose_name = "Configuração do salão"
+        verbose_name_plural = "Configuração do salão"

@@ -20,7 +20,7 @@
         <dd>{{ servico.get_categoria_display }}</dd>
 
         <dt>Preço</dt>
-        <dd>R$ {{ servico.preco }}</dd>
+        <dd>R$ {{ servico.preco|floatformat:2 }}</dd>
 
         <dt>Duração</dt>
         <dd>{{ servico.duracao_min }} minutos</dd>

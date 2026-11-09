@@ -1,33 +1,18 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <title>{{ profissional.nome_completo }} | Una Instituto de Beleza</title>
-  <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<body>
-  <div style="max-width:700px;margin:60px auto;padding:0 20px;font-family:sans-serif;">
-    <p><a href="{% url 'agendamentos:home' %}">&larr; Voltar para a home</a></p>
-
-    <h1>{{ profissional.nome_completo }}</h1>
-
-    <p><strong>Especialidades:</strong>
-      {% for especialidade in profissional.especialidades.all %}
-        {{ especialidade.nome }}{% if not forloop.last %}, {% endif %}
-      {% empty %}
-        Nenhuma especialidade cadastrada.
-      {% endfor %}
-    </p>
-
-    <p><strong>Horário de atendimento:</strong> {{ profissional.horario_atendimento|default:"Não informado" }}</p>
-
-    {% if profissional.apresentacao %}
-      <p><strong>Sobre:</strong> {{ profissional.apresentacao }}</p>
-    {% endif %}
-
-    <p>
-      <a href="{% url 'agendamentos:agendamento' %}" class="btn">Agendar horário com {{ profissional.nome_completo }}</a>
-    </p>
+{% extends "conta/base.html" %}
+{% block titulo %}{{ profissional.nome_completo }}{% endblock %}
+{% block classe %}larga{% endblock %}
+{% block conteudo %}
+  <p class="conta-link" style="text-align:left;margin:0 0 14px"><a href="{% url 'agendamentos:home' %}">&larr; Voltar para a home</a></p>
+  <div class="prof-topo">
+    {% if profissional.foto %}<img class="prof-foto" src="{{ profissional.foto.url }}" alt="Foto de {{ profissional.nome_completo }}">{% endif %}
+    <div>
+      <h1>{{ profissional.nome_completo }}</h1>
+      <div class="chips-esp">
+        {% for especialidade in profissional.especialidades.all %}<span>{{ especialidade.nome }}</span>{% empty %}<span>Nenhuma especialidade cadastrada</span>{% endfor %}
+      </div>
+    </div>
   </div>
-</body>
-</html>
+  <p class="conta-sub"><strong>Horário de atendimento:</strong> {{ profissional.horario_atendimento|default:"Não informado" }}</p>
+  {% if profissional.apresentacao %}<p class="conta-sub">{{ profissional.apresentacao }}</p>{% endif %}
+  <a href="{% url 'agendamentos:agendamento' %}" class="conta-btn">Agendar horário</a>
+{% endblock %}

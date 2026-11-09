@@ -49,8 +49,13 @@ html, body {
   flex-direction: column;
   justify-content: space-between;
   padding: 52px 48px;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;      /* nunca corta o menu em telas baixas */
+  scrollbar-width: none;
+  gap: 24px;
 }
+.cad-visual::-webkit-scrollbar { display: none; }
+@media (max-height: 820px) { .cad-visual { padding: 28px 40px; gap: 16px; } }
 
 /* Círculos decorativos */
 .cv-circulo {
@@ -800,3 +805,4 @@ html, body {
   .nascimento-grid { grid-template-columns: 1fr 1fr; }
   .dia-row { grid-template-columns: 80px 1fr 1fr auto; }
 }
+@media (max-height: 760px) { .cv-desc, .cv-checks { display: none; } }

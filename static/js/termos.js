@@ -208,20 +208,14 @@ function atualizarDateTime() {
 }
 
 async function obterIP() {
-  try {
-    // Em produção, use seu próprio endpoint ou um serviço confiável
-    const r = await fetch('https://api.ipify.org?format=json');
-    const d = await r.json();
-    ESTADO.ipUsuario = d.ip;
-    document.getElementById('assin-ip').textContent = 'IP: ' + d.ip;
-  } catch {
-    ESTADO.ipUsuario = '127.0.0.1';
-    document.getElementById('assin-ip').textContent = 'IP: não disponível';
-  }
+  // O IP é registrado pelo servidor ao assinar; nenhuma chamada a serviços externos.
+  ESTADO.ipUsuario = '—';
+  const el = document.getElementById('assin-ip');
+  if (el) el.textContent = 'IP: registrado ao assinar';
 }
 
 // ============================================================
-// PROGRESSO DE LEITURA (scroll)
+// LEITURA
 // ============================================================
 function monitorarScroll() {
   const conteudo = document.querySelector('.doc-conteudo');

@@ -14,13 +14,22 @@ from django.core.exceptions import ValidationError
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
 
 from .forms import PerfilForm, ServicoForm
-from .models import CONDICOES, Agendamento, Especialidade, Profissional, Servico
+from .models import CONDICOES, Agendamento, Especialidade, Pagamento, Profissional, Servico
 
 SLOTS = ["08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00",
          "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00",
          "17:30", "18:00"]
 FECHAMENTO = 20 * 60  # nenhum atendimento pode terminar depois das 20:00
 ROTULOS = dict(CONDICOES)
+FORMAS = dict(Pagamento.FORMA_CHOICES)
+
+
+def _pag_txt(ag):
+    """Resumo do pagamento: 'Pix · a pagar no salão' / 'Pix · pago'."""
+    p = getattr(ag, "pagamento", None)
+    if not p or ag.status == "cancelado":
+        return ""
+    return f"{FORMAS.get(p.forma_pagamento, p.forma_pagamento)} · " + ("pago" if p.status == "aprovado" else "a pagar no salão")
 
 
 def _erro(msg, status=400):
@@ -140,17 +149,18 @@ def dados(request):
             "ini": "".join(x[0] for x in p.nome_completo.split()[:2]).upper(),
         } for p in profs],
         "perfil": {"tipo": "profissional" if prof else "cliente", "nome": perfil.nome_completo,
-                   "email": u.email, "tel": perfil.telefone, "prof_id": prof.id if prof else None},
+                   "email": u.email, "tel": perfil.telefone, "prof_id": prof.id if prof else None,
+                   "foto": perfil.foto.url if perfil.foto else ""},
     }
     if cli:
         agora = _agora()
         d["historico"] = [{
             "id": a.id, "data": a.data.strftime("%d/%m/%Y"), "hora": a.hora.strftime("%H:%M"),
             "serv": a.servico.nome, "prof": a.profissional.nome_completo,
-            "preco": _brl(a.preco_cobrado), "status": a.status,
+            "preco": _brl(a.preco_cobrado), "status": a.status, "pag": _pag_txt(a),
             "pode_cancelar": a.status in ("pendente", "confirmado")
             and datetime.combine(a.data, a.hora) > agora,
-        } for a in cli.agendamentos.select_related("servico", "profissional")[:50]]
+        } for a in cli.agendamentos.select_related("servico", "profissional", "pagamento")[:50]]
     return JsonResponse(d)
 
 
@@ -200,6 +210,9 @@ def agendar(request):
                 cliente=cli, profissional=prof, servico=serv, data=dia,
                 hora=time.fromisoformat(hora[:5]), preco_cobrado=serv.preco,
                 observacoes=str(b.get("obs", ""))[:500])
+            forma = b.get("forma") if b.get("forma") in FORMAS else "pix"
+            Pagamento.objects.create(agendamento=a, forma_pagamento=forma, parcelas=1,
+                                     valor_total=serv.preco)
     except IntegrityError:  # outra cliente pegou o mesmo horário no mesmo instante
         return indisponivel
     return JsonResponse({"ok": True, "id": a.id})
@@ -227,6 +240,8 @@ def mudar_status(request, pk):
         return _erro("Não é possível cancelar um atendimento que já começou.")
     a.status = novo
     a.save(update_fields=["status"])
+    if novo == "concluido":  # atendimento concluído => pagamento recebido no salão
+        Pagamento.objects.filter(agendamento=a).update(status="aprovado", pago_em=timezone.now())
     return JsonResponse({"ok": True})
 
 
@@ -255,12 +270,12 @@ def agenda(request):
         h = _agora().date()
         ini = h - timedelta(days=h.weekday())
     qs = prof.agendamentos.filter(data__gte=ini, data__lt=ini + timedelta(days=7)) \
-        .select_related("cliente", "servico").order_by("data", "hora")
+        .select_related("cliente", "servico", "pagamento").order_by("data", "hora")
     return JsonResponse({"ok": True, "eventos": [{
         "id": a.id, "dia": a.data.isoweekday(), "data": a.data.isoformat(),
         "h": a.hora.strftime("%H:%M"), "cli": a.cliente.nome_completo, "tel": a.cliente.telefone,
         "serv": a.servico.nome, "dur": a.servico.duracao_min, "tipo": a.servico.categoria,
-        "preco": float(a.preco_cobrado), "status": a.status, "obs": a.observacoes,
+        "preco": float(a.preco_cobrado), "status": a.status, "obs": a.observacoes, "pag": _pag_txt(a),
         "ficha": _ficha_resumo(a.cliente) if a.status != "cancelado" else None,
     } for a in qs]})
 
@@ -327,7 +342,8 @@ def perfil(request):
             if prof:
                 p.especialidades.set(
                     [Especialidade.objects.get_or_create(nome=n[:50])[0] for n in esps])
-        return JsonResponse({"ok": True, "nome": p.nome_completo})
+        return JsonResponse({"ok": True, "nome": p.nome_completo,
+                             "foto": p.foto.url if p.foto else ""})
     d = {"tipo": "profissional" if prof else "cliente", "nome": p.nome_completo, "email": u.email,
          "tel": p.telefone, "cep": p.cep, "genero": p.genero, "cpf": p.cpf,
          "nasc": p.data_nascimento.isoformat(), "foto": p.foto.url if p.foto else ""}

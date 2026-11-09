@@ -1,10 +1,11 @@
+from django.contrib.auth import views as auth_views
 from django.core.cache import cache
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_POST
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.db import transaction
+from django.db import IntegrityError, transaction
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
@@ -17,10 +18,21 @@ from django.views.generic import (
 )
 
 from . import textos
-from .forms import CadastroForm, FichaSaudeForm, ServicoForm
+from .forms import CadastroForm, FichaSaudeForm, NovaSenhaForm, RedefinirForm, ServicoForm
 from .models import (
     CONDICOES, SIM_NAO, FichaSaude, Profissional, Servico, TermoAssinado,
 )
+
+
+def _excedeu(chave, maximo):
+    return cache.get(chave, 0) >= maximo
+
+
+def _contar(chave, janela):
+    try:
+        cache.incr(chave)
+    except ValueError:
+        cache.set(chave, 1, janela)
 
 
 def home(request):
@@ -30,7 +42,7 @@ def home(request):
 
 
 def sobre(request):
-    return render(request, "sobre.html")
+    return redirect(reverse("agendamentos:home") + "#sobre")  # seção Sobre da nova home (responsiva)
 
 
 def termos(request):
@@ -39,7 +51,12 @@ def termos(request):
 
 def cadastro(request):
     if request.method == "POST":
-        chave = f"adm:{request.META.get('REMOTE_ADDR')}"
+        ip = request.META.get("REMOTE_ADDR")
+        if _excedeu(f"cad:{ip}", 10):  # no máximo 10 contas novas por hora por IP
+            return JsonResponse(
+                {"ok": False, "erros": {"cadastro": "Muitos cadastros deste dispositivo. Tente mais tarde."}},
+                status=429)
+        chave = f"adm:{ip}"
         if request.POST.get("funcionario") and cache.get(chave, 0) >= 5:
             return JsonResponse(
                 {"ok": False, "erros": {"senha_adm": "Muitas tentativas. Aguarde 15 minutos."}}, status=429)
@@ -49,7 +66,12 @@ def cadastro(request):
                 cache.set(chave, cache.get(chave, 0) + 1, 900)
             erros = {c: " ".join(e) for c, e in form.errors.items()}
             return JsonResponse({"ok": False, "erros": erros}, status=400)
-        user = form.save(request)
+        try:
+            user = form.save(request)
+        except IntegrityError:  # duas pessoas cadastrando o mesmo e-mail/CPF ao mesmo tempo
+            return JsonResponse(
+                {"ok": False, "erros": {"cadastro": "E-mail ou CPF já cadastrado."}}, status=400)
+        _contar(f"cad:{ip}", 3600)
         if not form.cleaned_data["funcionario"]:
             login(request, user)
             destino = reverse("agendamentos:ficha_saude")
@@ -62,13 +84,15 @@ def cadastro(request):
 def login_view(request):
     if request.method == "POST":
         email = request.POST.get("email", "").strip().lower()[:254]
-        chave = f"login:{request.META.get('REMOTE_ADDR')}:{email}"
-        if cache.get(chave, 0) >= 5:  # proteção contra tentativa de adivinhar senha
+        ip = request.META.get("REMOTE_ADDR")
+        chave = f"login:{ip}:{email}"
+        if _excedeu(chave, 5) or _excedeu(f"loginip:{ip}", 30):  # proteção contra tentativa de adivinhar senha
             return JsonResponse(
                 {"ok": False, "erro": "Muitas tentativas. Aguarde 15 minutos."}, status=429)
         user = authenticate(request, username=email, password=request.POST.get("senha", ""))
         if not user:
             cache.set(chave, cache.get(chave, 0) + 1, 900)
+            _contar(f"loginip:{ip}", 900)
             return JsonResponse({"ok": False, "erro": "E-mail ou senha incorretos."}, status=400)
         cache.delete(chave)
         perfil = "profissional" if hasattr(user, "profissional") else (
@@ -92,8 +116,7 @@ def sair(request):
 
 
 def inicial(request):
-    servicos = Servico.objects.filter(ativo=True)
-    return render(request, "index_inical.html", {"servicos": servicos})
+    return redirect("agendamentos:home")
 
 
 @never_cache
@@ -114,6 +137,7 @@ def agendamento(request):
         "email": u.email,
         "nome": perfil.nome_completo if perfil else u.get_username(),
         "tipo": "profissional" if prof else "cliente",
+        "foto": perfil.foto.url if perfil.foto else "",
     }
     servicos = Servico.objects.filter(ativo=True)
     profissionais = Profissional.objects.filter(aprovado=True)
@@ -254,3 +278,28 @@ class ServicoDeleteView(AcessoGestaoMixin, DeleteView):
     template_name = "agendamentos/servico_confirm_delete.html"
     context_object_name = "servico"
     success_url = reverse_lazy("agendamentos:servico_list")
+
+
+# ---------------------------------------------------------------------------
+# Redefinição de senha (e-mail com link de uso único, válido por 2 horas)
+# ---------------------------------------------------------------------------
+class SolicitarRedefinicao(auth_views.PasswordResetView):
+    form_class = RedefinirForm
+    template_name = "conta/redefinir_form.html"
+    email_template_name = "conta/redefinir_email.txt"
+    subject_template_name = "conta/redefinir_assunto.txt"
+    success_url = reverse_lazy("agendamentos:senha_enviada")
+
+    def post(self, request, *args, **kwargs):
+        chave = f"reset:{request.META.get('REMOTE_ADDR')}"
+        if _excedeu(chave, 5):  # evita disparar e-mails em massa
+            return render(request, self.template_name,
+                          {"form": self.get_form(), "bloqueado": True}, status=429)
+        _contar(chave, 3600)
+        return super().post(request, *args, **kwargs)
+
+
+class ConfirmarRedefinicao(auth_views.PasswordResetConfirmView):
+    form_class = NovaSenhaForm
+    template_name = "conta/redefinir_confirmar.html"
+    success_url = reverse_lazy("agendamentos:senha_concluida")

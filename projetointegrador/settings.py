@@ -49,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'agendamentos.middleware.SecurityHeadersMiddleware',
 ]
 
 ROOT_URLCONF = 'projetointegrador.urls'
@@ -128,7 +129,21 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# E-mail: sem UNA_EMAIL_HOST os e-mails (ex.: link de redefinição de senha) aparecem no
+# terminal do servidor. Para enviar de verdade, defina UNA_EMAIL_HOST, UNA_EMAIL_USER e
+# UNA_EMAIL_PASSWORD (ex.: smtp.gmail.com com senha de app).
+if os.environ.get('UNA_EMAIL_HOST'):
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = os.environ['UNA_EMAIL_HOST']
+    EMAIL_PORT = int(os.environ.get('UNA_EMAIL_PORT', '587'))
+    EMAIL_HOST_USER = os.environ.get('UNA_EMAIL_USER', '')
+    EMAIL_HOST_PASSWORD = os.environ.get('UNA_EMAIL_PASSWORD', '')
+    EMAIL_USE_TLS = True
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = os.environ.get('UNA_EMAIL_FROM', 'Una Instituto de Beleza <nao-responda@una.local>')
+PASSWORD_RESET_TIMEOUT = 60 * 60 * 2       # link de redefinição vale 2 horas
+ADMIN_URL = os.environ.get('DJANGO_ADMIN_URL', 'admin/')  # troque em produção
 
 LOGIN_URL = '/index_agenda.html'
 SENHA_ADM_CADASTRO = os.environ.get('UNA_SENHA_ADM', 'Una@Adm2026')  # exigida para cadastrar funcionários
@@ -136,6 +151,7 @@ SENHA_ADM_CADASTRO = os.environ.get('UNA_SENHA_ADM', 'Una@Adm2026')  # exigida p
 
 # ---- Segurança ----
 SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = True  # o JS lê o token do HTML, não do cookie
 SESSION_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_AGE = 60 * 60 * 12          # sessão expira em 12h

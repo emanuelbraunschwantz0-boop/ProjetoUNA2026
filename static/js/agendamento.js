@@ -45,6 +45,7 @@ async function carregar() {
   const d = await api('/api/dados/');
   SERVICOS = d.servicos; PROFISSIONAIS = d.profissionais; PERFIL = d.perfil;
   HIST_CLIENTE = d.historico || [];
+  if ((d.perfil.foto || '') !== (user.foto || '')) { user.foto = d.perfil.foto || ''; sessionStorage.setItem('una_user', JSON.stringify(user)); setAvatar(); }
   if (user.tipo === 'profissional') await carregarAgenda();
 }
 
@@ -102,10 +103,22 @@ window.addEventListener('DOMContentLoaded', async () => {
   }
 });
 
+function setAvatar(ini) {
+  const av = document.getElementById('av-inicial');
+  if (user.foto) av.innerHTML = `<img src="${esc(user.foto)}" alt="">`;
+  else av.textContent = ini || user.nome.split(' ').map(p=>p[0]).join('').substring(0,2);
+}
+
+function toggleMenu(abrir) {
+  const s = document.getElementById('sidebar'), o = document.getElementById('menu-overlay');
+  const f = abrir === undefined ? !s.classList.contains('aberto') : abrir;
+  s.classList.toggle('aberto', f); o.classList.toggle('show', f);
+}
+
 function montarLayout() {
   // Sidebar
   const ini = user.nome.split(' ').map(p=>p[0]).join('').substring(0,2);
-  document.getElementById('av-inicial').textContent = ini;
+  setAvatar(ini);
   document.getElementById('user-nome-sidebar').textContent = user.nome;
   document.getElementById('user-tipo-sidebar').textContent = user.tipo === 'cliente' ? 'Cliente' : 'Profissional';
 
@@ -148,6 +161,7 @@ function montarLayout() {
 }
 
 function irSec(id, el) {
+  toggleMenu(false);
   if(id==='sec-perfil') carregarPerfil();
   document.querySelectorAll('.secao').forEach(s=>s.classList.remove('ativa'));
   document.getElementById(id).classList.add('ativa');
@@ -328,14 +342,15 @@ function preencherResumo(){
 async function confirmar(){
   try {
     await api('/api/agendar/', {servico: sel.servico.id, prof: sel.prof.id, data: sel.data, hora: sel.hora,
-                                obs: document.getElementById('c-obs').value});
+                                obs: document.getElementById('c-obs').value,
+                                forma: document.querySelector('input[name=forma]:checked').value});
   } catch (e) {
     notif(e.message);
     if (sel.data) { sel.hora = null; document.getElementById('btn-n3').disabled = true; renderHorarios(sel.data, true); goEt(3); }
     return;
   }
   const [a,m,d]=sel.data.split('-');
-  document.getElementById('suc-info').innerHTML=`<strong>${esc(sel.servico.nome)}</strong> com ${esc(sel.prof.nome)}<br>${d}/${m} às ${sel.hora}<br><small>Aguardando confirmação da profissional.</small>`;
+  document.getElementById('suc-info').innerHTML=`<strong>${esc(sel.servico.nome)}</strong> com ${esc(sel.prof.nome)}<br>${d}/${m} às ${sel.hora}<br><small>Aguardando confirmação da profissional.</small><br><small>Pagamento no salão: ${esc(({pix:'Pix',cartao:'Cartão',dinheiro:'Dinheiro'})[document.querySelector('input[name=forma]:checked').value])}</small>`;
   ['et1','et2','et3','et4'].forEach(id=>document.getElementById(id).style.display='none');
   document.getElementById('et-suc').style.display='block';
   notif('Agendamento solicitado com sucesso!');
@@ -368,7 +383,7 @@ function renderHist(){
         <p>${esc(h.prof)} &bull; ${h.hora}</p>
       </div>
       <div class="hist-status"><i class="bi ${ST[h.status].i}"></i> ${SL[h.status]}</div>
-      <div class="hist-preco">${esc(h.preco)}</div>
+      <div class="hist-preco">${esc(h.preco)}${h.pag?`<small>${esc(h.pag)}</small>`:''}</div>
       ${h.pode_cancelar?`<button class="btn-danger" title="Cancelar" onclick="if(confirm('Cancelar este agendamento?'))mudarStatus(${h.id},'cancelado')"><i class="bi bi-x-lg"></i></button>`:''}
     </div>`;
   }).join('');
@@ -455,6 +470,7 @@ function abrirEvento(id){
     <strong style="color:var(--marrom)">Serviço:</strong> ${esc(e.serv)}<br>
     <strong style="color:var(--marrom)">Quando:</strong> ${d}/${m}/${a} às ${e.h}<br>
     <strong style="color:var(--marrom)">Duração:</strong> ${e.dur} minutos &bull; R$ ${brl(e.preco)}<br>
+    ${e.pag?`<strong style="color:var(--marrom)">Pagamento:</strong> ${esc(e.pag)}<br>`:''}
     <strong style="color:var(--marrom)">Status:</strong> <span style="color:${{pendente:'#E6A23C',confirmado:'#2980B9',concluido:'#4CAF7D',cancelado:'#C0392B'}[e.status]}"><i class="bi ${ST[e.status].i}"></i> ${SL[e.status]}</span><br>
     ${e.obs?`<strong style="color:var(--marrom)">Obs.:</strong> ${esc(e.obs)}<br>`:''}${fichaHtml}`;
   const bt=[];
@@ -611,7 +627,7 @@ async function salvarPerfil(){
   const foto = document.getElementById('pf-foto').files[0]; if (foto) fd.append('foto', foto);
   try {
     const d = await api('/api/perfil/', fd);
-    user.nome = d.nome; sessionStorage.setItem('una_user', JSON.stringify(user));
+    user.nome = d.nome; user.foto = d.foto || ''; sessionStorage.setItem('una_user', JSON.stringify(user)); setAvatar();
     document.getElementById('user-nome-sidebar').textContent = d.nome;
     notif('Perfil atualizado com sucesso!');
   } catch(e) { notif(e.message); }

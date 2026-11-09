@@ -14,6 +14,9 @@
 
 <body>
 
+  <div class="topbar"><button type="button" aria-label="Abrir menu" onclick="toggleMenu()">&#9776;</button><span>Una</span></div>
+  <div class="menu-overlay" id="menu-overlay" onclick="toggleMenu(false)"></div>
+
   <!-- SIDEBAR -->
   <nav class="sidebar" id="sidebar">
     <div class="logo-wrap">
@@ -118,82 +121,50 @@
           </div>
         </div>
 
-        <!-- ETAPA 4: CONFIRMAR + PAGAMENTO -->
+        <!-- ETAPA 4: REVISAR + PAGAMENTO -->
         <div id="et4" style="display:none">
           <span class="label-sec">Confirmar agendamento</span>
-          <div class="resumo-pag-grid">
-            <!-- RESUMO -->
-            <div>
-              <div class="resumo-card" style="margin-bottom:20px;">
+          <div class="pag-grid">
+            <div class="pag-col">
+              <div class="resumo-card">
                 <p class="resumo-titulo">Resumo do <em>agendamento</em></p>
-                <div class="rl">
-                  <div class="rl-ico"><i class="bi bi-scissors"></i></div>
-                  <div class="rl-info"><label>Serviço</label>
-                    <p id="r-serv">—</p>
-                  </div>
-                </div>
-                <div class="rl">
-                  <div class="rl-ico"><i class="bi bi-person"></i></div>
-                  <div class="rl-info"><label>Profissional</label>
-                    <p id="r-prof">—</p>
-                  </div>
-                </div>
-                <div class="rl">
-                  <div class="rl-ico"><i class="bi bi-calendar3"></i></div>
-                  <div class="rl-info"><label>Data</label>
-                    <p id="r-data">—</p>
-                  </div>
-                </div>
-                <div class="rl">
-                  <div class="rl-ico"><i class="bi bi-clock"></i></div>
-                  <div class="rl-info"><label>Horário</label>
-                    <p id="r-hora">—</p>
-                  </div>
-                </div>
-                <div class="rl">
-                  <div class="rl-ico"><i class="bi bi-hourglass"></i></div>
-                  <div class="rl-info"><label>Duração</label>
-                    <p id="r-dur">—</p>
-                  </div>
-                </div>
-                <div class="total-linha">
-                  <span class="tl">Total</span>
-                  <span class="tv"><span>R$</span> <span id="r-preco">—</span></span>
-                </div>
+                <div class="rl"><div class="rl-ico"><i class="bi bi-scissors"></i></div><div class="rl-info"><label>Serviço</label><p id="r-serv">—</p></div></div>
+                <div class="rl"><div class="rl-ico"><i class="bi bi-person"></i></div><div class="rl-info"><label>Profissional</label><p id="r-prof">—</p></div></div>
+                <div class="rl"><div class="rl-ico"><i class="bi bi-calendar3"></i></div><div class="rl-info"><label>Data</label><p id="r-data">—</p></div></div>
+                <div class="rl"><div class="rl-ico"><i class="bi bi-clock"></i></div><div class="rl-info"><label>Horário</label><p id="r-hora">—</p></div></div>
+                <div class="rl"><div class="rl-ico"><i class="bi bi-hourglass"></i></div><div class="rl-info"><label>Duração</label><p id="r-dur">—</p></div></div>
               </div>
               <div class="resumo-card">
                 <p class="resumo-titulo">Seus <em>dados</em></p>
-                <div class="campo-f"><label class="inp-label">Nome completo</label><input class="inp" id="c-nome"
-                    placeholder="Maria Silva"></div>
+                <div class="campo-f"><label class="inp-label">Nome completo</label><input class="inp" id="c-nome" placeholder="Maria Silva"></div>
                 <div class="grid2">
-                  <div class="campo-f"><label class="inp-label">WhatsApp</label><input class="inp" id="c-tel"
-                      placeholder="(69) 9 9999-9999"></div>
-                  <div class="campo-f"><label class="inp-label">E-mail</label><input class="inp" id="c-email"
-                      placeholder="maria@email.com"></div>
+                  <div class="campo-f"><label class="inp-label">WhatsApp</label><input class="inp" id="c-tel" placeholder="(69) 9 9999-9999"></div>
+                  <div class="campo-f"><label class="inp-label">E-mail</label><input class="inp" id="c-email" placeholder="maria@email.com"></div>
                 </div>
-                <div class="campo-f"><label class="inp-label">Observações</label><textarea class="inp" id="c-obs" rows="2"
-                    placeholder="Preferências, alergias, etc..."></textarea></div>
+                <div class="campo-f"><label class="inp-label">Observações</label><textarea class="inp" id="c-obs" rows="2" placeholder="Preferências, alergias, etc..."></textarea></div>
               </div>
             </div>
-            <!-- PAGAMENTO -->
-
-              <div class="resumo-card">
+            <div class="pag-col">
+              <div class="resumo-card pag-card">
                 <p class="resumo-titulo">Forma de <em>pagamento</em></p>
-                <div class="rl">
-                <div class="rl-ico"><i class="bi bi-cash-coin"></i></div>
-                <div class="rl-info"><label>Pagamento no local</label>
-                  <p>Dinheiro,maquininha ou pix, após o atendimento</p>
-                  </div>
+                <div class="pag-opcoes">
+                  <label class="pag-op"><input type="radio" name="forma" value="pix" checked>
+                    <span class="pag-op-in"><i class="bi bi-qr-code"></i><b>Pix</b><small>Pague na hora, no salão</small></span></label>
+                  <label class="pag-op"><input type="radio" name="forma" value="cartao">
+                    <span class="pag-op-in"><i class="bi bi-credit-card"></i><b>Cartão</b><small>Débito ou crédito na maquininha</small></span></label>
+                  <label class="pag-op"><input type="radio" name="forma" value="dinheiro">
+                    <span class="pag-op-in"><i class="bi bi-cash-coin"></i><b>Dinheiro</b><small>Pague em espécie</small></span></label>
                 </div>
-              </div>
-
-              <div style="display:flex;gap:12px;margin-top:20px;">
-                <button class="btn-sec" onclick="goEt(3)"><i class="bi bi-arrow-left"></i> Voltar</button>
-                <button class="btn-pri" onclick="confirmar()"><i class="bi bi-check2-circle"></i> Confirmar
-                  agendamento</button>
+                <div class="pag-total"><span>Total a pagar</span><strong>R$ <span id="r-preco">—</span></strong></div>
+                <p class="pag-nota">O pagamento é feito no salão, após o atendimento. Nada é cobrado agora.</p>
+                <div class="pag-acoes">
+                  <button class="btn-sec" onclick="goEt(3)"><i class="bi bi-arrow-left"></i> Voltar</button>
+                  <button class="btn-pri" onclick="confirmar()"><i class="bi bi-check2-circle"></i> Confirmar agendamento</button>
+                </div>
               </div>
             </div>
           </div>
+        </div>
 
         <!-- SUCESSO -->
         <div id="et-suc" style="display:none">
@@ -308,20 +279,7 @@
           <div class="ag-header" id="ag-header"></div>
           <div class="ag-corpo" id="ag-corpo"></div>
         </div>
-        <div class="legenda">
-          <div class="leg">
-            <div class="leg-c" style="background:#C9A96E"></div> Corte
-          </div>
-          <div class="leg">
-            <div class="leg-c" style="background:#C0392B"></div> Manicure/Pedicure
-          </div>
-          <div class="leg">
-            <div class="leg-c" style="background:#4CAF7D"></div> Tratamento Capilar
-          </div>
-          <div class="leg">
-            <div class="leg-c" style="background:#8E44AD"></div> Coloração
-          </div>
-        </div>
+        
       </div>
 
       <!-- ========================================

@@ -188,6 +188,9 @@ html, body {
   position: sticky;
   top: 128px;
   padding: 36px 0 36px 0;
+  max-height: calc(100vh - 128px);
+  overflow-y: auto;
+  scrollbar-width: thin;
 }
 .sumario-titulo {
   font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
@@ -763,4 +766,23 @@ html, body {
   .doc-hero { padding: 36px 20px 32px; }
   .doc-tabs-wrap { padding: 0 16px; }
   .doc-footer { padding: 24px 20px; flex-direction: column; gap: 12px; text-align: center; }
+}
+
+/* ---- Ajustes responsivos (celular) ---- */
+.doc-tabs-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.doc-tabs-wrap::-webkit-scrollbar { display: none; }
+.doc-tab { white-space: nowrap; flex-shrink: 0; }
+@media (max-width: 768px) {
+  .header-logo-sub { display: none; }
+  .header-logo-nome { white-space: nowrap; }
+  .btn-hd-ghost { padding: 7px 12px; letter-spacing: 1px; white-space: nowrap; }
+  .doc-tab { padding: 14px 16px; letter-spacing: 1px; }
+}
+@media (max-width: 480px) {
+  .termos-header { padding: 0 12px; }
+  .header-nav-btns { gap: 6px; }
+  .btn-hd-ghost { padding: 7px 10px; font-size: 10px; }
+  .btn-hd-ghost:first-child { font-size: 0; gap: 0; }   /* só a seta no celular pequeno */
+  .btn-hd-ghost:first-child i { font-size: 14px; }
+  .doc-tabela { display: block; overflow-x: auto; }
 }

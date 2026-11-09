@@ -192,7 +192,7 @@ async function finalizar() {
     const d = await r.json();
     btn.classList.remove('carregando');
     if (!d.ok) {
-      mostrarAlertaGlobal(Object.entries(d.erros || {}).map(([k, v]) => `${k}: ${v}`).join(' | ') || 'Erro ao cadastrar.');
+      mostrarAlertaGlobal(Object.values(d.erros || {}).join(' | ') || 'Erro ao cadastrar.');
       return;
     }
     document.getElementById('etapa4').classList.remove('ativa');

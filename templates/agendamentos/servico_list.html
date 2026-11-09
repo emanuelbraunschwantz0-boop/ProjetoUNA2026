@@ -44,7 +44,7 @@
         <tr>
           <td>{{ servico.nome }}</td>
           <td>{{ servico.get_categoria_display }}</td>
-          <td>R$ {{ servico.preco }}</td>
+          <td>R$ {{ servico.preco|floatformat:2 }}</td>
           <td>{{ servico.duracao_min }} min</td>
           <td>{% if servico.ativo %}Sim{% else %}Não{% endif %}</td>
           <td class="crud-acoes">

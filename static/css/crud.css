@@ -1,4 +1,21 @@
-/* Estilo do CRUD de Serviços — reaproveita a paleta do site (style.css) */
+/* Estilo do CRUD de Serviços — usa a paleta do site */
+:root {
+  --marrom: #3D2B1A;
+  --marrom-medio: #6B4226;
+  --dourado: #C9A96E;
+  --dourado-claro: #E8D5B0;
+  --creme: #FAF5EE;
+  --creme-escuro: #F0E6D3;
+  --texto: #2A1A0E;
+}
+* { box-sizing: border-box; }
+body { background: var(--creme); }
+
+/* tabelas largas rolam de lado no celular */
+@media (max-width: 720px) {
+  .crud-wrap { margin: 24px auto; padding: 0 14px; }
+  .crud-wrap table { display: block; overflow-x: auto; white-space: nowrap; }
+}
 
 .crud-wrap {
   max-width: 960px;

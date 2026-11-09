@@ -59,3 +59,58 @@ class AgendaTests(TestCase):
         r = self.client.post(f"/api/agendamento/{a.id}/status/",
                              data=json.dumps({"status": "cancelado"}), content_type="application/json")
         self.assertEqual(r.status_code, 404)
+
+
+class ContaTests(TestCase):
+    def test_redefinicao_de_senha_envia_email_com_link(self):
+        from django.core import mail
+        from datetime import date
+        from .models import Cliente
+        u = User.objects.create_user(username="r@t.com", email="r@t.com", password=SENHA)
+        Cliente.objects.create(usuario=u, nome_completo="R T", cpf="529.982.247-25", telefone="(69) 9 9999-0001",
+                               data_nascimento=date(1995, 5, 10), aceitou_termos=True)
+        # CPF errado: responde igual, mas não envia e-mail
+        self.assertEqual(self.client.post("/senha/redefinir/", {"email": "r@t.com", "cpf": "111.111.111-11"}).status_code, 302)
+        self.assertEqual(len(mail.outbox), 0)
+        r = self.client.post("/senha/redefinir/", {"email": "r@t.com", "cpf": "52998224725"})
+        self.assertEqual(r.status_code, 302)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn("/senha/nova/", mail.outbox[0].body)
+        # e-mail inexistente responde igual (não revela quem tem conta)
+        self.assertEqual(self.client.post("/senha/redefinir/", {"email": "x@t.com", "cpf": "52998224725"}).status_code, 302)
+        self.assertEqual(len(mail.outbox), 1)
+
+    def test_senha_de_administrador_personalizada(self):
+        from .models import ConfigSalao
+        from django.conf import settings
+        self.assertTrue(ConfigSalao.senha_adm_confere(settings.SENHA_ADM_CADASTRO))
+        cfg = ConfigSalao.objects.get_or_create(pk=1)[0]
+        from django.contrib.auth.hashers import make_password
+        cfg.senha_adm_hash = make_password("Nova@Adm123")
+        cfg.save()
+        self.assertTrue(ConfigSalao.senha_adm_confere("Nova@Adm123"))
+        self.assertFalse(ConfigSalao.senha_adm_confere(settings.SENHA_ADM_CADASTRO))
+
+
+class NovaSenhaTests(TestCase):
+    def test_exige_data_de_nascimento(self):
+        from datetime import date
+        from django.core import mail
+        from django.core.cache import cache
+        from .models import Cliente
+        cache.clear()
+        u = User.objects.create_user(username="n@t.com", email="n@t.com", password=SENHA)
+        Cliente.objects.create(usuario=u, nome_completo="N T", cpf="529.982.247-25", telefone="(69) 9 9999-0001",
+                               data_nascimento=date(1995, 5, 10), aceitou_termos=True)
+        self.client.post("/senha/redefinir/", {"email": "n@t.com", "cpf": "529.982.247-25"})
+        import re
+        link = re.search(r"/senha/nova/\S+", mail.outbox[0].body).group(0)
+        url = self.client.get(link).url  # token vai para a sessão
+        r = self.client.post(url, {"new_password1": "Outra@Senha77", "new_password2": "Outra@Senha77",
+                                   "data_nascimento": "1990-01-01"})
+        self.assertEqual(r.status_code, 200)  # data errada: continua na página
+        u.refresh_from_db(); self.assertTrue(u.check_password(SENHA))
+        r = self.client.post(url, {"new_password1": "Outra@Senha77", "new_password2": "Outra@Senha77",
+                                   "data_nascimento": "1995-05-10"})
+        self.assertEqual(r.status_code, 302)
+        u.refresh_from_db(); self.assertTrue(u.check_password("Outra@Senha77"))

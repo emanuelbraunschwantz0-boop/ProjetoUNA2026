@@ -28,8 +28,9 @@ banco em vez de conteúdo fixo no HTML.
 
 ## Como rodar o projeto
 
-O banco já vem migrado e populado (`db.sqlite3`), então basta instalar as
-dependências e subir o servidor.
+O banco (`db.sqlite3`) **não vai junto** no repositório: ele é criado na primeira
+migração. Para testar rápido, `python criar_demo.py` cria uma cliente e uma
+profissional de exemplo.
 
 ```bash
 # 1. Crie e ative um ambiente virtual (recomendado)
@@ -39,11 +40,13 @@ source venv/bin/activate        # Windows: venv\Scripts\activate
 # 2. Instale as dependências
 pip install -r requirements.txt
 
-# 3. Aplique as migrações
+# 3. Crie e aplique as migrações
+python manage.py makemigrations agendamentos
 python manage.py migrate
 
-# 4. (opcional) crie um usuário admin próprio
+# 4. Crie o seu usuário administrador (e, se quiser, as contas de teste)
 python manage.py createsuperuser
+python criar_demo.py
 
 # 5. Suba o servidor
 python manage.py runserver
@@ -52,9 +55,8 @@ python manage.py runserver
 Depois acesse:
 
 - Site: `http://127.0.0.1:8000/`
-- Painel admin: `http://127.0.0.1:8000/admin/`
-  (usuário de conveniência já incluso: `admin` / `admin12345` — troque ou
-  apague antes de entregar/publicar o projeto)
+- Painel admin: `http://127.0.0.1:8000/admin/` (use o superusuário criado acima)
+- **Se você já tinha um banco com o usuário `admin` / `admin12345`, troque essa senha ou apague o usuário.**
 
 ### Rodando pelo PyCharm
 
@@ -141,3 +143,24 @@ existentes no protótipo.
 - `Servico` foi escolhido como entidade do CRUD por ser a mais simples de
   demonstrar sem depender de login (diferente de `Cliente`/`Profissional`,
   que exigem um `User` associado).
+
+
+## Senha de administrador (cadastro de funcionários)
+
+O cadastro de funcionário exige uma senha de administrador. Para definir a sua:
+`/admin/` → **Configuração do salão** → *Nova senha de administrador* → Salvar.
+Ela é guardada como hash. Sem isso vale a senha padrão (variável `UNA_SENHA_ADM`,
+padrão `Una@Adm2026`) — troque antes de publicar.
+
+## Redefinição de senha
+
+"Esqueci a senha" (tela de login) envia um link por e-mail, válido por 2 horas e de
+uso único. Sem configurar e-mail, a mensagem aparece **no terminal do servidor**.
+Para enviar de verdade, defina `UNA_EMAIL_HOST`, `UNA_EMAIL_USER`,
+`UNA_EMAIL_PASSWORD` (e opcionalmente `UNA_EMAIL_PORT`, `UNA_EMAIL_FROM`).
+
+## Segurança / produção
+
+Defina `DJANGO_DEBUG=0`, `DJANGO_SECRET_KEY`, `DJANGO_ALLOWED_HOSTS` e, de preferência,
+`DJANGO_ADMIN_URL` (ex.: `gestao-una-x7/`). O projeto envia CSP, limita tentativas de
+login/cadastro/redefinição e usa cookies protegidos. Testes: `python manage.py test`.

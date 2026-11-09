@@ -5,22 +5,56 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bdc1b596-7d26-4680-9d1d-25d06975ba96" name="Changes" comment="criando formulário e funcionalidades CORRIJIR BUGS NA PRÓXIMA AULA">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/ProjetoUNA2026.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ProjetoUNA2026.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/data_sources_history.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/data_sources_history.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetoUNA2026" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agendamentos/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/agendamentos/admin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/agendamentos/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/agendamentos/api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agendamentos/apps.py" beforeDir="false" afterPath="$PROJECT_DIR$/agendamentos/apps.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/agendamentos/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/agendamentos/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agendamentos/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/agendamentos/migrations/0001_initial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agendamentos/migrations/0002_alter_servico_categoria.py" beforeDir="false" afterPath="$PROJECT_DIR$/agendamentos/migrations/0002_alter_servico_categoria.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agendamentos/migrations/0003_seed_dados.py" beforeDir="false" afterPath="$PROJECT_DIR$/agendamentos/migrations/0003_seed_dados.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/agendamentos/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/agendamentos/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/agendamentos/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/agendamentos/tests.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agendamentos/textos.py" beforeDir="false" afterPath="$PROJECT_DIR$/agendamentos/textos.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agendamentos/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/agendamentos/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/agendamentos/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/agendamentos/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/criar_demo.py" beforeDir="false" afterPath="$PROJECT_DIR$/criar_demo.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/manage.py" beforeDir="false" afterPath="$PROJECT_DIR$/manage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetointegrador/asgi.py" beforeDir="false" afterPath="$PROJECT_DIR$/projetointegrador/asgi.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/projetointegrador/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/projetointegrador/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetointegrador/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/projetointegrador/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetointegrador/wsgi.py" beforeDir="false" afterPath="$PROJECT_DIR$/projetointegrador/wsgi.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/agenda.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/agenda.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/cadastro.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/cadastro.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/crud.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/crud.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/css/home.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/home.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/login.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/login.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/termos.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/termos.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/logo_redonda.png" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/logo_redonda.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/js/agendamento.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/agendamento.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/js/cadastro.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/cadastro.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/login.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/login.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/js/termos.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/termos.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/agendamento.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/agendamento.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/agendamentos/servico_confirm_delete.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/agendamentos/servico_confirm_delete.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/agendamentos/servico_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/agendamentos/servico_detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/agendamentos/servico_form.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/agendamentos/servico_form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/agendamentos/servico_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/agendamentos/servico_list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/cadastro.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cadastro.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/ficha_saude.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/ficha_saude.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/index_agenda.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index_agenda.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/profissional_detalhe.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/profissional_detalhe.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/termo_assinado.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/termo_assinado.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/termos.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/termos.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,22 +94,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Batch.INICIAR_PROJETO.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python.Run Server.executor": "Run",
-    "Python.criar_demo.executor": "Run",
-    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "andrefelip-bot-patch-1",
-    "nodejs_package_manager_path": "npm"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Batch.INICIAR_PROJETO.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.Run Server.executor&quot;: &quot;Run&quot;,
+    &quot;Python.criar_demo.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;django.template.preview.state&quot;: &quot;SHOW_EDITOR&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;andrefelip-bot-patch-1&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
-}]]></component>
-  <component name="RunManager" selected="Python.criar_demo">
+}</component>
+  <component name="RunManager" selected="Django Server.ProjetoUNA2026">
     <configuration name="INICIAR_PROJETO" type="BatchConfigurationType" factoryName="Batch" temporary="true">
       <module name="projeto_django" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -164,6 +200,8 @@
       <workItem from="1793039804539" duration="1143000" />
       <workItem from="1793041267499" duration="1278000" />
       <workItem from="1793100740287" duration="1967000" />
+      <workItem from="1793792055638" duration="2593000" />
+      <workItem from="1794246932083" duration="1111000" />
     </task>
     <task id="LOCAL-00001" summary="criando formulário e funcionalidades CORRIJIR BUGS NA PRÓXIMA AULA">
       <option name="closed" value="true" />
@@ -186,6 +224,17 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="testes" />
