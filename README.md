@@ -66,8 +66,6 @@ O sistema foi dividido em quatro áreas. Cada integrante é responsável por uma
 | **Emanuel Braun Schwantz** | Ficha de saúde e termos | Ficha de saúde obrigatória, termo de responsabilidade com assinatura digital e registro imutável das assinaturas (IP, data, versão do texto), controle de acesso aos termos. Models `FichaSaude` e `TermoAssinado`; telas `ficha_saude.html`, `termo_assinado.html` e `termos.html`. |
 | **Rogerio Timm da Cruz** | Site institucional e serviços | Landing page com serviços ativos, páginas "Sobre" e de cada profissional, CRUD de serviços com busca, ordenação e paginação, dados de demonstração (`criar_demo.py`) e identidade visual (CSS e imagens). Model `Servico`. |
 
-Os detalhes completos, com a lista de arquivos de cada parte, estão em [DIVISAO_DO_PROJETO.md](DIVISAO_DO_PROJETO.md).
-
 ### Combinados do grupo
 
 - `Cliente`, `Profissional` e `Servico` são usados por todas as partes: o dono só pode **adicionar** campos, nunca renomear ou remover, e avisa o grupo antes.
